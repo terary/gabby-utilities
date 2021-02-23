@@ -14,10 +14,9 @@ import {
   GenericInputDoubleValue,
   GenericInputDoubleValueFields,
 } from './components/field-types/GenericInputDoubleValue';
-import {
-  GenericInputDoubleValueSideBySide,
-  // GenericInputDoubleValueFields,
-} from './components/field-types/generic-input/DoubleValueSideBySide';
+
+import { DoubleValueSideBySide } from './components/field-types/generic-input/DoubleValueSideBySide';
+
 import { ExpandLessRounded } from '@material-ui/icons';
 
 const validatorIsValid = (...args: any[]): UIValidatorError => {
@@ -158,7 +157,7 @@ function App() {
       {JSON.stringify(subfieldErrors)}
       <br />
       <button onClick={toggleSubfieldErrors}>Set Subfield Error</button>
-      <GenericInputDoubleValueSideBySide
+      <DoubleValueSideBySide
         // errorSubfields={subfieldErrors}
         // value={{ testLow: 'a', testHigh: 'z' }}}
         // value={genericValue}
