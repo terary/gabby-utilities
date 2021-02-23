@@ -104,45 +104,6 @@ function App() {
       <div>
         <span>{JSON.stringify(childQCondition)}</span>
       </div>
-      {/* <QInput
-        nodeId="MyAwesomeNode"
-        // validator={validatorIsValid}
-        validator={validatorNotValid}
-        onChange={handleChildChange}
-        fieldId="TheVield"
-        conditionOperator={CONDITION_OPERATORS.eq}
-        // new
-        id={'MyAwesomeNode:0-1-3.a'}
-        // optional
-        label={'This is the Label'}
-        initialValue="Initial Value"
-        helperText="Helper Text"
-      />
-      <hr /> */}
-      {JSON.stringify(newValue)}
-      {/* <QInputMinMax
-        // nodeId="MyAwesomeNode"
-        // // validator={validatorIsValid}
-        // validator={validatorIsValid}
-        // onChange={handleChildChange}
-        // fieldId="TheVield"
-        // conditionOperator={CONDITION_OPERATORS.eq}
-        // // new
-        // id={'MyAwesomeNode:0-1-3.a'}
-        // // optional
-        // label={'This is the Label'}
-        // // initialValue="Initial Value"
-        // helperText="Helper Text"
-        onChangeParentMinMax={handleMaxMinChange}
-        nodeId="MyAwesomeNode"
-        validator={validatorIsValid}
-        fieldId="TheField"
-        conditionOperator={CONDITION_OPERATORS.eq}
-        // new
-        id={'MyAwesomeNode:0-1-3'}
-      /> */}
-      <hr />
-      {JSON.stringify(genericValue)}
       <br />
       <GenericInputDoubleValue
         // value={{ testLow: 'a', testHigh: 'z' }}
