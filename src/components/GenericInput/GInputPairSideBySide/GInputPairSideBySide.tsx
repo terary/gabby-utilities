@@ -11,7 +11,7 @@ import {
   DoubleValueFields,
   Subfield,
   ClickHanlder,
-} from './DoubleValueSideBySide.types';
+} from './GInputPairSideBySide.types';
 
 const noopOnChange = (values: object) => {};
 const useStyles = makeStyles({
@@ -76,7 +76,7 @@ const TheAdornment = ({ onClick, isExpanded }: TheAdornmentProps) => {
   );
 };
 
-export interface DoubleValueSideBySideProps {
+export interface GInputPairSideBySideProps {
   /**
    * Parent set error messages for subfields
    */
@@ -98,7 +98,7 @@ export interface DoubleValueSideBySideProps {
 /**
  * Primary UI component for user interaction
  */
-export function DoubleValueSideBySide({
+export function GInputPairSideBySide({
   errorSubfields,
   formatDispayedValues = defaultGetDisplayValue,
   helperText,
@@ -109,7 +109,7 @@ export function DoubleValueSideBySide({
   textFieldProps = {},
   value,
   onChange = noopOnChange,
-}: DoubleValueSideBySideProps) {
+}: GInputPairSideBySideProps) {
   const classes = useStyles();
   const [focusedField, setFocusedField] = React.useState(subfields.min);
   const [isExpanded, setIsExpanded] = React.useState(expanded);

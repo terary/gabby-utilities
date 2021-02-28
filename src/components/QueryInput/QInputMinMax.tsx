@@ -95,10 +95,9 @@ export function QInputMinMax({
           aria-label="toggle password visibility"
           onClick={() => {
             toggleMaxMin();
-            // console.log('AdormentClick');
           }}
           onMouseDown={() => {
-            console.log('AdormentMouseOver');
+            // this maybe necesarry. Leaving in so that it doesn't get overlooked
           }}
         >
           {isMin ? 'Min' : 'Max'}

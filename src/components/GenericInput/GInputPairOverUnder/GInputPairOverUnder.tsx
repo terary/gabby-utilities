@@ -15,7 +15,7 @@ type Subfield = {
   intialValue?: string | number;
 };
 
-export type GenericInputDoubleValueFields = {
+export type GInputPairOverUnderFields = {
   min: Subfield;
   max: Subfield;
 };
@@ -23,16 +23,16 @@ export type GenericInputDoubleValueFields = {
 const defaultSubfields = {
   min: { label: 'min', id: 'min' },
   max: { label: 'max', id: 'max' },
-} as GenericInputDoubleValueFields;
+} as GInputPairOverUnderFields;
 
-const extractValue = (updateValue: any, subfields: GenericInputDoubleValueFields) => {
+const extractValue = (updateValue: any, subfields: GInputPairOverUnderFields) => {
   const newValue = { ...updateValue };
   newValue[subfields.min.id] = updateValue[subfields.min.id];
   newValue[subfields.max.id] = updateValue[subfields.max.id];
   return newValue;
 };
 
-interface GenericInputDoubleValueProps {
+interface GInputPairOverUnderProps {
   helperText?: string | ((value: any) => string);
   id?: string;
   isExpanded?: boolean;
@@ -43,7 +43,7 @@ interface GenericInputDoubleValueProps {
   value?: any; // should be <T> or something?
 }
 
-export function GenericInputDoubleValue({
+export function GInputPairOverUnder({
   helperText,
   id,
   isExpanded = false,
@@ -52,7 +52,7 @@ export function GenericInputDoubleValue({
   textFieldProps = {},
   onChange = noopOnChange,
   value,
-}: GenericInputDoubleValueProps) {
+}: GInputPairOverUnderProps) {
   const [focusedField, setFocusedField] = React.useState(subfields.min);
   const [thisValue, setThisValue] = React.useState(
     extractValue(
@@ -108,7 +108,7 @@ export function GenericInputDoubleValue({
           aria-label="toggle password visibility"
           onClick={toggleMaxMin}
           onMouseDown={() => {
-            console.log('AdormentMouseOver');
+            // maybe useful in the future
           }}
         >
           {focusedField.label}

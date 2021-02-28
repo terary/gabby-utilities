@@ -23,7 +23,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:once": "react-scripts test --coverage --verbose --watchAll=false",
+    "test:once": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories'",
+    "test:once:GenericInput": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --collectCoverageFrom=src/components/GenericInput/**/*.tsx",
+
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"

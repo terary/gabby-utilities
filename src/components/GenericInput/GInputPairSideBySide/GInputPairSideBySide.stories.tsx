@@ -1,10 +1,10 @@
-// GenericInputDoubleValueSideBySide.stories.tsx
+// GenericInputGInputPairSideBySide.stories.tsx
 
 import React, { ComponentProps } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 
-import { DoubleValueSideBySide } from './DoubleValueSideBySide';
-import { DoubleValueFields, Subfield } from './DoubleValueSideBySide.types';
+import { GInputPairSideBySide } from './GInputPairSideBySide';
+import { DoubleValueFields, Subfield } from './GInputPairSideBySide.types';
 
 const minSubfield = { id: 'low', label: 'Lower Bound', intialValue: 1 } as Subfield;
 const maxSubfield = { id: 'high', label: 'Upper Bound', intialValue: 3 } as Subfield;
@@ -43,8 +43,8 @@ const differentSubfields = {
 // value?: any; // should be <T> or something?
 
 export default {
-  title: 'GenericInput/DoubleValueFields',
-  component: DoubleValueSideBySide,
+  title: 'Generic Input/Input Pair, Side-by-Side',
+  component: GInputPairSideBySide,
   args: {
     formatDispayedValues: formatDisplayValues,
     helperText: 'This is the help test - disappears when expanded',
@@ -69,8 +69,8 @@ export default {
   // },
 } as Meta;
 
-const Template: Story<ComponentProps<typeof DoubleValueSideBySide>> = (args) => (
-  <DoubleValueSideBySide
+const Template: Story<ComponentProps<typeof GInputPairSideBySide>> = (args) => (
+  <GInputPairSideBySide
     {...args}
     // formatDispayedValues={formatDisplayValues}
   />

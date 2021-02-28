@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import './App.css';
-import {
-  QInput,
-  CONDITION_OPERATORS,
-  UIValidatorError,
-} from './components/field-types';
+import { UIValidatorError } from './components/QueryInput/IFieldType';
 import {
   QSingleCondition,
   QSingleConditionChangeMessage,
-} from './components/field-types/IFieldType';
-import { QInputMinMax } from './components/field-types/QInputMinMax';
+} from './components/QueryInput/IFieldType';
+
 import {
-  GenericInputDoubleValue,
-  GenericInputDoubleValueFields,
-} from './components/field-types/GenericInputDoubleValue';
+  GInputPairOverUnder,
+  GInputPairOverUnderFields,
+  GInputPairSideBySide,
+} from './components/GenericInput';
 
-import { DoubleValueSideBySide } from './components/field-types/generic-input/DoubleValueSideBySide';
+import { QDebugDevSimple } from './components/QueryFields/QDebugDevSimple';
+import { GInputWrapper } from './components/GenericInput/GInputWrapper';
+import { Input } from '@material-ui/core';
+import {
+  GInputSelect,
+  GInputSelectControl,
+} from './components/GenericInput/GInputSelect/GInputSelect';
 
-import { ExpandLessRounded } from '@material-ui/icons';
+const GInputSelectOptions = [
+  { value: 'value1', label: 'Option One' },
+  { value: 'value2', label: 'Option Two' },
+  { value: 'value3', label: 'Option Three' },
+];
 
 const validatorIsValid = (...args: any[]): UIValidatorError => {
   return {
@@ -44,10 +51,13 @@ const validatorNotValid = (...args: any[]): UIValidatorError => {
 const testSubfieldsWithInitialValue = {
   min: { id: 'testLow', label: 'Lower Bound', intialValue: 1 },
   max: { id: 'testHigh', label: 'Upper Bound', intialValue: 23 },
-} as GenericInputDoubleValueFields;
+} as GInputPairOverUnderFields;
 
 function App() {
   const [childQCondition, setCchildQCondition] = useState({} as QSingleCondition);
+  const [selectedOptions, setSelectedOptions] = useState([] as string[]);
+  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOptionGeneric, setSelectedOptionGeneric] = useState('');
   const [newValue, setNewValue] = useState({} as any);
   const [genericValue, setGenericValue] = useState({} as any);
   const [subfieldErrors, setSubfielError] = useState({
@@ -57,19 +67,19 @@ function App() {
   // const subfields = {
   //   min: { id: '0', label: 'Lower' },
   //   max: { id: '1', label: 'Upper' },
-  // } as GenericInputDoubleValueFields;
+  // } as GInputPairOverUnderFields;
   const subfields = {
     min: { id: 'low', label: 'LowerBound' },
     max: { id: 'high', label: 'UpperBound' },
-  } as GenericInputDoubleValueFields;
+  } as GInputPairOverUnderFields;
   const subfieldsTopBottom = {
     min: { id: 'low', label: 'LowerBound', intialValue: '-1' },
     max: { id: 'high', label: 'UpperBound', intialValue: 12 },
-  } as GenericInputDoubleValueFields;
+  } as GInputPairOverUnderFields;
   // const defaultSubfields = {
   //   min: { label: 'min', id: 'min' },
   //   max: { label: 'max', id: 'max' },
-  // } as GenericInputDoubleValueFields;
+  // } as GInputPairOverUnderFields;
 
   // export type Subfield = {
   //   label: string;
@@ -78,7 +88,7 @@ function App() {
   const testSubfieldsWithInitialValue = {
     min: { id: 'testLow', label: 'Lower Bound', intialValue: 1 },
     max: { id: 'testHigh', label: 'Upper Bound', intialValue: 23 },
-  } as GenericInputDoubleValueFields;
+  } as GInputPairOverUnderFields;
 
   const handleChildChange = (childMessage: QSingleConditionChangeMessage) => {
     setCchildQCondition(childMessage.condition);
@@ -105,7 +115,7 @@ function App() {
         <span>{JSON.stringify(childQCondition)}</span>
       </div>
       <br />
-      <GenericInputDoubleValue
+      <GInputPairOverUnder
         // value={{ testLow: 'a', testHigh: 'z' }}
         // value={genericValue}
         // helperText={(value) => 'x' + JSON.stringify(value)}
@@ -118,7 +128,7 @@ function App() {
       {JSON.stringify(subfieldErrors)}
       <br />
       <button onClick={toggleSubfieldErrors}>Set Subfield Error</button>
-      <DoubleValueSideBySide
+      <GInputPairSideBySide
         // errorSubfields={subfieldErrors}
         // value={{ testLow: 'a', testHigh: 'z' }}}
         // value={genericValue}
@@ -128,6 +138,36 @@ function App() {
         // label="The Labelx"
         errorSubfields={subfieldErrors}
         subfields={subfieldsTopBottom}
+      />
+      <hr />
+      <QDebugDevSimple />
+      <hr />
+      <GInputWrapper required={false} label="This is my label" id="someId">
+        {/* <Select>
+          <MenuItem>Something</MenuItem>
+        </Select> */}
+        <Input
+          defaultValue="Hello world"
+          inputProps={{ 'aria-label': 'description' }}
+        />
+      </GInputWrapper>
+      <hr />
+
+      <GInputSelect
+        onChange={setSelectedOptions}
+        options={GInputSelectOptions}
+        allowMultiSelect={true}
+        id="TheSelect"
+      />
+      {JSON.stringify(selectedOptions)}
+      <hr />
+      <GInputSelectControl
+        required={true}
+        errorText="Error"
+        id="naked"
+        label="The Label"
+        inputProps={{ 'data-test': 'unit-testing' }}
+        options={GInputSelectOptions}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import { render, act } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import { QInput } from './QInput';
+import { QInput } from '../GenericInput/QInput';
 import {
   CONDITION_OPERATORS,
   UIValidatorError,
