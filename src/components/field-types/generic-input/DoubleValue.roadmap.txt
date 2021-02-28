@@ -1,2 +1,0 @@
-Change component name
-fix the formatDispayValues to use the arguments suplied by subfields

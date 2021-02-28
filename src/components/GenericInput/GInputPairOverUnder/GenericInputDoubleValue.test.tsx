@@ -3,34 +3,18 @@ import { render, act, RenderOptions } from '@testing-library/react';
 import { screen, fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import {
-  GenericInputDoubleValue,
-  GenericInputDoubleValueFields,
-} from './GenericInputDoubleValue';
-
-import {
-  CONDITION_OPERATORS,
-  UIValidatorError,
-  // NodeChangeValueType,
-  // NodeChangeValueType,
-} from './IFieldType';
-// import { act } from 'react-dom/test-utils';
-
-const testSubfields = {
-  min: { id: 'testLow', label: 'LowerBound' },
-  max: { id: 'testHigh', label: 'UpperBound' },
-} as GenericInputDoubleValueFields;
+import { GInputPairOverUnder, GInputPairOverUnderFields } from './GInputPairOverUnder';
 
 const testSubfieldsWithInitialValue = {
   min: { id: 'testLow', label: 'LowerBound', intialValue: 1 },
   max: { id: 'testHigh', label: 'UpperBound', intialValue: 23 },
-} as GenericInputDoubleValueFields;
+} as GInputPairOverUnderFields;
 
 describe('QInput', () => {
   describe('Normal Operations', () => {
     it('Should render with no properties, toggle min/max', () => {
       act(() => {
-        render(<GenericInputDoubleValue />);
+        render(<GInputPairOverUnder />);
       });
 
       const buttonMin = screen.getByRole('button');
@@ -58,7 +42,7 @@ describe('QInput', () => {
       const changeHandler = jest.fn((_childChange: any) => {});
 
       act(() => {
-        render(<GenericInputDoubleValue onChange={changeHandler} />);
+        render(<GInputPairOverUnder onChange={changeHandler} />);
       });
 
       await userEvent.type(screen.getByRole('textbox'), '5');
@@ -77,7 +61,7 @@ describe('QInput', () => {
       tmpSubFields.max.intialValue = 23;
       act(() => {
         render(
-          <GenericInputDoubleValue onChange={changeHandler} subfields={tmpSubFields} />
+          <GInputPairOverUnder onChange={changeHandler} subfields={tmpSubFields} />
         );
       });
 
@@ -94,7 +78,7 @@ describe('QInput', () => {
   });
   describe('Option Helper Text', () => {
     it('Displayed initial value', () => {
-      const dom = render(<GenericInputDoubleValue />);
+      const dom = render(<GInputPairOverUnder />);
 
       const helperP = dom.container.querySelector('p');
       expect(helperP).not.toBeInTheDocument();
@@ -104,7 +88,7 @@ describe('QInput', () => {
     });
     it('Display string helper text if provided string', () => {
       const dom = render(
-        <GenericInputDoubleValue helperText="Client supplied helper text" />
+        <GInputPairOverUnder helperText="Client supplied helper text" />
       );
 
       const helperP = dom.container.querySelector('p');
@@ -115,7 +99,7 @@ describe('QInput', () => {
     });
     it('Should call a with internal value using default min/max as keys', () => {
       const dom = render(
-        <GenericInputDoubleValue helperText={(value) => JSON.stringify(value)} />
+        <GInputPairOverUnder helperText={(value) => JSON.stringify(value)} />
       );
 
       const helperP = dom.container.querySelector('p');
@@ -129,7 +113,7 @@ describe('QInput', () => {
       delete tmpSubFields.min.intialValue;
       delete tmpSubFields.max.intialValue;
       const dom = render(
-        <GenericInputDoubleValue
+        <GInputPairOverUnder
           helperText={(value) => JSON.stringify(value)}
           subfields={tmpSubFields}
         />
@@ -144,7 +128,7 @@ describe('QInput', () => {
 
   describe('Optional Label Text', () => {
     it('Should contain label and lengend when supplied', () => {
-      const dom = render(<GenericInputDoubleValue label="Client Code Label" />);
+      const dom = render(<GInputPairOverUnder label="Client Code Label" />);
       const label = dom.container.querySelector('label');
       expect(label?.innerHTML).toBe('Client Code Label');
 
@@ -152,7 +136,7 @@ describe('QInput', () => {
       expect(legend?.innerHTML).toMatch('Client Code Label');
     });
     it('Should not contain label or lengend when not supplied', () => {
-      const dom = render(<GenericInputDoubleValue />);
+      const dom = render(<GInputPairOverUnder />);
       const label = dom.container.querySelector('label');
       expect(label).toBeNull();
 
@@ -166,7 +150,7 @@ describe('QInput', () => {
       const changeHandler = jest.fn((_childChange: any) => {});
 
       act(() => {
-        render(<GenericInputDoubleValue onChange={changeHandler} />);
+        render(<GInputPairOverUnder onChange={changeHandler} />);
       });
       await userEvent.type(screen.getByRole('textbox'), '5');
 
@@ -185,7 +169,7 @@ describe('QInput', () => {
 
       act(() => {
         render(
-          <GenericInputDoubleValue onChange={changeHandler} subfields={tmpSubFields} />
+          <GInputPairOverUnder onChange={changeHandler} subfields={tmpSubFields} />
         );
       });
       await userEvent.type(screen.getByRole('textbox'), '5');

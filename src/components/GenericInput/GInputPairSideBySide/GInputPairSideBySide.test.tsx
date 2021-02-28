@@ -3,8 +3,8 @@ import { render, act, cleanup } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import { DoubleValueSideBySide } from './DoubleValueSideBySide';
-import { DoubleValueFields } from './DoubleValueSideBySide.types';
+import { GInputPairSideBySide } from './GInputPairSideBySide';
+import { DoubleValueFields } from './GInputPairSideBySide.types';
 
 const testSubfields = {
   min: { id: 'testLow', label: 'LowerBound' },
@@ -16,7 +16,7 @@ const testSubfieldsWithInitialValue = {
   max: { id: 'testHigh', label: 'UpperBound', intialValue: 23 },
 } as DoubleValueFields;
 
-describe('GenericInputDual', () => {
+describe('GInputPairSideBySide', () => {
   afterEach(() => {
     cleanup();
   }); // afterEach
@@ -313,7 +313,7 @@ describe('GenericInputDual', () => {
               Click Away Area
               <button id="clickAwayButton">Click Away Button</button>
             </div>
-            <DoubleValueSideBySide id="clickAwayTestComponent" />
+            <GInputPairSideBySide id="clickAwayTestComponent" />
           </div>
         );
       });
@@ -337,7 +337,7 @@ describe('GenericInputDual', () => {
     let buttons;
     beforeEach(() => {
       act(() => {
-        render(<DoubleValueSideBySide />);
+        render(<GInputPairSideBySide />);
         buttons = screen.getAllByRole('button');
       });
     });
@@ -424,7 +424,7 @@ const setupRender = (focusProps: PropertyObject = {}) => {
     }
   });
   return render(
-    <DoubleValueSideBySide {...effectiveProps} id={'testManyThings' + Math.random()} />
+    <GInputPairSideBySide {...effectiveProps} id={'testManyThings' + Math.random()} />
   );
 };
 
@@ -460,7 +460,7 @@ const setupBeforeEachError = (focusProps: PropertyObject = {}) => {
   tmpSubFields.max.intialValue = '';
 
   return render(
-    <DoubleValueSideBySide
+    <GInputPairSideBySide
       onChange={changeHandler}
       {...effectiveProps}
       //errorSubfields={{ lowerBound: 'Low End Error', upperBound: 'High End Error' }}
