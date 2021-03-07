@@ -407,7 +407,7 @@ describe('GInputPairSideBySide', () => {
   }); //describe('Smoke test...
 }); // describe('GOverUnder'
 
-// ------------------  Helperss
+// ------------------  Helpers
 
 type PropertyObject = { [propName: string]: any };
 

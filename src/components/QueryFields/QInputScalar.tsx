@@ -1,6 +1,7 @@
 import React, { ReactChild, ReactComponentElement, useState } from 'react';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { QueryTermValueOrNull } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,19 +15,28 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const noopOnChange = (value: string) => {};
+const noopOnChange = (termValue: QueryTermValueOrNull) => {};
 
 interface QInputScalarProps {
   value?: string;
-  onChange?: (value: string) => void;
+  onChange?: (termValue: QueryTermValueOrNull) => void;
 }
 export function QInputScalar({ value, onChange = noopOnChange }: QInputScalarProps) {
   const classes = useStyles();
-  const [thisValue, setThisValue] = useState(value || '');
+  const [thisTermValue, setThisTermValue] = useState({} as QueryTermValueOrNull);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value as string;
-    setThisValue(newValue);
-    onChange(newValue);
+    let tempTermValue = {
+      label: event.target.value,
+      value: event.target.value,
+    } as QueryTermValueOrNull;
+    setThisTermValue(tempTermValue);
+
+    if (!tempTermValue || tempTermValue?.value === '') {
+      onChange({ label: '', value: null });
+    } else {
+      onChange(tempTermValue);
+    }
   };
 
   return (
@@ -36,7 +46,7 @@ export function QInputScalar({ value, onChange = noopOnChange }: QInputScalarPro
       label="Outlined"
       variant="outlined"
       onChange={handleChange}
-      value={thisValue}
+      value={thisTermValue?.value || ''}
     />
   );
 }

@@ -2,7 +2,7 @@ import { ReactChild } from 'react';
 
 export enum QFieldDataTypeEnum {
   DATE = 'DATE',
-  STRING = 'S.TRING',
+  STRING = 'STRING',
   NUMBER = 'NUMBER',
 }
 
@@ -33,3 +33,12 @@ export type QueryTermOperator = {
     shortLabel: string;
   };
 };
+
+export type QueryTermValue = {
+  label: string;
+  value: string | number | object | null;
+  // null probably unnecessary.  If null the expression is null
+  // see QueryTermValueOrNull
+};
+
+export type QueryTermValueOrNull = QueryTermValue | null;

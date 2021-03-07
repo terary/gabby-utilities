@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { QueryTermValueOrNull } from './types';
 import {
   QueryTermOperators,
   SelectOption,
@@ -6,7 +8,23 @@ import {
   QFieldCollection,
 } from './types';
 import { QFieldSelector } from './QFieldSelector';
-import { QInputGeneric } from './QInputGeneric';
+// import { QInputGeneric } from './QInputGeneric';
+import { Grid } from '@material-ui/core';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    paper: {
+      height: 140,
+      width: 100,
+    },
+    control: {
+      padding: theme.spacing(2),
+    },
+  })
+);
 
 const fields = {
   fname: { label: 'First Name', datatype: QFieldDataTypeEnum.STRING },
@@ -16,10 +34,9 @@ const fields = {
 } as QFieldCollection;
 
 type QueryTerm = {
-  fieldId: null | string;
-  queryOp: null | string;
-  value: null | string;
-};
+  fieldId: string | null;
+  queryOp: string | null;
+} & QueryTermValueOrNull;
 
 const getQueryTermOperators = (): SelectOption[] => {
   return Object.entries(QueryTermOperators).map(([qOperator, entity], i) => {
@@ -33,60 +50,107 @@ const getFieldOptions = (): SelectOption[] => {
   });
 };
 
-export function QDebugDevSimple() {
+const noopOnChange = (queryExpression: object | null) => {};
+
+interface QDebugDevSimpleProps {
+  onChange: (queryExpression: object | null) => void;
+}
+
+export function QDebugDevSimple({ onChange = noopOnChange }: QDebugDevSimpleProps) {
+  const classes = useStyles();
   const [queryTerm, setQueryTerm] = useState({
+    // fieldId: 'estimatedIncome',
+    // queryOp: 'betweenx',
+
     fieldId: 'lname',
     queryOp: 'regex',
     value: 'The Awesome Value',
   } as QueryTerm);
-  // const [queryTerm, setQueryTerm] = useState({
-  //   fieldId: null,
-  //   queryOp: null,
-  //   value: null,
-  // } as QueryTerm);
 
   const handleFieldIdChange = (newFieldId: string) => {
     const fieldId = newFieldId === '' ? null : newFieldId;
-    const newQueryTerm = { ...queryTerm, ...{ fieldId } };
-    setQueryTerm(newQueryTerm);
+
+    const newQueryTerm = {
+      ...queryTerm,
+      ...{ fieldId },
+      ...{ label: '', value: '' },
+    };
+    setQueryTerm(newQueryTerm as QueryTerm);
+    onChange(null);
   };
+
   const handleQueryOpChange = (queryOp: string) => {
     const newQueryTerm = { ...queryTerm, ...{ queryOp } };
-    setQueryTerm(newQueryTerm);
+    setQueryTerm(newQueryTerm as QueryTerm);
+    onChange(null);
   };
-  const handleInputChange = (value: string) => {
-    const newQueryTerm = { ...queryTerm, ...{ value } };
-    setQueryTerm(newQueryTerm);
+
+  const makeLabel = (inputValue: string) => {
+    // use isEmpty
+    const fieldId = queryTerm.fieldId;
+    const queryOp = queryTerm.queryOp;
+
+    if (fieldId === null || fieldId === '') {
+      return '';
+    }
+    if (queryOp === null || queryOp === '') {
+      return '';
+    }
+    return ` ${fields[fieldId].label} ${QueryTermOperators[queryOp].longLabel} ${inputValue}`;
+  };
+
+  const handleInputChange = (termValue: QueryTermValueOrNull) => {
+    const newTermValue = { ...queryTerm, ...termValue };
+    setQueryTerm(newTermValue);
+    if (!termValue || termValue.value === null) {
+      onChange(null);
+    } else {
+      newTermValue.label = makeLabel(newTermValue.label);
+      onChange(newTermValue);
+    }
+  };
+
+  const QueryOperatorSelector = () => {
+    if (!queryTerm.fieldId) {
+      return null;
+    }
+
+    return (
+      <QFieldSelector
+        onChange={handleQueryOpChange}
+        allowEmpty={false}
+        id="operatorSelector"
+        label="is"
+        options={getQueryTermOperators()}
+        value={queryTerm.queryOp}
+      />
+    );
   };
 
   return (
-    <div>
-      <QFieldSelector
-        onChange={handleFieldIdChange}
-        id="fieldSelector"
-        label="Field"
-        options={getFieldOptions()}
-        value={queryTerm.fieldId}
-      />
-      {queryTerm.fieldId && (
+    <Grid container justify="space-around" className={classes.root}>
+      <Grid item xs={12} md={3}>
         <QFieldSelector
-          onChange={handleQueryOpChange}
-          allowEmpty={false}
-          id="operatorSelector"
-          label="is"
-          options={getQueryTermOperators()}
-          value={queryTerm.queryOp}
+          onChange={handleFieldIdChange}
+          id="fieldSelector"
+          label="Field"
+          options={getFieldOptions()}
+          value={queryTerm.fieldId}
         />
-      )}
-      {queryTerm.fieldId && queryTerm.queryOp && (
-        <QInputGeneric
-          queryTermOperator={queryTerm.queryOp}
-          onChange={handleInputChange}
-          value={queryTerm.value || ''}
-        />
-      )}
-      <br />
-      {JSON.stringify(queryTerm)}
-    </div>
+      </Grid>
+      <Grid item xs={12} md={3}>
+        <QueryOperatorSelector />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        {/* {queryTerm.fieldId && queryTerm.queryOp && (
+          <QInputGeneric
+            id="Maybe ID is a mistake"
+            queryTermOperator={queryTerm.queryOp}
+            onChange={handleInputChange}
+            value={queryTerm.value || ''}
+          />
+        )} */}
+      </Grid>
+    </Grid>
   );
 }

@@ -8,7 +8,8 @@ import {
 import { GInputPairSideBySide } from './GInputPairSideBySide/GInputPairSideBySide';
 import { GInputSelect } from './GInputSelect/GInputSelect';
 import { GInputText } from './GInputText/GInputText';
+import { Subfield } from './GInputPairSideBySide/GInputPairSideBySide.types';
 
 export { GInputPairOverUnder, GInputPairSideBySide, GInputSelect, GInputText };
 
-export type { GInputPairOverUnderFields };
+export type { GInputPairOverUnderFields, Subfield };

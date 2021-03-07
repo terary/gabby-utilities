@@ -3,7 +3,7 @@ import { render, act } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import { QInput } from '../GenericInput/QInput';
+import { QInput } from './QInput';
 import {
   CONDITION_OPERATORS,
   UIValidatorError,
@@ -84,9 +84,7 @@ describe('QInput', () => {
           helperText="This is the Helper Text"
         />
       );
-      const helperP = dom.container.querySelector(
-        '#MyAwesomeNode_0-1-3-helper-text'
-      );
+      const helperP = dom.container.querySelector('#MyAwesomeNode_0-1-3-helper-text');
       expect(helperP?.constructor.name).toBe('HTMLParagraphElement');
       expect(helperP?.innerHTML).toBe('This is the Helper Text');
     });
@@ -205,9 +203,7 @@ describe('QInput', () => {
       expect(errorLabel.length).toBe(1);
       expect(errorLabel[0].innerHTML).toBe('This Has An Error');
 
-      const errorInput = dom.container.querySelectorAll(
-        'div.Mui-error > input'
-      );
+      const errorInput = dom.container.querySelectorAll('div.Mui-error > input');
       expect(errorInput.length).toBe(1);
       expect(screen.getByRole('textbox')).toHaveValue('Hello, World!');
       expect(parentHadleChange).not.toHaveBeenCalled();

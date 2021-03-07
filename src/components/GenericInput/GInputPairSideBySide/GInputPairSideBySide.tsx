@@ -12,6 +12,7 @@ import {
   Subfield,
   ClickHanlder,
 } from './GInputPairSideBySide.types';
+import { NONAME } from 'dns';
 
 const noopOnChange = (values: object) => {};
 const useStyles = makeStyles({
@@ -39,6 +40,9 @@ const useStyles = makeStyles({
     marginRight: '1em',
     top: '-1.5em',
     color: 'primary',
+  },
+  subFieldHidden: {
+    display: 'none',
   },
   input: {
     color: 'white',
@@ -240,8 +244,10 @@ export function GInputPairSideBySide({
           error={subfieldError('min') || subfieldError('max')}
           className={classes.textField}
           onFocus={setExpandedTrue}
+          key={id}
           id={id}
           InputProps={{
+            readOnly: true,
             endAdornment: (
               <TheAdornment onClick={handleExpandFields} isExpanded={isExpanded} />
             ),
@@ -254,7 +260,7 @@ export function GInputPairSideBySide({
           <div>
             <TextField
               error={subfieldError('min')}
-              className={classes.subField}
+              className={isExpanded ? classes.subField : classes.subFieldHidden}
               id={id + '-min'}
               label={subfields['min'].label}
               margin="dense"
@@ -267,7 +273,7 @@ export function GInputPairSideBySide({
             />
             <TextField
               error={subfieldError('max')}
-              className={classes.subField}
+              className={isExpanded ? classes.subField : classes.subFieldHidden}
               color="primary"
               id={id + '-max'}
               label={subfields['max'].label}

@@ -1,0 +1,33 @@
+import React, { ComponentProps } from 'react';
+import { Story, Meta } from '@storybook/react/types-6-0';
+
+import { QInputPair } from './QInputPair';
+
+export default {
+  title: 'Query Input/Pair',
+  component: QInputPair,
+  args: {
+    errorText: 'Remove this text to clear error',
+    helperText: 'This is the help test - disappears when expanded',
+    // id: 'QInputPair',
+    label: 'This is the Label',
+    required: true,
+    startValue: 'value2',
+    presetOption: 'minmax',
+  },
+  argTypes: { onChange: { action: 'change' } },
+} as Meta;
+
+const Template: Story<ComponentProps<typeof QInputPair>> = (args) => (
+  <QInputPair {...args} />
+);
+
+export const DefaultStory = Template.bind({});
+DefaultStory.args = {};
+// export const MultiSelect = Template.bind({});
+// MultiSelect.args = {
+//   id: 'TheStoryID',
+//   allowMultiSelect: true,
+//   startValue: ['value2'],
+//   /* the args you need here will depend on your component */
+// };
