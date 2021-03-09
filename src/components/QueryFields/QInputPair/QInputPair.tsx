@@ -9,7 +9,7 @@ interface QInputPairProps {
   expanded?: boolean; //undocumented exposed for test/dev/debug -not expected to be externally
   formatCallbackValues?: (min: any, max: any) => any;
   formatDisplayValues?: (min: any, max: any) => string;
-  id: string;
+  inputProps?: object;
   label?: string;
   onChange?: (termValue: QueryTermValueOrNull) => void;
   subfields?: { min: Subfield; max: Subfield };
@@ -20,7 +20,7 @@ type ChangeValue = { [subfieldId: string]: string | number | null };
 export const QInputPair = ({
   presetOption = 'minmax',
   expanded = false,
-  id,
+  inputProps = {},
   label,
   onChange = onChangeNoOp,
 
@@ -40,7 +40,7 @@ export const QInputPair = ({
   return (
     <GInputPairSideBySide
       expanded={expanded}
-      id={id}
+      inputProps={inputProps}
       label={label}
       subfields={subfields}
       formatDispayedValues={formatDisplayValues}

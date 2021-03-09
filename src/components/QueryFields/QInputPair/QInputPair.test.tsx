@@ -2,14 +2,22 @@ import React from 'react';
 import { render, act, cleanup } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-
+import { Subfield } from '../../../common/types';
 import { QInputPair } from './QInputPair';
 
 const noopOnChange = (expressionValue: any) => {};
 
 const testSubfieldsWithInitialValue = {
-  min: { id: 'testLow', label: 'LowerBound', intialValue: 1 as string | number },
-  max: { id: 'testHigh', label: 'UpperBound', intialValue: 23 as string | number },
+  min: {
+    id: 'testLow',
+    label: 'LowerBound',
+    intialValue: 1 as string | number,
+  } as Subfield,
+  max: {
+    id: 'testHigh',
+    label: 'UpperBound',
+    intialValue: 23 as string | number,
+  } as Subfield,
 };
 
 describe('Properties', () => {
@@ -72,33 +80,36 @@ describe('Properties', () => {
       expect(changeHandler).toHaveBeenCalledWith(expectedSecondCallback);
     });
   });
-  describe('id', () => {
-    it.skip('(ID no longer used) Should set child boxes with root id', () => {
-      const expectedIds = [
-        'MyAwesomeTestID',
-        'MyAwesomeTestID-min',
-        'MyAwesomeTestID-max',
-      ];
+  describe('inputProps', () => {
+    it('Should be passed trough to the underlying control', () => {
+      const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
+      tmpSubFields.min.inputProps = { 'aria-label': 'Minor' };
+      tmpSubFields.max.inputProps = { 'aria-label': 'Major' };
+
       act(() => {
-        setupRender({ id: 'MyAwesomeTestID', expanded: true });
+        setupRender({
+          inputProps: {
+            'aria-label': 'input-props-test',
+            'data-test': 'this-is-only-a-test',
+          },
+          subfields: tmpSubFields,
+        });
       });
 
-      // default isExpanded = false, click isExpanded = true
+      const mainTextBox = document.querySelectorAll(
+        '[data-test="this-is-only-a-test"]'
+      );
+      expect(mainTextBox.length).toBe(1);
+
       const textBoxes = document.querySelectorAll('input');
       expect(textBoxes.length).toBe(3);
-      textBoxes.forEach((textbox) => {
-        const idx = expectedIds.indexOf(textbox.id);
-        expect(idx).toBeGreaterThan(-1);
-      });
-    });
-    it.skip('"ID" Should be required', () => {
-      // editor gives issue - but maybe id not necessary?
-      //  test needs to capture eror.  Console dumps ugly output but
-      // everything works well
-      const noOptions = () => {
-        render(<QInputPair onChange={noopOnChange} />);
-      };
-      expect(noOptions).toThrowError();
+
+      const parentLabel = screen.getByLabelText('input-props-test');
+      const lowEndLabel = screen.getByLabelText('Minor');
+      const highEndLabel = screen.getByLabelText('Major');
+      expect(parentLabel).toBeInTheDocument();
+      expect(lowEndLabel).toBeInTheDocument();
+      expect(highEndLabel).toBeInTheDocument();
     });
   });
   describe('Label', () => {
