@@ -25,3 +25,5 @@ yarn-error.log*
 /src/dev-debug
 trash
 *.hidden
+Sandboxes/
+# src/Sandbox.tsx

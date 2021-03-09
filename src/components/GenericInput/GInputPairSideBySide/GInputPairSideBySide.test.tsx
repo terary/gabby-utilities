@@ -146,19 +146,27 @@ describe('GInputPairSideBySide', () => {
         id: 'lowEnd',
         intialValue: '',
         label: 'premero',
+        inputProps: { 'aria-label': 'premero' },
       });
       Object.assign(tmpSubFields.max, {
         id: 'highEnd',
         intialValue: '',
         label: 'ultima',
+        inputProps: { 'aria-label': 'ultima' },
       });
 
       act(() => {
-        setupRender({ subfields: tmpSubFields, label: 'Parent Label' });
+        setupRender({
+          subfields: tmpSubFields,
+          label: 'Parent Label',
+          inputProps: { 'aria-label': 'Parent Label' },
+        });
       });
-
       const mainLabel = screen.getByLabelText('Parent Label');
       expect(mainLabel).toBeInTheDocument();
+
+      // const mainLabel = document.querySelectorAll('[aria-label="Parent Label"]');
+      // expect(mainLabel.length).toBe(1);
 
       const minLabel = screen.getByLabelText('premero');
       expect(minLabel).toBeInTheDocument();

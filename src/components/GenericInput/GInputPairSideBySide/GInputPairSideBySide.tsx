@@ -91,6 +91,7 @@ export interface GInputPairSideBySideProps {
   formatDispayedValues?: (min: string | number, max: string | number) => string;
   helperText?: string | ((value: any) => string);
   id?: string;
+  inputProps?: object;
   expanded?: boolean;
   label?: string;
   onChange?: (newValue: any) => void; // should be <T> or something
@@ -106,7 +107,8 @@ export function GInputPairSideBySide({
   errorSubfields,
   formatDispayedValues = defaultGetDisplayValue,
   helperText,
-  id,
+  // id,
+  inputProps = {},
   expanded = false,
   label,
   subfields = defaultSubfields,
@@ -244,13 +246,14 @@ export function GInputPairSideBySide({
           error={subfieldError('min') || subfieldError('max')}
           className={classes.textField}
           onFocus={setExpandedTrue}
-          key={id}
-          id={id}
+          // key={id}
+          // id={id}
           InputProps={{
             readOnly: true,
             endAdornment: (
               <TheAdornment onClick={handleExpandFields} isExpanded={isExpanded} />
             ),
+            ...inputProps,
           }}
           value={getValueForDisplay()}
           {...effectiveTextFieldProps}
@@ -261,7 +264,8 @@ export function GInputPairSideBySide({
             <TextField
               error={subfieldError('min')}
               className={isExpanded ? classes.subField : classes.subFieldHidden}
-              id={id + '-min'}
+              // id={id + '-min'}
+              inputProps={subfields['min'].inputProps}
               label={subfields['min'].label}
               margin="dense"
               onFocus={setExpandedTrue}
@@ -275,7 +279,8 @@ export function GInputPairSideBySide({
               error={subfieldError('max')}
               className={isExpanded ? classes.subField : classes.subFieldHidden}
               color="primary"
-              id={id + '-max'}
+              // id={id + '-max'}
+              inputProps={subfields['max'].inputProps}
               label={subfields['max'].label}
               margin="dense"
               onChange={(e) => {

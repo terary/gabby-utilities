@@ -8,7 +8,7 @@ import {
   QFieldCollection,
 } from './types';
 import { QFieldSelector } from './QFieldSelector';
-// import { QInputGeneric } from './QInputGeneric';
+import { QInputGeneric } from './QInputGeneric';
 import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,6 +36,7 @@ const fields = {
 type QueryTerm = {
   fieldId: string | null;
   queryOp: string | null;
+  expression?: object | null;
 } & QueryTermValueOrNull;
 
 const getQueryTermOperators = (): SelectOption[] => {
@@ -101,6 +102,9 @@ export function QDebugDevSimple({ onChange = noopOnChange }: QDebugDevSimpleProp
 
   const handleInputChange = (termValue: QueryTermValueOrNull) => {
     const newTermValue = { ...queryTerm, ...termValue };
+    newTermValue.expression = {
+      [newTermValue.fieldId || 'missing_filed_id']: termValue?.value,
+    };
     setQueryTerm(newTermValue);
     if (!termValue || termValue.value === null) {
       onChange(null);
@@ -142,14 +146,14 @@ export function QDebugDevSimple({ onChange = noopOnChange }: QDebugDevSimpleProp
         <QueryOperatorSelector />
       </Grid>
       <Grid item xs={12} md={6}>
-        {/* {queryTerm.fieldId && queryTerm.queryOp && (
+        {queryTerm.fieldId && queryTerm.queryOp && (
           <QInputGeneric
             id="Maybe ID is a mistake"
             queryTermOperator={queryTerm.queryOp}
             onChange={handleInputChange}
             value={queryTerm.value || ''}
           />
-        )} */}
+        )}
       </Grid>
     </Grid>
   );
