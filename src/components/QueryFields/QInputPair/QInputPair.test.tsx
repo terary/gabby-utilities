@@ -73,7 +73,7 @@ describe('Properties', () => {
     });
   });
   describe('id', () => {
-    it('Should set child boxes with root id', () => {
+    it.skip('(ID no longer used) Should set child boxes with root id', () => {
       const expectedIds = [
         'MyAwesomeTestID',
         'MyAwesomeTestID-min',

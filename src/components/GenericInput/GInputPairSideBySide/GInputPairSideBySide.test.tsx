@@ -35,7 +35,9 @@ describe('GInputPairSideBySide', () => {
     it('Should be able to set labels of internal fields', () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
       tmpSubFields.min.label = 'Low';
+      tmpSubFields.min.inputProps = { 'aria-label': 'Low' };
       tmpSubFields.max.label = 'High';
+      tmpSubFields.max.inputProps = { 'aria-label': 'High' };
 
       act(() => {
         setupRender({ subfields: tmpSubFields });
@@ -44,7 +46,7 @@ describe('GInputPairSideBySide', () => {
       // button click expands - original text box plus 2 more
       const button = screen.getByRole('button');
       userEvent.click(button);
-      const lowEndLabel = screen.getByLabelText('High');
+      const lowEndLabel = screen.getByLabelText('Low');
       const highEndLabel = screen.getByLabelText('High');
       expect(lowEndLabel).toBeInTheDocument();
       expect(highEndLabel).toBeInTheDocument();
