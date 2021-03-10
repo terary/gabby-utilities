@@ -4,7 +4,9 @@ import React, { ComponentProps } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 
 import { GInputPairSideBySide } from './GInputPairSideBySide';
+import { InputDataType } from '../types';
 import { DoubleValueFields, Subfield } from './GInputPairSideBySide.types';
+import { Grid } from '@material-ui/core';
 
 const minSubfield = { id: 'low', label: 'Lower Bound', intialValue: 1 } as Subfield;
 const maxSubfield = { id: 'high', label: 'Upper Bound', intialValue: 3 } as Subfield;
@@ -48,7 +50,8 @@ export default {
   args: {
     formatDispayedValues: formatDisplayValues,
     helperText: 'This is the help test - disappears when expanded',
-    id: 'primaryStoryId',
+    // id: 'primaryStoryId',
+    inputDataType: 'text' as InputDataType,
     label: 'This is the Label',
     subfields: { min: minSubfield, max: maxSubfield },
     // textFieldProps: ...
@@ -70,20 +73,32 @@ export default {
 } as Meta;
 
 const Template: Story<ComponentProps<typeof GInputPairSideBySide>> = (args) => (
-  <GInputPairSideBySide
-    {...args}
-    // formatDispayedValues={formatDisplayValues}
-  />
+  <Grid container spacing={2}>
+    <Grid item>
+      <GInputPairSideBySide {...args} />
+    </Grid>
+    <Grid item>
+      <section>
+        <h4>inputDataType</h4>
+        <p>
+          Setting intiValue to a value that is a mismatch data type ("3" vs 3) will not
+          automatically convert initail value. This in turn will cause issues with the
+          callback and expected values (cb("3", 3)). Remember to set inital value to
+          appropriate type.
+        </p>
+      </section>
+    </Grid>
+  </Grid>
 );
 
 export const DefaultStory = Template.bind({});
 DefaultStory.args = {
-  id: 'TheStoryID',
+  // id: 'TheStoryID',
   /* the args you need here will depend on your component */
 };
 export const ExpandedStory = Template.bind({});
 ExpandedStory.args = {
-  id: 'TheStoryID2',
+  // id: 'TheStoryID2',
   label: 'Differnt Min/Max',
   // initialValue seems to work in the live component but not in storybook
   // maybe something to do with storybook re/render.

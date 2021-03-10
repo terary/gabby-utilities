@@ -51,7 +51,6 @@ export const QInputPairStory = ({
           presetOption={presetOption}
           expanded={expanded}
           formatDisplayValues={formatDisplayValues}
-          id={id}
           label={label}
           onChange={handleChange}
           // subfields = presetOptions[presetOption].subfields,

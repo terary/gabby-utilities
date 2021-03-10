@@ -13,3 +13,5 @@ export type SwitchOption = {
 export type SwitchOptionCollection = {
   [fieldId: string]: SwitchOption;
 };
+
+export type InputDataType = 'decimal' | 'integer' | 'date' | 'text';

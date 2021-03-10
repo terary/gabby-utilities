@@ -58,6 +58,90 @@ describe('GInputText', () => {
       expect(helperP?.innerHTML).toBe('This is an Error');
     });
   });
+  describe('inputDataType', () => {
+    // --------------------------------------
+    it.skip('Should callback with data formated as number when decimal (not a string)', async () => {
+      // actual use seems to work as expected.  Testing library seems goofed
+      // https://github.com/testing-library/user-event/issues/360
+      //  mock typing '.' after number (5.) - is consider invalid input and doesn't fire event.
+      // This test works if exected value (5.0123) 5123, which is an error.
+    });
+    it('Should callback with data formated as number when integer (not a string)', async () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'integer',
+          expanded: true,
+        });
+      });
+
+      // default isExpanded = false, click isExpanded = true
+      // userEvent.click(screen.getByRole('button'));
+      const numberBoxes = screen.getAllByRole('spinbutton');
+
+      await userEvent.type(numberBoxes[0], '51');
+
+      expect(numberBoxes.length).toBe(1);
+      expect(changeHandler).toHaveBeenCalledWith(51);
+      expect(changeHandler).not.toHaveBeenCalledWith('51');
+    });
+
+    it('Should callback with data formated as string when set to text', async () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'text',
+        });
+      });
+
+      const numberBoxes = screen.getAllByRole('textbox');
+
+      await userEvent.type(numberBoxes[0], '51');
+
+      expect(numberBoxes.length).toBe(1);
+      expect(changeHandler).toHaveBeenCalledWith('51');
+      expect(changeHandler).not.toHaveBeenCalledWith(51);
+    });
+    it('Should set input type to date when appropriate', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'date',
+          expanded: true,
+        });
+      });
+
+      const dateboxes = document.querySelectorAll('input[type=date]');
+      expect(dateboxes.length).toBe(1);
+    });
+    it('Should set input type to number when decimal | integer', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'decimal',
+          expanded: true,
+        });
+      });
+
+      const numberbox = document.querySelectorAll('input[type=number]');
+      expect(numberbox.length).toBe(1);
+    });
+    it('Should set input type to text by default ', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+        });
+      });
+
+      const textboxes = document.querySelectorAll('input[type=text]');
+      expect(textboxes.length).toBe(1);
+    });
+  });
   describe('Label', () => {
     beforeEach(() => {
       cleanup();
@@ -189,7 +273,5 @@ const setupRender = (focusProps: PropertyObject = {}) => {
       delete effectiveProps[propName];
     }
   });
-  return render(
-    <GInputText {...effectiveProps} id={'testManyThings' + Math.random()} />
-  );
+  return render(<GInputText {...effectiveProps} />);
 };

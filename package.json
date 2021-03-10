@@ -23,7 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:once": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories'",
+    "test:once": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --coveragePathIgnorePatterns='Sandbox'",
     "test:once:GenericInput": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --collectCoverageFrom=src/components/GenericInput/**/*.tsx",
     "test:once:QInputPair": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --collectCoverageFrom=src/components/QueryFields/QInputPair/**/*.tsx",
 

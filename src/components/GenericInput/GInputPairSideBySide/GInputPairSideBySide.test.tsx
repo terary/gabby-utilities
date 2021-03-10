@@ -116,6 +116,137 @@ describe('GInputPairSideBySide', () => {
       expect(helperP?.innerHTML).toBe('{"lowEnd":"","highEnd":""}');
     });
   });
+  describe('inputDataType', () => {
+    beforeEach(() => {
+      cleanup();
+    });
+    it.skip('Should callback with data formated as number when decimal (not a string)', async () => {
+      // actual use seems to work as expected.  Testing library seems goofed
+      // https://github.com/testing-library/user-event/issues/360
+      //  mock typing '.' after number (5.) - is consider invalid input and doesn't fire event.
+      // This test works if exected value (5.0123) 5123, which is an error.
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'decimal',
+          expanded: true,
+        });
+      });
+
+      // default isExpanded = false, click isExpanded = true
+      // userEvent.click(screen.getByRole('button'));
+      const textBox = screen.getAllByRole('textbox');
+      const numberBoxes = screen.getAllByRole('spinbutton');
+
+      await userEvent.type(numberBoxes[0], '5.0123');
+      await userEvent.type(numberBoxes[1], '0.7321');
+
+      expect(textBox.length).toBe(1);
+      expect(numberBoxes.length).toBe(2);
+      const calls = changeHandler.mock.calls;
+      expect(changeHandler).toHaveBeenCalledWith({ min: 5.01, max: '' });
+      expect(changeHandler).toHaveBeenCalledWith({ min: 5.0123, max: 0.7321 });
+
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '5.0123', max: '' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '5.0123', max: '0.7321' });
+    });
+    it('Should callback with data formated as number when integer (not a string)', async () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'integer',
+          expanded: true,
+        });
+      });
+
+      // default isExpanded = false, click isExpanded = true
+      // userEvent.click(screen.getByRole('button'));
+      const textBox = screen.getAllByRole('textbox');
+      const numberBoxes = screen.getAllByRole('spinbutton');
+
+      await userEvent.type(numberBoxes[0], '51');
+      await userEvent.type(numberBoxes[1], '-7');
+
+      expect(textBox.length).toBe(1);
+      expect(numberBoxes.length).toBe(2);
+
+      expect(changeHandler).toHaveBeenCalledWith({ min: 51, max: '' });
+      expect(changeHandler).toHaveBeenCalledWith({ min: 51, max: -7 });
+
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '51', max: '' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '51', max: '-7' });
+    });
+
+    it('Should callback with data formated as string when set to text', async () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'text',
+          expanded: true,
+        });
+      });
+
+      // default isExpanded = false, click isExpanded = true
+      // userEvent.click(screen.getByRole('button'));
+      const textBox = screen.getAllByRole('textbox');
+
+      await userEvent.type(textBox[1], '51');
+      await userEvent.type(textBox[2], '-7');
+
+      expect(textBox.length).toBe(3);
+
+      expect(changeHandler).toHaveBeenCalledWith({ min: '51', max: '' });
+      expect(changeHandler).toHaveBeenCalledWith({ min: '51', max: '-7' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: 51, max: '' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: 51, max: -7 });
+    });
+    it('Should set input type to date when appropriate', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'date',
+          expanded: true,
+        });
+      });
+
+      const textBox = screen.getAllByRole('textbox');
+      const dateboxes = document.querySelectorAll('input[type=date]');
+      expect(textBox.length).toBe(1);
+      expect(dateboxes.length).toBe(2);
+    });
+    it('Should set input type to number when decimal | integer', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'decimal',
+          expanded: true,
+        });
+      });
+
+      const textBox = screen.getAllByRole('textbox');
+      const dateboxes = document.querySelectorAll('input[type=number]');
+      expect(textBox.length).toBe(1);
+      expect(dateboxes.length).toBe(2);
+    });
+    it('Should set input type to text by default ', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          // inputDataType: 'decimal',
+          expanded: true,
+        });
+      });
+
+      const textboxes = document.querySelectorAll('input[type=text]');
+      expect(textboxes.length).toBe(3);
+    });
+  });
   describe('Label', () => {
     beforeEach(() => {
       cleanup();
@@ -423,9 +554,6 @@ type PropertyObject = { [propName: string]: any };
 
 const setupRender = (focusProps: PropertyObject = {}) => {
   const effectiveProps = {
-    // ...{
-    //   errorSubfields: { lowerBound: 'Low End Error', upperBound: 'High End Error' },
-    // },
     ...focusProps,
   } as PropertyObject;
   Object.keys(focusProps).forEach((propName) => {
@@ -433,9 +561,7 @@ const setupRender = (focusProps: PropertyObject = {}) => {
       delete effectiveProps[propName];
     }
   });
-  return render(
-    <GInputPairSideBySide {...effectiveProps} id={'testManyThings' + Math.random()} />
-  );
+  return render(<GInputPairSideBySide {...effectiveProps} />);
 };
 
 const setupBeforeEachError = (focusProps: PropertyObject = {}) => {

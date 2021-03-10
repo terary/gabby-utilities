@@ -46,7 +46,6 @@ export const QInputGeneric = ({
       {queryTermOperator === 'betweenx' && (
         <QInputPair
           presetOption="exclusive"
-          id={id + '-input'}
           label="should not be required"
           onChange={handleQueryTermValueChange}
         />

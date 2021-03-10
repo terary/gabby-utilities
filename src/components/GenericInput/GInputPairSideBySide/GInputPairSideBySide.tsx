@@ -7,13 +7,12 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { InputDataType } from '../types';
 import {
   DoubleValueFields,
   Subfield,
   ClickHanlder,
 } from './GInputPairSideBySide.types';
-import { NONAME } from 'dns';
-
 const noopOnChange = (values: object) => {};
 const useStyles = makeStyles({
   root: {},
@@ -91,6 +90,7 @@ export interface GInputPairSideBySideProps {
   formatDispayedValues?: (min: string | number, max: string | number) => string;
   helperText?: string | ((value: any) => string);
   id?: string;
+  inputDataType?: InputDataType;
   inputProps?: object;
   expanded?: boolean;
   label?: string;
@@ -108,6 +108,7 @@ export function GInputPairSideBySide({
   formatDispayedValues = defaultGetDisplayValue,
   helperText,
   // id,
+  inputDataType = 'text',
   inputProps = {},
   expanded = false,
   label,
@@ -155,6 +156,24 @@ export function GInputPairSideBySide({
   ) => {
     const newValue = { ...thisValue };
     newValue[subfields[fieldIndex].id] = e.target.value;
+
+    if (inputDataType === 'text') {
+      newValue[subfields[fieldIndex].id] += '';
+    }
+
+    if (inputDataType === 'integer') {
+      newValue[subfields[fieldIndex].id] = parseInt(
+        newValue[subfields[fieldIndex].id],
+        10
+      );
+    }
+
+    if (inputDataType === 'decimal') {
+      const floatVal = parseFloat(newValue[subfields[fieldIndex].id]);
+      if (!Number.isNaN(floatVal) && floatVal !== undefined) {
+        newValue[subfields[fieldIndex].id] = floatVal;
+      }
+    }
 
     setThisValue(newValue);
     onChange(newValue);
@@ -260,18 +279,24 @@ export function GInputPairSideBySide({
           helperText={getAppropriateHelperText()}
         />
         <Fade in={isExpanded}>
-          <div>
+          <div style={{ position: 'absolute' }}>
             <TextField
               error={subfieldError('min')}
               className={isExpanded ? classes.subField : classes.subFieldHidden}
               // id={id + '-min'}
               inputProps={subfields['min'].inputProps}
+              key="min"
               label={subfields['min'].label}
               margin="dense"
               onFocus={setExpandedTrue}
               onChange={(e) => {
                 handleChange(e, 'min');
               }}
+              type={
+                inputDataType === 'integer' || inputDataType === 'decimal'
+                  ? 'number'
+                  : inputDataType
+              }
               value={thisValue[subfields['min'].id]}
               variant="outlined"
             />
@@ -281,11 +306,17 @@ export function GInputPairSideBySide({
               color="primary"
               // id={id + '-max'}
               inputProps={subfields['max'].inputProps}
+              key="max"
               label={subfields['max'].label}
               margin="dense"
               onChange={(e) => {
                 handleChange(e, 'max');
               }}
+              type={
+                inputDataType === 'integer' || inputDataType === 'decimal'
+                  ? 'number'
+                  : inputDataType
+              }
               value={thisValue[subfields['max'].id]}
               variant="outlined"
             />
