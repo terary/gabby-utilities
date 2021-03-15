@@ -4,18 +4,18 @@ import { QInputRangeStory } from './QInputRangeStory';
 import { presetOptions } from './presetOptions';
 import { Subfield } from '../../GenericInput';
 
-// TODO  - fix spelling of intialValue -> initialValue
+// TODO  - fix spelling of initialValue -> initialValue
 
 const customSubfields = {
-  min: { id: 'low', label: 'Low', intialValue: 1 } as Subfield,
-  max: { id: 'high', label: 'Hi', intialValue: 3 } as Subfield,
+  min: { id: 'low', label: 'Low', initialValue: 1 } as Subfield,
+  max: { id: 'high', label: 'Hi', initialValue: 3 } as Subfield,
 };
 const customFormatCallbackValues = (min: any, max: any) => {
   return { x: { gt: min, lt: max } };
 };
 
-//  These (formatCallbackValue*) shouldnt be required for normal usage
-//  It seems Storybook does something with initializing controls (mabye)
+//  These (formatCallbackValue*) shouldn't be required for normal usage
+//  It seems Storybook does something with initializing controls (maybe)
 const formatCallbackValueMinmax = (min: any, max: any) => {
   return presetOptions.minmax.formatCallbackValue(
     min,

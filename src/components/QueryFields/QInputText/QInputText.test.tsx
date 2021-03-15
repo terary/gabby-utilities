@@ -144,7 +144,7 @@ describe('QInputText', () => {
     });
   });
   describe('initialValue', () => {
-    it('Should set intial (default) value ', () => {
+    it('Should set initial (default) value ', () => {
       act(() => {
         setupRender({
           initialValue: 'This s a value',

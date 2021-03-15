@@ -32,7 +32,7 @@ function GInputSelectGenericControl<T extends AllowedTypes>({
   initialValues,
   onChange = noopOnChange,
 }: GInputSelectGenericProps<T>) {
-  /* mostly because prettiers not always more readable */
+  /* mostly because Prettier not always more readable */
 
   const [thisValue, setThisValue] = useState(initialValues as T);
   // const [thisValue, setThisValue] = useState(startValue);
@@ -48,9 +48,9 @@ function GInputSelectGenericControl<T extends AllowedTypes>({
 
   const hasError = () => {
     // because storybook's user control
-    // no way to set errorText to undefined. non empty is consdered length
+    // no way to set errorText to undefined. non empty is considered length
     // greater than 0.  Hence to set error without description will require
-    // setting " ", emptyish string.
+    // setting " ", empty-ish string.
     return errorText !== undefined && errorText.length > 0;
   };
   return (
@@ -84,7 +84,7 @@ function GInputSelectGeneric<T extends AllowedTypes>(
     </GInputWrapper>
   );
 }
-// ----------------  Specializaion  - single
+// ----------------  Specialization  - single
 export interface GInputSelectSingleProps
   extends GInputSelectPublicProps<string | number> {
   allowEmpty: boolean;
@@ -94,7 +94,7 @@ export function GInputSelectSingle(props: GInputSelectSingleProps) {
   const effectiveProps = Object.assign({}, { initialValues: '' }, props);
   return <GInputSelectGeneric<string | number> {...effectiveProps} />;
 }
-// ----------------  Specializaion  - multiple
+// ----------------  Specialization  - multiple
 export interface GInputSelectMultiProps
   extends GInputSelectPublicProps<(string | number)[]> {}
 
@@ -102,7 +102,7 @@ export function GInputSelectMulti(props: GInputSelectMultiProps) {
   // multiSelect - has select or no selected, no empty
   const effectiveProps = Object.assign(
     {},
-    { initialValues: [], allowMultiSelect: true, allowEmptys: false },
+    { initialValues: [], allowMultiSelect: true, allowEmpty: false },
     props
   );
   return <GInputSelectGeneric<(string | number)[]> {...effectiveProps} />;

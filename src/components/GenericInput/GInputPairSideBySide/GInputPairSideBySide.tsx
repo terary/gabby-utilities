@@ -11,13 +11,13 @@ import { InputDataType } from '../types';
 import {
   DoubleValueFields,
   Subfield,
-  ClickHanlder,
+  ClickHandler,
 } from './GInputPairSideBySide.types';
 const noopOnChange = (values: object) => {};
 const useStyles = makeStyles({
   root: {},
   overRideFocus: {
-    /*
+    /* handler
     Not currently in use.  Keeping because it maybe handy.
     Can be used to set disabled to appear active (parent disable but children active)
     */
@@ -65,7 +65,7 @@ const defaultGetDisplayValue = (min: string | number, max: string | number) => {
 };
 
 interface TheAdornmentProps {
-  onClick: ClickHanlder;
+  onClick: ClickHandler;
   isExpanded: boolean;
 }
 
@@ -87,7 +87,7 @@ export interface GInputPairSideBySideProps {
   /**
    * Parent defined main text fields display
    */
-  formatDispayedValues?: (min: string | number, max: string | number) => string;
+  formatDisplayedValues?: (min: string | number, max: string | number) => string;
   helperText?: string | ((value: any) => string);
   id?: string;
   inputDataType?: InputDataType;
@@ -105,7 +105,7 @@ export interface GInputPairSideBySideProps {
  */
 export function GInputPairSideBySide({
   errorSubfields,
-  formatDispayedValues = defaultGetDisplayValue,
+  formatDisplayedValues = defaultGetDisplayValue,
   helperText,
   // id,
   inputDataType = 'text',
@@ -123,8 +123,8 @@ export function GInputPairSideBySide({
   const [thisValue, setThisValue] = React.useState(
     extractValue(
       value || {
-        [subfields.min.id]: subfields.min.intialValue || '',
-        [subfields.max.id]: subfields.max.intialValue || '',
+        [subfields.min.id]: subfields.min.initialValue || '',
+        [subfields.max.id]: subfields.max.initialValue || '',
       },
       subfields
     )
@@ -146,7 +146,7 @@ export function GInputPairSideBySide({
     helperText: getHelperText(),
     placeholder: focusedField.label, // not sure why this works, but it seems to
     required: false,
-    variant: 'outlined' as 'outlined', // typescript compplains if I dont do it this way.
+    variant: 'outlined' as 'outlined', // typescript complains if I don't do it this way.
   };
   Object.assign(effectiveTextFieldProps, textFieldProps);
 
@@ -201,7 +201,7 @@ export function GInputPairSideBySide({
   };
 
   const getValueForDisplay = (): string => {
-    return formatDispayedValues(
+    return formatDisplayedValues(
       thisValue[subfields['min'].id],
       thisValue[subfields['max'].id]
     );

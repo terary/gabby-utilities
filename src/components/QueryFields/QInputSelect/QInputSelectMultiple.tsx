@@ -1,4 +1,4 @@
-// import { GInputSelect } from '../GenericInput/GInputSelect/GInputSelect';
+// cspell:ignore datatypes
 import {
   IQInputChange,
   TermValueChangeMessageOrNull,

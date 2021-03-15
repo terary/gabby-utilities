@@ -43,7 +43,7 @@ export const QInputPair = ({
       inputProps={inputProps}
       label={label}
       subfields={subfields}
-      formatDispayedValues={formatDisplayValues}
+      formatDisplayedValues={formatDisplayValues}
       onChange={handleChange}
     />
   );

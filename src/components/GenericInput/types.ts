@@ -7,7 +7,7 @@ export type SwitchOption = {
   label: string;
   controlId: string; // for DOM purposes used in <input name,id
   // fieldId: string; // for identifying which switch
-  intialValue?: boolean;
+  initialValue?: boolean;
 };
 
 export type SwitchOptionCollection = {

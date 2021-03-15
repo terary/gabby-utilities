@@ -1,6 +1,6 @@
 /*
   QInput will call parent with value
-  value will be {operater:termValue}
+  value will be {operator:termValue}
   termValue will be either a listScalar or objectScalar
 
   cb(
@@ -12,7 +12,7 @@
   )
 
   cb(
-    {$in: [valu1, value2]}
+    {$in: [value1, value2]}
   )
 */
 export type TermOperators = '$eq' | '$lt' | '$lte' | '$gt' | '$gte' | '$in' | '$regex';
@@ -29,7 +29,7 @@ type TermValueChangeMessage = {
 };
 export type TermValueChangeMessageOrNull = TermValueChangeMessage | null;
 export interface IQInputChange {
-  // for the timebeing not used, only here to keep notes.
+  // for the time being not used, only here to keep notes.
   onChange?: (termValues: TermValueChangeMessageOrNull) => void;
   // TODO - This should allow optional -
 }

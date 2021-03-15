@@ -49,13 +49,13 @@ describe('GInputText', () => {
   });
   describe('inputDataType', () => {
     // --------------------------------------
-    it.skip('Should callback with data formated as number when decimal (not a string)', async () => {
+    it.skip('Should callback with data formatted as number when decimal (not a string)', async () => {
       // actual use seems to work as expected.  Testing library seems goofed
       // https://github.com/testing-library/user-event/issues/360
       //  mock typing '.' after number (5.) - is consider invalid input and doesn't fire event.
       // This test works if exected value (5.0123) 5123, which is an error.
     });
-    it('Should callback with data formated as number when integer (not a string)', async () => {
+    it('Should callback with data formatted as number when integer (not a string)', async () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
         setupRender({
@@ -76,7 +76,7 @@ describe('GInputText', () => {
       expect(changeHandler).not.toHaveBeenCalledWith('51');
     });
 
-    it('Should callback with data formated as string when set to text', async () => {
+    it('Should callback with data formatted as string when set to text', async () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
         setupRender({
@@ -249,7 +249,7 @@ describe('TODO', () => {
   it.skip('Should test inputProps', () => {});
 });
 
-// ------------------  Helperss
+// ------------------  Helpers
 
 type PropertyObject = { [propName: string]: any };
 

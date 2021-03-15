@@ -1,5 +1,5 @@
 /**
- * Storybook seemd to have troubles with initialization.
+ * Storybook seemed to have troubles with initialization.
  * The component is used only for storybook.
  */
 
@@ -84,10 +84,10 @@ export const QInputRangeStory = ({
         onChange: (value: QueryTermValueOrNull) => void
 
         QueryTermValueOrNull: 
-            lable: string, ( value of formatDisplayValues)
+            label: string, ( value of formatDisplayValues)
             value: object, ( value of formatCallbackValues)
         
-        onChange(null) is signal the user has cancled. Not reliable.
+        onChange(null) is signal the user has canceled. Not reliable.
                     `}
                   </code>
                 </pre>
@@ -139,7 +139,7 @@ export const QInputRangeStory = ({
       Subfield: {
           id: string,   (referred to as fieldId)
           label: string, 
-          intialValue: number|string (string recommended)  
+          initialValue: number|string (string recommended)  
       }
                   `}
                   </code>
@@ -153,25 +153,25 @@ export const QInputRangeStory = ({
                   <code>
                     {`
       minmax: 
-        formatDisplayValues:  (min,max)=>{__SOMETHING__} (override recommneded)
+        formatDisplayValues:  (min,max)=>{__SOMETHING__} (override recommended)
         formatCallbackValues: (min, max) => with nulls (see above)
         subfields: {
-            min: { id: 'min', label: 'Lower Bound', intialValue: '' } as Subfield,
-            max: { id: 'max', label: 'Upper Bound', intialValue: '' } as Subfield,
+            min: { id: 'min', label: 'Lower Bound', initialValue: '' } as Subfield,
+            max: { id: 'max', label: 'Upper Bound', initialValue: '' } as Subfield,
         }
       inclusive: 
-        formatDisplayValues:  (min,max)=>{__SOMETHING__} (override recommneded)
+        formatDisplayValues:  (min,max)=>{__SOMETHING__} (override recommended)
         formatCallbackValues: (min, max) => without nulls (see above)
         subfields: {
-          min: { id: '$gte', label: 'Greater or Equal', intialValue: '' } as Subfield,
-          max: { id: '$lte', label: 'Less or Equal', intialValue: '' } as Subfield,
+          min: { id: '$gte', label: 'Greater or Equal', initialValue: '' } as Subfield,
+          max: { id: '$lte', label: 'Less or Equal', initialValue: '' } as Subfield,
         }
       exclusive: 
-        formatDisplayValues:  (min,max)=>{__SOMETHING__} (override recommneded)
+        formatDisplayValues:  (min,max)=>{__SOMETHING__} (override recommended)
         formatCallbackValues: (min, max) => without nulls (see above)
         subfields: {
-          min: { id: '$gt', label: 'Greater than', intialValue: '' } as Subfield,
-          max: { id: '$lt', label: 'Less than', intialValue: '' } as Subfield,
+          min: { id: '$gt', label: 'Greater than', initialValue: '' } as Subfield,
+          max: { id: '$lt', label: 'Less than', initialValue: '' } as Subfield,
         }
                   `}
                   </code>

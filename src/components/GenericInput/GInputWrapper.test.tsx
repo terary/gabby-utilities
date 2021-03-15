@@ -103,7 +103,7 @@ describe('GInputWrapper', () => {
     afterEach(() => {
       cleanup();
     });
-    test.skip(' left for componet Initial State only one button', () => {
+    test.skip('left for component Initial State only one button', () => {
       // this is some Material Magic - there is no actual 'select'
       // unless using the native option
       let inputBoxes = screen.getAllByRole('button');
@@ -112,7 +112,7 @@ describe('GInputWrapper', () => {
   }); //describe('Smoke test...
 }); // describe('GOverUnder'
 
-// ------------------  Helperss
+// ------------------  Helpers
 
 type PropertyObject = { [propName: string]: any };
 

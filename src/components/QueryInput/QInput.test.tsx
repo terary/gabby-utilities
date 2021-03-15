@@ -38,7 +38,7 @@ describe('QInput', () => {
             nodeId="MyAwesomeNode"
             validator={validatorIsValid}
             onChange={(qCondition) => {}}
-            fieldId="TheVield"
+            fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
             // new
             id={'MyAwesomeNode:0-1-3'}
@@ -49,7 +49,7 @@ describe('QInput', () => {
       expect(textInput).toBeInTheDocument();
     });
     it('Should set an initial value if supplied', () => {
-      const parentHadleChange = jest.fn(
+      const parentHandleChange = jest.fn(
         (childChange: QSingleConditionChangeMessage) => {}
       );
       act(() => {
@@ -58,7 +58,7 @@ describe('QInput', () => {
             nodeId="MyAwesomeNode"
             validator={validatorIsValid}
             initialValue="Initial Value"
-            onChange={parentHadleChange}
+            onChange={parentHandleChange}
             fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
             // new
@@ -67,17 +67,17 @@ describe('QInput', () => {
         );
       });
       expect(screen.getByRole('textbox')).toHaveValue('Initial Value');
-      expect(parentHadleChange).not.toHaveBeenCalled();
+      expect(parentHandleChange).not.toHaveBeenCalled();
     });
   });
   describe('Option Helper Text', () => {
-    it('Displayed when pressent', () => {
+    it('Displayed when present', () => {
       const dom = render(
         <QInput
           nodeId="MyAwesomeNode"
           validator={validatorIsValid}
           onChange={(qCondition) => {}}
-          fieldId="TheVield"
+          fieldId="TheField"
           conditionOperator={CONDITION_OPERATORS.eq}
           // new
           id={'MyAwesomeNode_0-1-3'}
@@ -90,13 +90,13 @@ describe('QInput', () => {
     });
   });
   describe('Option Label Text', () => {
-    it('Displays when pressent', () => {
+    it('Displays when present', () => {
       const dom = render(
         <QInput
           nodeId="MyAwesomeNode"
           validator={validatorIsValid}
           onChange={(qCondition) => {}}
-          fieldId="TheVield"
+          fieldId="TheField"
           conditionOperator={CONDITION_OPERATORS.eq}
           // new
           id={'MyAwesomeNode_0-1-3'}
@@ -128,7 +128,7 @@ describe('QInput', () => {
       expect(screen.getByRole('textbox')).toHaveValue('Hello, World!');
     });
     it('Should be called when present', () => {
-      const parentHadleChange = jest.fn(
+      const parentHandleChange = jest.fn(
         (childChange: QSingleConditionChangeMessage) => {}
       );
       act(() => {
@@ -136,7 +136,7 @@ describe('QInput', () => {
           <QInput
             nodeId="MyAwesomeNode"
             validator={validatorIsValid}
-            onChange={parentHadleChange}
+            onChange={parentHandleChange}
             fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
             // new
@@ -148,14 +148,14 @@ describe('QInput', () => {
       const theExpected = {
         nodeId: 'MyAwesomeNode',
         condition: {
-          // computed property more closely mimmics real-world
+          // computed property more closely mimics real-world
           ['TheField']: { [CONDITION_OPERATORS.eq]: 'Hello, World!' },
         },
       };
 
       userEvent.type(screen.getByRole('textbox'), 'Hello, World!');
       expect(screen.getByRole('textbox')).toHaveValue('Hello, World!');
-      expect(parentHadleChange).toHaveBeenCalledWith(theExpected);
+      expect(parentHandleChange).toHaveBeenCalledWith(theExpected);
     });
   });
   describe('callback validator', () => {
@@ -174,8 +174,8 @@ describe('QInput', () => {
       userEvent.type(screen.getByRole('textbox'), 'Hello, World!');
       expect(screen.getByRole('textbox')).toHaveValue('Hello, World!');
     });
-    it('Should inidate to user with, Label, Helper Text, and texfield', () => {
-      const parentHadleChange = jest.fn(
+    it('Should indicate to user with, Label, Helper Text, and textfield', () => {
+      const parentHandleChange = jest.fn(
         (childChange: QSingleConditionChangeMessage) => {}
       );
       // act(() => {
@@ -183,7 +183,7 @@ describe('QInput', () => {
         <QInput
           nodeId="MyAwesomeNode"
           validator={validatorNotValid}
-          onChange={parentHadleChange}
+          onChange={parentHandleChange}
           fieldId="TheField"
           conditionOperator={CONDITION_OPERATORS.eq}
           // new
@@ -206,10 +206,10 @@ describe('QInput', () => {
       const errorInput = dom.container.querySelectorAll('div.Mui-error > input');
       expect(errorInput.length).toBe(1);
       expect(screen.getByRole('textbox')).toHaveValue('Hello, World!');
-      expect(parentHadleChange).not.toHaveBeenCalled();
+      expect(parentHandleChange).not.toHaveBeenCalled();
     });
     it('Should not call onChange in error state', () => {
-      const parentHadleChange = jest.fn(
+      const parentHandleChange = jest.fn(
         (childChange: QSingleConditionChangeMessage) => {}
       );
       act(() => {
@@ -217,7 +217,7 @@ describe('QInput', () => {
           <QInput
             nodeId="MyAwesomeNode"
             validator={validatorNotValid}
-            onChange={parentHadleChange}
+            onChange={parentHandleChange}
             fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
             // new
@@ -235,7 +235,7 @@ describe('QInput', () => {
 
       userEvent.type(screen.getByRole('textbox'), 'Hello, World!');
       expect(screen.getByRole('textbox')).toHaveValue('Hello, World!');
-      expect(parentHadleChange).not.toHaveBeenCalled();
+      expect(parentHandleChange).not.toHaveBeenCalled();
     });
   });
 });

@@ -82,7 +82,7 @@ describe('QInputSelect', () => {
     });
   });
   describe('initialValue', () => {
-    it('Should be able to set intial value', () => {
+    it('Should be able to set initial value', () => {
       act(() => {
         setupRender({
           options: testOptions,
@@ -222,7 +222,7 @@ describe('QInputSelect', () => {
     it('Should be called to format value Object', () => {
       const changeHandler = jest.fn((_childChange: any) => {});
 
-      const formatCallbacValue = (selectedValue: (string | number)[]) => {
+      const formatCallbackValue = (selectedValue: (string | number)[]) => {
         return { thevalue: selectedValue };
       };
 
@@ -236,7 +236,7 @@ describe('QInputSelect', () => {
           options: testOptions,
           allowMultiSelect: true,
           onChange: changeHandler,
-          formatCallbackValues: formatCallbacValue,
+          formatCallbackValues: formatCallbackValue,
         });
       });
 

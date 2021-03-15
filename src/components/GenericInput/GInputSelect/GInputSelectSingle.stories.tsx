@@ -31,7 +31,7 @@ const TemplateSingle: Story<ComponentProps<typeof GInputSelectSingle>> = (args) 
   <GInputSelectSingle {...args} />
 );
 
-const TemplateMutliple: Story<ComponentProps<typeof GInputSelectMulti>> = (args) => (
+const TemplateMultiple: Story<ComponentProps<typeof GInputSelectMulti>> = (args) => (
   <GInputSelectMulti {...args} />
 );
 
@@ -40,9 +40,9 @@ SingleSelect.args = {
   id: 'TheStoryIDSingle',
   /* the args you need here will depend on your component */
 };
-export const MultiSelect = TemplateMutliple.bind({});
+export const MultiSelect = TemplateMultiple.bind({});
 MultiSelect.args = {
-  id: 'TheStoryIDMultple',
+  id: 'TheStoryIDMultiple',
   initialValues: ['value2'],
   /* the args you need here will depend on your component */
 };

@@ -34,7 +34,7 @@ export default {
 const Template: Story<ComponentProps<typeof GInputText>> = (args) => (
   <GInputText
     {...args}
-    // formatDispayedValues={formatDisplayValues}
+    // formatDisplayedValues={formatDisplayValues}
   />
 );
 

@@ -4,7 +4,7 @@ export type { Subfield };
 // export type Subfield = {
 //   label: string;
 //   id: string;
-//   intialValue?: string | number;
+//   initialValue?: string | number;
 // };
 
 export type DoubleValueFields = {
@@ -12,4 +12,4 @@ export type DoubleValueFields = {
   max: Subfield;
 };
 
-export type ClickHanlder = () => void;
+export type ClickHandler = () => void;

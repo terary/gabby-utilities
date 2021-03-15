@@ -5,8 +5,8 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 
 import { GInputPairOverUnder } from './GInputPairOverUnder';
 // import { Subfield }
-// const minSubfield = { id: 'low', label: 'Lower Bound', intialValue: 1 } as Subfield;
-// const maxSubfield = { id: 'high', label: 'Upper Bound', intialValue: 3 } as Subfield;
+// const minSubfield = { id: 'low', label: 'Lower Bound', initialValue: 1 } as Subfield;
+// const maxSubfield = { id: 'high', label: 'Upper Bound', initialValue: 3 } as Subfield;
 
 const formatDisplayValues = (min: any, max: any) => {
   return `From ${min} to ${max}`;
@@ -16,12 +16,12 @@ const formatDisplayValues = (min: any, max: any) => {
 // };
 
 // const lowHighSubfields = {
-//   min: { id: 'low', label: 'Lower Bound', intialValue: 1 } as Subfield,
-//   max: { id: 'high', label: 'Upper Bound', intialValue: 3 } as Subfield,
+//   min: { id: 'low', label: 'Lower Bound', initialValue: 1 } as Subfield,
+//   max: { id: 'high', label: 'Upper Bound', initialValue: 3 } as Subfield,
 // };
 // const topBottomSubfields = {
-//   min: { id: 'bottom', label: 'Bottom', intialValue: '-1' },
-//   max: { id: 'top', label: 'Top', intialValue: 12 },
+//   min: { id: 'bottom', label: 'Bottom', initialValue: '-1' },
+//   max: { id: 'top', label: 'Top', initialValue: 12 },
 // } as DoubleValueFields;
 
 // const defaultSubfields = Object.assign({}, lowHighSubfields);
@@ -32,7 +32,7 @@ const formatDisplayValues = (min: any, max: any) => {
 // //  topBottom: topBottomSubfields,
 // };
 // errorSubfields?: { [fieldId: string]: string };
-// formatDispayedValues?: (min: string | number, max: string | number) => string;
+// formatDisplayedValues?: (min: string | number, max: string | number) => string;
 // helperText?: string | ((value: any) => string);
 // id?: string;
 // label?: string;
@@ -45,7 +45,7 @@ export default {
   title: 'Generic Input/Input Pair, Over-Under',
   component: GInputPairOverUnder,
   args: {
-    formatDispayedValues: formatDisplayValues,
+    formatDisplayedValues: formatDisplayValues,
     helperText: 'This is the help test - disappears when expanded',
     id: 'primaryStoryId',
     label: 'This is the Label',
@@ -71,7 +71,7 @@ export default {
 const Template: Story<ComponentProps<typeof GInputPairOverUnder>> = (args) => (
   <GInputPairOverUnder
     {...args}
-    // formatDispayedValues={formatDisplayValues}
+    // formatDisplayedValues={formatDisplayValues}
   />
 );
 

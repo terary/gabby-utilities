@@ -104,7 +104,7 @@ describe('GInputSelectMultiControl', () => {
     });
   }); // describe options
   describe('onChange', () => {
-    it('Should be with array if multiselect.', async () => {
+    it('Should be with array if multiSelect.', async () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
         setupRender({
@@ -211,7 +211,7 @@ describe('GInputSelectMultiControl', () => {
   }); //describe('Smoke test...
 }); // describe('GOverUnder'
 
-// ------------------  Helperss
+// ------------------  Helpers
 
 type PropertyObject = { [propName: string]: any };
 const options = [

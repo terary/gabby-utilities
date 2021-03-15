@@ -1,3 +1,4 @@
+// cspell:ignore  fname lname
 import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { QueryTermValueOrNull } from './types';
@@ -30,8 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const fields = {
   fname: { label: 'First Name', datatype: QFieldDataTypeEnum.STRING },
   lname: { label: 'Last Name', datatype: QFieldDataTypeEnum.STRING },
-  estimatedIncome: { label: 'Anual Income', datatype: QFieldDataTypeEnum.NUMBER },
-  dateOfBirthe: { label: 'Date of Birth', datatype: QFieldDataTypeEnum.DATE },
+  estimatedIncome: { label: 'Annual Income', datatype: QFieldDataTypeEnum.NUMBER },
+  dateOfBirth: { label: 'Date of Birth', datatype: QFieldDataTypeEnum.DATE },
 } as QFieldCollection;
 
 type QueryTerm = {

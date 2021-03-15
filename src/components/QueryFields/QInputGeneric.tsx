@@ -59,8 +59,8 @@ export const QInputGeneric = ({
   return (
     <>
       {/**
-       * havent tested below. Was useing QInputScalar.  Also prettier re-arranged
-       * some of the code anding "()".
+       * haven't tested below. Was using QInputScalar.  Also prettier re-arranged
+       * some of the code adding "()".
        */}
       {queryTermOperator === 'eq' && (
         <QInputText initialValue="" onChange={handleChange2} />
@@ -104,7 +104,7 @@ export const QInputGeneric = ({
 } as QueryTermOperator;
 
 
-    formatDispayedValues: formatDisplayValues,
+    formatDisplayedValues: formatDisplayValues,
     helperText: 'This is the help test - disappears when expanded',
     id: 'primaryStoryId',
     label: 'This is the Label',

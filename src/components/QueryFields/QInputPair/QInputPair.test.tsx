@@ -11,12 +11,12 @@ const testSubfieldsWithInitialValue = {
   min: {
     id: 'testLow',
     label: 'LowerBound',
-    intialValue: 1 as string | number,
+    initialValue: 1 as string | number,
   } as Subfield,
   max: {
     id: 'testHigh',
     label: 'UpperBound',
-    intialValue: 23 as string | number,
+    initialValue: 23 as string | number,
   } as Subfield,
 };
 
@@ -217,8 +217,8 @@ describe('Properties', () => {
     it('Should be able to set initial values using subfields', () => {
       const expectedText = ['little', 'big', 'little - big'];
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      tmpSubFields.min.intialValue = 'little';
-      tmpSubFields.max.intialValue = 'big';
+      tmpSubFields.min.initialValue = 'little';
+      tmpSubFields.max.initialValue = 'big';
       act(() => {
         setupRender({
           subfields: tmpSubFields,
@@ -236,9 +236,9 @@ describe('Properties', () => {
     it('Should be able to set fieldIds used for call back', async () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
       tmpSubFields.min.id = 'small';
-      tmpSubFields.min.intialValue = '';
+      tmpSubFields.min.initialValue = '';
       tmpSubFields.max.id = 'big';
-      tmpSubFields.max.intialValue = '';
+      tmpSubFields.max.initialValue = '';
 
       const expectedFirstCallback = {
         termLabel: expect.any(String),

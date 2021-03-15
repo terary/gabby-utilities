@@ -205,7 +205,7 @@ describe('GInputSelectControl', () => {
   }); //describe('Smoke test...
 }); // describe('GOverUnder'
 
-// ------------------  Helperss
+// ------------------  Helpers
 
 type PropertyObject = { [propName: string]: any };
 const options = [

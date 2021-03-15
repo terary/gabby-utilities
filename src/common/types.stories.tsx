@@ -5,16 +5,16 @@ import { Story, Meta } from '@storybook/react/types-6-0';
 
 import { Subfield } from './types';
 
-const minSubfield = { id: 'low', label: 'Lower Bound', intialValue: 1 } as Subfield;
-const maxSubfield = { id: 'high', label: 'Upper Bound', intialValue: 3 } as Subfield;
+const minSubfield = { id: 'low', label: 'Lower Bound', initialValue: 1 } as Subfield;
+const maxSubfield = { id: 'high', label: 'Upper Bound', initialValue: 3 } as Subfield;
 
 const lowHighSubfields = {
-  min: { id: 'low', label: 'Lower Bound', intialValue: 1 } as Subfield,
-  max: { id: 'high', label: 'Upper Bound', intialValue: 3 } as Subfield,
+  min: { id: 'low', label: 'Lower Bound', initialValue: 1 } as Subfield,
+  max: { id: 'high', label: 'Upper Bound', initialValue: 3 } as Subfield,
 };
 // const topBottomSubfields = {
-//   min: { id: 'bottom', label: 'Bottom', intialValue: '-1' },
-//   max: { id: 'top', label: 'Top', intialValue: 12 },
+//   min: { id: 'bottom', label: 'Bottom', initialValue: '-1' },
+//   max: { id: 'top', label: 'Top', initialValue: 12 },
 // } as DoubleValueFields;
 
 const defaultSubfields = Object.assign({}, lowHighSubfields);
@@ -48,7 +48,7 @@ export default {
   title: 'TypeDocs',
   component: EmptyContainer,
   args: {
-    // formatDispayedValues: formatDisplayValues,
+    // formatDisplayedValues: formatDisplayValues,
     // helperText: 'This is the help test - disappears when expanded',
     // id: 'primaryStoryId',
     // label: 'This is the Label',
@@ -79,7 +79,7 @@ const Template: Story<ComponentProps<typeof EmptyContainer>> = (args) => (
       type Subfield = {; 
         label: string; 
         id: string; 
-        intialValue?: string | number;
+        initialValue?: string | number;
         inputProps?: object;
       }
       `}
@@ -100,8 +100,8 @@ const Template: Story<ComponentProps<typeof EmptyContainer>> = (args) => (
         <Code>label: string</Code>
       </li>
       <li>
-        <Code>intialValue?: string | number;</Code>
-        <p>To be used to set intial value of subfields.</p>
+        <Code>initialValue?: string | number;</Code>
+        <p>To be used to set initial value of subfields.</p>
       </li>
       <li>
         <Code>inputProps?: object;</Code>

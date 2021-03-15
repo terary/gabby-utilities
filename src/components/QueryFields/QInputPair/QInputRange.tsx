@@ -50,7 +50,7 @@ export const QInputRange = ({
       inputDataType={inputDataType}
       label={label}
       subfields={subfields}
-      formatDispayedValues={formatDisplayValues}
+      formatDisplayedValues={formatDisplayValues}
       onChange={handleChange}
     />
   );
