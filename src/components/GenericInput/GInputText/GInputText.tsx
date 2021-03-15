@@ -23,6 +23,7 @@ interface QInputScalarProps {
   errorText?: string | undefined;
   helperText?: string;
   // id: string;
+  inputProps?: object;
   inputDataType?: InputDataType;
   label?: string;
   required?: boolean;
@@ -33,7 +34,7 @@ interface QInputScalarProps {
 export function GInputText({
   errorText,
   helperText,
-  // id,
+  inputProps,
   inputDataType = 'text',
   label,
   required = false,
@@ -80,6 +81,7 @@ export function GInputText({
       // id="id"
       error={hasError()}
       helperText={getHelperText()}
+      inputProps={inputProps}
       label={label}
       onChange={handleChange}
       required={required}

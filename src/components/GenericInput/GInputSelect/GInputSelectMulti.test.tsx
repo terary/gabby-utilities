@@ -2,11 +2,10 @@ import React from 'react';
 import { render, act, cleanup, fireEvent, within } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 
-import { GInputSelectControl, GInputSelectProps } from './GInputSelect';
+import { GInputSelectMulti, GInputSelectMultiProps } from './GInputSelectGeneric';
 import { SelectOption } from '../types';
-import userEvent from '@testing-library/user-event';
 
-describe('GInputSelectControl', () => {
+describe('GInputSelectMultiControl', () => {
   afterEach(() => {
     cleanup();
   }); // afterEach
@@ -24,23 +23,9 @@ describe('GInputSelectControl', () => {
       const label = document.querySelector('label');
       expect(label).toBeNull();
     });
-    it('Should allow setting of label, but will not get added MaterialUI spec.', () => {
-      act(() => {
-        setupRender({ label: 'Client Code Label' });
-      });
-      const label = document.querySelector('label');
-      expect(label).toBeNull();
-    });
   });
   describe('Options', () => {
     // I think cleanUp is unnecessary if the top most describe?
-    it.skip('Should be required', () => {
-      // now setting default to empty array
-      const noOptions = () => {
-        render(<GInputSelectControl />);
-      };
-      expect(noOptions).toThrowError();
-    });
     it('Should hide options on render and expose them after', () => {
       const options = [
         { value: 'optTest1', label: 'Option Test One' },
@@ -58,7 +43,7 @@ describe('GInputSelectControl', () => {
       fireEvent.mouseDown(button);
       expect(screen.queryByRole('listbox', { hidden: false })).toBeTruthy();
     });
-    it('Should have list items count + 1 for empty when "allowEmpty" undefined', () => {
+    it.skip('Should have list items count + 1 for empty when "allowEmpty" undefined', () => {
       const options = [
         { value: 'optTest1', label: 'Option Test One' },
         { value: 'optTest1', label: 'Option Test Two' },
@@ -119,17 +104,6 @@ describe('GInputSelectControl', () => {
     });
   }); // describe options
   describe('onChange', () => {
-    it('Should be called with the value of the selected option', async () => {
-      const changeHandler = jest.fn((_childChange: any) => {});
-      act(() => {
-        setupRender({ onChange: changeHandler });
-      });
-
-      fireEvent.mouseDown(screen.getByRole('button'));
-      const listbox = within(screen.getByRole('listbox'));
-      fireEvent.click(listbox.getByText(/Option One/i));
-      expect(changeHandler).toHaveBeenCalledWith('value1');
-    });
     it('Should be with array if multiselect.', async () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
@@ -143,22 +117,8 @@ describe('GInputSelectControl', () => {
       fireEvent.mouseDown(screen.getByRole('button'));
       const listbox = within(screen.getByRole('listbox'));
       fireEvent.click(listbox.getByText(/Option One/i));
-      expect(changeHandler).toHaveBeenCalledWith(['value1']);
-    });
-    it.skip('Should cause error if setting allowMultiSelect and setting value to non-array', () => {
-      // it is an error condition allowMultiSelect=true && startValue=NOT_ARRAY
-      // but test set-up wrecks havoc without put. Skipping test
-      const noOptions = () => {
-        render(
-          <GInputSelectControl
-            allowMultiSelect={true}
-            startValue="SomeString"
-            options={[]}
-            id="myAwesomeId"
-          />
-        );
-      };
-      expect(noOptions).toThrowError();
+      fireEvent.click(listbox.getByText(/Option Three/i));
+      expect(changeHandler).toHaveBeenCalledWith(['value1', 'value3']);
     });
   });
   describe('Error Messages', () => {
@@ -175,7 +135,7 @@ describe('GInputSelectControl', () => {
         });
       });
       const errorLabel = document.querySelectorAll('.Mui-error');
-      expect(errorLabel.length).toBe(1);
+      expect(errorLabel.length).toBe(2);
     });
     it('Should NOT set class Mui-error when no error text is specified.', () => {
       act(() => {
@@ -206,7 +166,8 @@ describe('GInputSelectControl', () => {
     });
   });
   describe('InputProps', () => {
-    it('Should, by default pass name/id to inputProps', () => {
+    it.skip('Should, by default pass name/id to inputProps', () => {
+      // not longer an option will need to passing Id, Name via inputProps
       act(() => {
         setupRender({ id: 'MyPropTest' });
       });
@@ -277,5 +238,6 @@ const setupRender = (
       delete effectiveProps[propName];
     }
   });
-  return render(<GInputSelectControl {...(effectiveProps as GInputSelectProps)} />);
+  return render(<GInputSelectMulti {...(effectiveProps as GInputSelectMultiProps)} />);
 };
+//import { GInputSelectGenericControl, GInputSelectGenericControlProps } from './GInputSelectGeneric';

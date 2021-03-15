@@ -3,10 +3,10 @@ import { render, act, cleanup } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { Subfield } from '../../../common/types';
-import { QInputPair } from './QInputPair';
+import { QInputRange } from './QInputRange';
 
 const noopOnChange = (expressionValue: any) => {};
-
+type StringOrNumberOrNull = string | number | null;
 const testSubfieldsWithInitialValue = {
   min: {
     id: 'testLow',
@@ -24,12 +24,12 @@ describe('Properties', () => {
   describe('formatCallbackValues', () => {
     it('Should be used to format value for callback cb({label:"", value: formatCallbackValues() })', async () => {
       const expectedFirstCallback = {
-        label: expect.any(String),
-        value: '5/',
+        termLabel: expect.any(String),
+        termValue: '5/',
       };
       const expectedSecondCallback = {
-        label: expect.any(String),
-        value: '5/7',
+        termLabel: expect.any(String),
+        termValue: '5/7',
       };
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
@@ -53,12 +53,12 @@ describe('Properties', () => {
   describe('formatDisplayValues', () => {
     it('Should be used to format value for callback cb({label:formatDisplayValues(...), value:  ... })', async () => {
       const expectedFirstCallback = {
-        label: '5 - ',
-        value: expect.any(Object),
+        termLabel: '5 - ',
+        termValue: expect.any(Object),
       };
       const expectedSecondCallback = {
-        label: '5 - 7',
-        value: expect.any(Object),
+        termLabel: '5 - 7',
+        termValue: expect.any(Object),
       };
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
@@ -138,8 +138,8 @@ describe('Properties', () => {
       const expectCallbackHelper = (min: any, max: any, label: string) => {
         return [
           {
-            label: label,
-            value: inclusiveValue(min, max),
+            termLabel: label,
+            termValue: inclusiveValue(min, max),
             // value: !min && !max ? null : { $gte: min, $lte: max },
           },
         ];
@@ -155,7 +155,7 @@ describe('Properties', () => {
 
       act(() => {
         setupRender({
-          presetOption: 'inclusive',
+          rangeOption: 'inclusive',
           onChange: changeHandler,
           expanded: true,
         });
@@ -177,8 +177,8 @@ describe('Properties', () => {
       const expectCallbackHelper = (min: any, max: any, label: string) => {
         return [
           {
-            label: label,
-            value: exclusiveValue(min, max),
+            termLabel: label,
+            termValue: exclusiveValue(min, max),
             // value: !min && !max ? null : { $gte: min, $lte: max },
           },
         ];
@@ -194,7 +194,7 @@ describe('Properties', () => {
 
       act(() => {
         setupRender({
-          presetOption: 'exclusive',
+          rangeOption: 'exclusive',
           onChange: changeHandler,
           expanded: true,
         });
@@ -241,12 +241,12 @@ describe('Properties', () => {
       tmpSubFields.max.intialValue = '';
 
       const expectedFirstCallback = {
-        label: expect.any(String),
-        value: { small: '5', big: null },
+        termLabel: expect.any(String),
+        termValue: { small: '5' },
       };
       const expectedSecondCallback = {
-        label: expect.any(String),
-        value: { small: '5', big: '7' },
+        termLabel: expect.any(String),
+        termValue: { small: '5', big: '7' },
       };
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
@@ -268,11 +268,24 @@ describe('Properties', () => {
       expect(changeHandler).toHaveBeenCalledWith(expectedSecondCallback);
     });
     it('(callback, not subfield) Should send null in place of empty values {max/min}. And null of both are empty ', async () => {
-      const expectCallbackHelper = (min: any, max: any) => {
+      const expectCallbackHelper = (
+        $gte: StringOrNumberOrNull,
+        $lte: StringOrNumberOrNull
+      ) => {
+        let values: { [key: string]: any } | null = {};
+        if ($gte !== null) {
+          values['$gte'] = $gte;
+        }
+        if ($lte !== null) {
+          values['$lte'] = $lte;
+        }
+        if (!$gte && !$lte) {
+          values = null;
+        }
         return [
           {
-            label: expect.any(String),
-            value: !min && !max ? null : { min, max },
+            termLabel: expect.any(String),
+            termValue: values,
           },
         ];
       };
@@ -303,7 +316,7 @@ describe('Properties', () => {
       await userEvent.type(textBoxes[2], '3'); //4: min:null max:7
 
       expect(changeHandler.mock.calls).toEqual(expectedCallbacks);
-      expect(changeHandler).toHaveBeenCalledTimes(5);
+      expect(changeHandler).toHaveBeenCalledTimes(expectedCallbacks.length);
     });
   });
 }); // describe('Properties'
@@ -314,18 +327,18 @@ describe('QInputPair', () => {
   describe('onChange', () => {
     it('Should $lte/$gte presetOptions "inclusive" ', async () => {
       const expectedFirstCallback = {
-        label: 'Greater or Equal to 5',
-        value: { $gte: '5' },
+        termLabel: 'Greater or Equal to 5',
+        termValue: { $gte: '5' },
       };
       const expectedSecondCallback = {
-        label: 'Greater or Equal to 5 and Less or Equal to 7',
-        value: { $gte: '5', $lte: '7' },
+        termLabel: 'Greater or Equal to 5 and Less or Equal to 7',
+        termValue: { $gte: '5', $lte: '7' },
       };
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
         setupRender({
           onChange: changeHandler,
-          presetOption: 'inclusive',
+          rangeOption: 'inclusive',
         });
       });
 
@@ -341,18 +354,18 @@ describe('QInputPair', () => {
     });
     it('Should $lte/$gte presetOptions "exclusive" ', async () => {
       const expectedFirstCallback = {
-        label: 'Greater than 5',
-        value: { $gt: '5' },
+        termLabel: 'Greater than 5',
+        termValue: { $gt: '5' },
       };
       const expectedSecondCallback = {
-        label: 'Greater than 5 and Less than 7',
-        value: { $gt: '5', $lt: '7' },
+        termLabel: 'Greater than 5 and Less than 7',
+        termValue: { $gt: '5', $lt: '7' },
       };
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
         setupRender({
           onChange: changeHandler,
-          presetOption: 'exclusive',
+          rangeOption: 'exclusive',
         });
       });
 
@@ -369,18 +382,18 @@ describe('QInputPair', () => {
     // -----------------------------------------------
     it('Should set formatCallBackValues over presetOptions ', async () => {
       const expectedFirstCallback = {
-        label: 'Greater than 5',
-        value: '5/',
+        termLabel: 'Greater than 5',
+        termValue: '5/',
       };
       const expectedSecondCallback = {
-        label: 'Greater than 5 and Less than 7',
-        value: '5/7',
+        termLabel: 'Greater than 5 and Less than 7',
+        termValue: '5/7',
       };
       const changeHandler = jest.fn((_childChange: any) => {});
       act(() => {
         setupRender({
           onChange: changeHandler,
-          presetOption: 'exclusive',
+          rangeOption: 'exclusive',
           formatCallbackValues: (min: any, max: any) => `${min}/${max}`,
         });
       });
@@ -395,10 +408,12 @@ describe('QInputPair', () => {
       expect(changeHandler).toHaveBeenCalledWith(expectedFirstCallback);
       expect(changeHandler).toHaveBeenCalledWith(expectedSecondCallback);
     });
-    // -----------------------------------------------
   });
 }); // QInputPair
-
+describe('TODO', () => {
+  it.skip('Should test "inputDataType"', () => {});
+});
+//------------------------ Helpers
 type PropertyObject = { [propName: string]: any };
 const setupRender = (focusProps: PropertyObject = {}) => {
   const effectiveProps = {
@@ -417,7 +432,7 @@ const setupRender = (focusProps: PropertyObject = {}) => {
   }
 
   return render(
-    <QInputPair
+    <QInputRange
       {...effectiveProps}
       // id={effectiveProps.id}
       // onChange={effectiveProps.onChange}

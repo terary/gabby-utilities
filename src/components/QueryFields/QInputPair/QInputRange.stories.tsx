@@ -1,6 +1,6 @@
 import React, { ComponentProps } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
-import { QInputPairStory } from './QInputPairStory';
+import { QInputRangeStory } from './QInputRangeStory';
 import { presetOptions } from './presetOptions';
 import { Subfield } from '../../GenericInput';
 
@@ -39,15 +39,15 @@ const formatCallbackValueExclusive = (min: any, max: any) => {
 };
 
 export default {
-  title: 'Query Input/QInputPair/Presets-minmax',
-  component: QInputPairStory,
+  title: 'Query Input/QInputRange',
+  component: QInputRangeStory,
   args: {
     // presetOption?: 'minmax' | 'inclusive' | 'exclusive';
     expanded: true,
     id: 'QInputPair',
     label: 'Query Pair',
     required: true,
-    presetOption: 'minmax',
+    rangeOption: 'inclusive',
 
     formatCallbackValues: formatCallbackValueMinmax, // defaultCallbackValueFormatter,
     formatDisplayValues: presetOptions.minmax.formatDisplayValue, // displayValueFormatter,
@@ -56,8 +56,8 @@ export default {
   argTypes: { onChange: { action: 'change' } },
 } as Meta;
 
-const Template: Story<ComponentProps<typeof QInputPairStory>> = (args) => (
-  <QInputPairStory {...args} />
+const Template: Story<ComponentProps<typeof QInputRangeStory>> = (args) => (
+  <QInputRangeStory {...args} />
 );
 
 export const DefaultStory = Template.bind({});
@@ -65,14 +65,14 @@ DefaultStory.args = {};
 
 export const InclusiveStory = Template.bind({});
 InclusiveStory.args = {
-  presetOption: 'inclusive',
+  rangeOption: 'inclusive',
   formatCallbackValues: formatCallbackValueInclusive,
   formatDisplayValues: presetOptions.inclusive.formatDisplayValue,
 };
 
 export const ExclusiveStory = Template.bind({});
 ExclusiveStory.args = {
-  presetOption: 'exclusive',
+  rangeOption: 'exclusive',
   formatCallbackValues: formatCallbackValueExclusive,
   formatDisplayValues: presetOptions.exclusive.formatDisplayValue,
 };

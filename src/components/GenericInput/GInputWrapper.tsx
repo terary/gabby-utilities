@@ -20,7 +20,7 @@ export interface GInputProps {
   // component allowEmpty?: boolean;
   errorText?: string | undefined;
   helperText?: string;
-  id: string;
+  id?: string; // shouldnt be used? aria-label
   label?: string;
   // conponent options: SelectOption[];
   required?: boolean;

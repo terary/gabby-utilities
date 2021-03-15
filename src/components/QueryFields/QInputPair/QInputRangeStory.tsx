@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 
-import { QInputPair } from './QInputPair';
+import { QInputRange } from './QInputRange';
 import { Subfield } from '../../GenericInput';
 import { QueryTermValueOrNull } from '../types';
 import { Grid } from '@material-ui/core';
@@ -19,7 +19,7 @@ const displayValueFormatter = (min: any, max: any) => {
 };
 
 interface QInputPairStoryProps {
-  presetOption?: 'minmax' | 'inclusive' | 'exclusive';
+  rangeOption?: 'inclusive' | 'exclusive';
   expanded?: boolean; //undocumented exposed for test/dev/debug -not expected to be externally
   formatCallbackValues?: (min: any, max: any) => any;
   formatDisplayValues?: (min: any, max: any) => string;
@@ -29,8 +29,8 @@ interface QInputPairStoryProps {
   subfields?: { min: Subfield; max: Subfield };
 }
 
-export const QInputPairStory = ({
-  presetOption = 'minmax',
+export const QInputRangeStory = ({
+  rangeOption = 'inclusive',
   expanded = false,
   id,
   label,
@@ -46,8 +46,8 @@ export const QInputPairStory = ({
   return (
     <Grid container spacing={3} direction="row">
       <Grid item>
-        <QInputPair
-          presetOption={presetOption}
+        <QInputRange
+          rangeOption={rangeOption}
           expanded={expanded}
           formatDisplayValues={formatDisplayValues}
           label={label}

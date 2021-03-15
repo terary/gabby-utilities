@@ -14,7 +14,7 @@ interface QInputPairProps {
   onChange?: (termValue: QueryTermValueOrNull) => void;
   subfields?: { min: Subfield; max: Subfield };
 }
-
+// TODO - probably get rid of QInputPair in favor of QInputRange and maybe QInputMinMax
 type ChangeValue = { [subfieldId: string]: string | number | null };
 
 export const QInputPair = ({

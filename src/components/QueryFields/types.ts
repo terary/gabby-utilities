@@ -25,6 +25,7 @@ export const QueryTermOperators = {
   regex: { longLabel: 'Contains', shortLabel: 'has' },
   betweenx: { longLabel: 'Between', shortLabel: 'from' },
   betweeni: { longLabel: 'Between and Including', shortLabel: 'from' },
+  anyOf: { longLabel: 'Any Of', shortLabel: 'Any' },
 } as QueryTermOperator;
 
 export type QueryTermOperator = {

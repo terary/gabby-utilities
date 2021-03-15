@@ -1,0 +1,32 @@
+import React, { useState } from 'react';
+// import { MenuItem, Select } from '@material-ui/core';
+// import { SelectOption } from '../types';
+// import { GInputWrapper, GInputProps } from '../GInputWrapper';
+import {
+  GInputSelectGeneric,
+  GInputSelectPublicProps,
+  GInputSelectGenericControl,
+} from './GInputSelectGeneric';
+
+export interface GInputSelectMultiProps
+  extends GInputSelectPublicProps<(string | number)[]> {}
+
+export function GInputSelectMultiControl(
+  props: GInputSelectPublicProps<(string | number)[]>
+) {
+  const effectiveProps = Object.assign(
+    {},
+    { initialValues: [], allowMultiSelect: true },
+    props
+  );
+  return <GInputSelectGenericControl<(string | number)[]> {...effectiveProps} />;
+}
+
+export function GInputSelectMulti(props: GInputSelectPublicProps<(string | number)[]>) {
+  const effectiveProps = Object.assign(
+    {},
+    { initialValues: [], allowMultiSelect: true },
+    props
+  );
+  return <GInputSelectGeneric<(string | number)[]> {...effectiveProps} />;
+}

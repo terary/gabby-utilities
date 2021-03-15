@@ -9,6 +9,7 @@ import {
 } from './types';
 import { QFieldSelector } from './QFieldSelector';
 import { QInputGeneric } from './QInputGeneric';
+import { TermValueChangeMessageOrNull } from './term.types';
 import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -52,12 +53,17 @@ const getFieldOptions = (): SelectOption[] => {
 };
 
 const noopOnChange = (queryExpression: object | null) => {};
+const noopOnQueryChange = (termValue: TermValueChangeMessageOrNull) => {};
 
 interface QDebugDevSimpleProps {
   onChange: (queryExpression: object | null) => void;
+  onQueryTermChange?: (termValue: TermValueChangeMessageOrNull) => void;
 }
 
-export function QDebugDevSimple({ onChange = noopOnChange }: QDebugDevSimpleProps) {
+export function QDebugDevSimple({
+  onChange = noopOnChange,
+  onQueryTermChange = noopOnQueryChange,
+}: QDebugDevSimpleProps) {
   const classes = useStyles();
   const [queryTerm, setQueryTerm] = useState({
     // fieldId: 'estimatedIncome',
@@ -113,6 +119,10 @@ export function QDebugDevSimple({ onChange = noopOnChange }: QDebugDevSimpleProp
       onChange(newTermValue);
     }
   };
+  const handleQueryTermValueChange2 = (termValue: TermValueChangeMessageOrNull) => {
+    // setThisValue(JSON.stringify(termValue?.value));
+    onQueryTermChange(termValue);
+  };
 
   const QueryOperatorSelector = () => {
     if (!queryTerm.fieldId) {
@@ -152,6 +162,7 @@ export function QDebugDevSimple({ onChange = noopOnChange }: QDebugDevSimpleProp
             queryTermOperator={queryTerm.queryOp}
             onChange={handleInputChange}
             value={queryTerm.value || ''}
+            onQueryTermChange={handleQueryTermValueChange2}
           />
         )}
       </Grid>

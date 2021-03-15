@@ -4,17 +4,6 @@ import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import { GInputText } from './GInputText';
-// import { DoubleValueFields } from './GInputText.types';
-
-// const testSubfields = {
-//   min: { id: 'testLow', label: 'LowerBound' },
-//   max: { id: 'testHigh', label: 'UpperBound' },
-// } as DoubleValueFields;
-
-// const testSubfieldsWithInitialValue = {
-//   min: { id: 'testLow', label: 'LowerBound', intialValue: 1 },
-//   max: { id: 'testHigh', label: 'UpperBound', intialValue: 23 },
-// } as DoubleValueFields;
 
 describe('GInputText', () => {
   afterEach(() => {
@@ -256,6 +245,9 @@ describe('GInputText', () => {
     });
   }); //describe('Smoke test...
 }); // describe('GOverUnder'
+describe('TODO', () => {
+  it.skip('Should test inputProps', () => {});
+});
 
 // ------------------  Helperss
 
