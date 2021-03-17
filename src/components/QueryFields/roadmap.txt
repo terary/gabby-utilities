@@ -1,0 +1,3 @@
+implement styling -
+  Now if label text is longer than control - the text gets cropped
+  Need too be able to adjust styles of the underlying component

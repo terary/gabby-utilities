@@ -26,7 +26,6 @@
     "test:once": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --coveragePathIgnorePatterns='Sandbox'",
     "test:once:GenericInput": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --collectCoverageFrom=src/components/GenericInput/**/*.tsx",
     "test:once:QInputPair": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --collectCoverageFrom=src/components/QueryFields/QInputPair/**/*.tsx",
-
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
@@ -58,6 +57,7 @@
     "@storybook/react": "^6.1.18",
     "@testing-library/user-event": "^12.6.3",
     "@types/react-test-renderer": "^17.0.0",
+    "cspell": "^5.3.7",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^3.3.1",

@@ -1,10 +1,12 @@
 import React from 'react';
 import { render, act, cleanup, fireEvent, within } from '@testing-library/react';
-// import { fireEvent, within } from "react-testing-library";
+
 import { screen } from '@testing-library/dom';
 
-import { QInputSelectMultiple } from './QInputSelectMultiple';
 import userEvent from '@testing-library/user-event';
+import { TermValueChangeMessageOrNull } from '../term.types';
+import { QInputSelectMultiple, untestables } from './QInputSelectMultiple';
+
 const testOptions = [
   { value: 'value1', label: 'Option One' },
   { value: 'value2', label: 'Option Two' },
@@ -14,7 +16,15 @@ describe('QInputSelect', () => {
   afterEach(() => {
     cleanup();
   });
-
+  describe('Untestables for the sake of coverage only', () => {
+    describe('noopOnChange', () => {
+      it('Should do nothing', () => {
+        expect(
+          untestables.noopOnChange({} as TermValueChangeMessageOrNull)
+        ).toBeUndefined();
+      });
+    });
+  });
   describe('inputProps', () => {
     it('Should be set on the base html input contorl', () => {
       act(() => {
@@ -51,7 +61,6 @@ describe('QInputSelect', () => {
         setupRender({
           options: testOptions,
           onChange: changeHandler,
-          allowMultiSelect: true,
         });
       });
 
@@ -117,6 +126,24 @@ describe('QInputSelect', () => {
       fireEvent.click(listbox.getByText(/Option Three/i));
       expect(changeHandler).toHaveBeenCalledWith(lastCallOnChangeArgs);
     });
+    it('Should be called null when no options selected (all options unselected)', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+
+      act(() => {
+        setupRender({
+          options: testOptions,
+          onChange: changeHandler,
+        });
+      });
+
+      fireEvent.mouseDown(screen.getByRole('button'));
+      const listbox = within(screen.getByRole('listbox'));
+
+      fireEvent.click(listbox.getByText(/Option One/i));
+      fireEvent.click(listbox.getByText(/Option One/i));
+      expect(changeHandler).toHaveBeenCalledWith(null);
+    });
+
     it('Should be called for each selected (multi select) ', () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       const lastCallOnChangeArgs = {
@@ -128,7 +155,6 @@ describe('QInputSelect', () => {
         setupRender({
           options: testOptions,
           onChange: changeHandler,
-          allowMultiSelect: true,
         });
       });
 
@@ -234,7 +260,6 @@ describe('QInputSelect', () => {
       act(() => {
         setupRender({
           options: testOptions,
-          allowMultiSelect: true,
           onChange: changeHandler,
           formatCallbackValues: formatCallbackValue,
         });

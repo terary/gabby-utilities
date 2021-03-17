@@ -5,20 +5,14 @@ import {
   TermValue,
   TermOperators,
 } from '../term.types';
-import {
-  // GInputSelectSingle,
-  GInputSelectMultiple,
-  // InputDataType,
-  SelectOption,
-} from '../../GenericInput';
-import { QueryTermOperators } from '../../QueryTermBuilder/types';
+import { GInputSelectMultiple, SelectOption } from '../../GenericInput';
 
 const noopOnChange = (changeMessage: TermValueChangeMessageOrNull) => {};
+export const untestables = {
+  noopOnChange,
+};
 
 interface QInputSelectMultipleProps extends IQInputChange {
-  allowEmpty?: boolean;
-  allowMultiSelect?: boolean;
-
   formatCallbackValues?: (value: (number | string)[]) => object;
   formatDisplayValues?: (value: (number | string)[]) => string;
   inputProps?: object;
@@ -26,13 +20,12 @@ interface QInputSelectMultipleProps extends IQInputChange {
   termOperator?: TermOperators;
   initialValue?: (string | number)[]; // actually its one of the datatypes?
   options: SelectOption[];
-  // onChange?: (termValue: TermValueChangeMessageOrNull) => void;
+  // onChange?: from IQInputChange
 }
 
 export const QInputSelectMultiple = ({
-  // allowMultiSelect,
   inputProps,
-  termOperator = '$in', // maybe only $in and $eq? $eq only valid for singleSelect, not multi Select
+  termOperator = '$in',
   label,
   initialValue = [],
   onChange = noopOnChange,
@@ -42,10 +35,6 @@ export const QInputSelectMultiple = ({
   },
   formatCallbackValues,
 }: QInputSelectMultipleProps) => {
-  // const termOperator = '$in';
-  // const startValue: (string | number)[] = [];
-  // initialValue && startValue.push(initialValue);
-
   const defaultFormatCallbackValues = (value: any) => {
     return { [termOperator]: value };
   };

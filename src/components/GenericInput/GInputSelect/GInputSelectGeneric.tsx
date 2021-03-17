@@ -63,7 +63,11 @@ function GInputSelectGenericControl<T extends AllowedTypes>({
       placeholder={getHelperText()}
       value={thisValue}
     >
-      {allowEmpty && <MenuItem key={-1}>&nbsp;</MenuItem>}
+      {allowEmpty && (
+        <MenuItem key={-1} value="">
+          &nbsp;
+        </MenuItem>
+      )}
       {options.map((opt, index) => {
         return (
           <MenuItem key={index} value={opt.value}>

@@ -27,3 +27,5 @@ trash
 *.hidden
 Sandboxes/
 src/Sandbox.tsx
+
+test-scripts

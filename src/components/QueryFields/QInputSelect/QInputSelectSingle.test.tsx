@@ -3,6 +3,7 @@ import { render, act, cleanup, fireEvent, within } from '@testing-library/react'
 import { screen } from '@testing-library/dom';
 
 import { QInputSelectSingle } from './QInputSelectSingle';
+import { untestables } from './QInputSelectSingle';
 import userEvent from '@testing-library/user-event';
 const testOptions = [
   { value: 'value1', label: 'Option One' },
@@ -15,6 +16,13 @@ describe('QInputSelect', () => {
   });
   describe('allowEmpty', () => {
     it.skip('Needs to be done', () => {});
+  });
+  describe('Untestables for the sake of coverage only', () => {
+    describe('noopOnChange', () => {
+      it('Should do nothing', () => {
+        expect(untestables.noopOnChange('x')).toBeUndefined();
+      });
+    });
   });
   describe('inputProps', () => {
     it('Should be set on the base html input contorl', () => {
@@ -61,7 +69,6 @@ describe('QInputSelect', () => {
         setupRender({
           options: testOptions,
           onChange: changeHandler,
-          allowMultiSelect: true,
         });
       });
 
@@ -143,7 +150,6 @@ describe('QInputSelect', () => {
         setupRender({
           options: testOptions,
           onChange: changeHandler,
-          allowMultiSelect: true,
         });
       });
 
@@ -153,6 +159,33 @@ describe('QInputSelect', () => {
       fireEvent.click(listbox.getByText(/Option One/i));
       fireEvent.click(listbox.getByText(/Option Three/i));
 
+      expect(changeHandler.mock.calls).toEqual(expectedCallbacks);
+      expect(changeHandler).toHaveBeenCalledTimes(expectedCallbacks.length);
+    });
+    it('Should be called with null when empty option are selected ', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+
+      const expectCallbackHelper = (value: string, label: string) => {
+        return [{ termLabel: label, termValue: { $eq: value } }];
+      };
+      const expectedCallbacks = [expectCallbackHelper('value1', 'is value1'), [null]];
+
+      act(() => {
+        setupRender({
+          allowEmpty: true,
+          options: testOptions,
+          onChange: changeHandler,
+          initialValue: '',
+        });
+      });
+
+      fireEvent.mouseDown(screen.getByRole('button'));
+      const listbox = within(screen.getByRole('listbox'));
+      const emptyOptions = document.querySelectorAll('li[tabindex="0"]');
+
+      fireEvent.click(listbox.getByText(/Option One/i));
+      fireEvent.click(emptyOptions[0]);
+      expect(changeHandler).toHaveBeenCalledWith(null);
       expect(changeHandler.mock.calls).toEqual(expectedCallbacks);
       expect(changeHandler).toHaveBeenCalledTimes(expectedCallbacks.length);
     });

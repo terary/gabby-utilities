@@ -1,0 +1,4 @@
+SelectSingle - should never allow empty.  The empty option cause material UI to send warning/error
+  when selecting empty.  Instead should use option 'none' or similar
+
+Appears the noopOnChange for Single and Multiple have different signatures - pick one stick with it.  
