@@ -4,7 +4,7 @@ import { QInputText } from './QInputText/QInputText';
 import { QueryTermValueOrNull } from './types';
 import { TermValueChangeMessageOrNull } from './term.types';
 import { QInputSelectMultiple } from './QInputSelect/QInputSelectMultiple';
-import { QInputRange } from './QInputPair/QInputRange';
+import { QInputRange } from './QInputRange/QInputRange';
 // TermValueChangeMessageOrNull
 const noopOnChange = (value: string | object | null) => {};
 const noopOnQueryChange = (termValue: TermValueChangeMessageOrNull) => {};

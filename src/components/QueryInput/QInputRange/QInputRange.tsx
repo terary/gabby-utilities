@@ -3,6 +3,9 @@ import { IQInputChange, TermValueChangeMessageOrNull } from '../term.types';
 import { presetOptions } from './presetOptions';
 
 const onChangeNoOp = (changeMessage: TermValueChangeMessageOrNull) => {};
+export const untestables = {
+  onChangeNoOp,
+};
 
 interface QInputRangeProps extends IQInputChange {
   rangeOption?: 'inclusive' | 'exclusive';

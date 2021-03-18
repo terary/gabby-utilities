@@ -20,7 +20,6 @@ export const untestables = {
   noopOnChange,
 };
 
-
 interface QInputTextProps extends IQInputChange {
   formatCallbackValues?: (value: any) => object;
   formatDisplayValues?: (value: any) => string;

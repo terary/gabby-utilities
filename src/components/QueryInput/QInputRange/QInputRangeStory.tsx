@@ -9,6 +9,7 @@ import { QInputRange } from './QInputRange';
 import { Subfield } from '../../GenericInput';
 import { QueryTermValueOrNull } from '../types';
 import { Grid } from '@material-ui/core';
+import { InputDataType } from '../../GenericInput';
 
 const defaultCallbackValueFormatter = (min: any, max: any) => {
   return { min, max };
@@ -23,7 +24,7 @@ interface QInputPairStoryProps {
   expanded?: boolean; //undocumented exposed for test/dev/debug -not expected to be externally
   formatCallbackValues?: (min: any, max: any) => any;
   formatDisplayValues?: (min: any, max: any) => string;
-  id: string;
+  inputDataType?: InputDataType;
   label?: string;
   onChange?: (termValue: QueryTermValueOrNull) => void;
   subfields?: { min: Subfield; max: Subfield };
@@ -32,8 +33,8 @@ interface QInputPairStoryProps {
 export const QInputRangeStory = ({
   rangeOption = 'inclusive',
   expanded = false,
-  id,
   label,
+  inputDataType = 'text',
   formatDisplayValues = displayValueFormatter,
   formatCallbackValues = defaultCallbackValueFormatter,
 }: QInputPairStoryProps) => {
@@ -52,6 +53,7 @@ export const QInputRangeStory = ({
           formatDisplayValues={formatDisplayValues}
           label={label}
           onChange={handleChange}
+          inputDataType={inputDataType}
           // subfields = presetOptions[presetOption].subfields,
           formatCallbackValues={formatCallbackValues}
         />

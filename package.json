@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "test:once": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --coveragePathIgnorePatterns='Sandbox'",
     "test:once:GenericInput": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --collectCoverageFrom=src/components/GenericInput/**/*.tsx",
-    "test:once:QInputPair": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --collectCoverageFrom=src/components/QueryFields/QInputPair/**/*.tsx",
+    "test:once:QueryInput": "react-scripts test --coverage --verbose --watchAll=false --coveragePathIgnorePatterns='stories' --coveragePathIgnorePatterns='Sandbox' --coveragePathIgnorePatterns='Story' --collectCoverageFrom=src/components/QueryInput/**/*.tsx",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"

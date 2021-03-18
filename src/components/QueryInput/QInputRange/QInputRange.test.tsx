@@ -3,7 +3,8 @@ import { render, act, cleanup } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { Subfield } from '../../../common/types';
-import { QInputRange } from './QInputRange';
+import { QInputRange, untestables } from './QInputRange';
+import { TermValueChangeMessageOrNull } from '../term.types';
 
 const noopOnChange = (expressionValue: any) => {};
 type StringOrNumberOrNull = string | number | null;
@@ -20,6 +21,15 @@ const testSubfieldsWithInitialValue = {
   } as Subfield,
 };
 
+describe('Untestables for the sake of coverage only', () => {
+  describe('noopOnChange', () => {
+    it('Should do nothing', () => {
+      expect(
+        untestables.onChangeNoOp({} as TermValueChangeMessageOrNull)
+      ).toBeUndefined();
+    });
+  });
+});
 describe('Properties', () => {
   describe('formatCallbackValues', () => {
     it('Should be used to format value for callback cb({label:"", value: formatCallbackValues() })', async () => {
@@ -320,7 +330,7 @@ describe('Properties', () => {
     });
   });
 }); // describe('Properties'
-describe('QInputPair', () => {
+describe('QInputRange', () => {
   afterEach(() => {
     cleanup();
   }); // afterEach
@@ -409,7 +419,7 @@ describe('QInputPair', () => {
       expect(changeHandler).toHaveBeenCalledWith(expectedSecondCallback);
     });
   });
-}); // QInputPair
+}); // QInputRange
 describe('TODO', () => {
   it.skip('Should test "inputDataType"', () => {});
 });
