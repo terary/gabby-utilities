@@ -3,23 +3,20 @@
  * The component is used only for storybook.
  */
 
-import { ReactElement, useState } from 'react';
-
-import { QInputSelectSingle } from './QInputSelectSingle';
-import { SelectOption } from '../../GenericInput';
+import { useState } from 'react';
 import { Grid } from '@material-ui/core';
+import { QInputText } from './QInputText';
 import { TermOperators } from '../term.types';
+import { InputDataType } from '../../GenericInput';
 
-interface QInputSelectSingleProps {
-  allowEmpty?: boolean;
-
+interface QInputTextStoryProps {
   formatCallbackValues?: (value: any) => object;
   formatDisplayValues?: (value: any) => string;
   inputProps?: object;
+  inputDataType?: InputDataType;
   label?: string;
   termOperator?: TermOperators;
-  initialValue?: string | number; // actually its one of the data-types?
-  options: SelectOption[];
+  initialValue?: string | number;
 }
 const Code = (props: any) => {
   return (
@@ -29,18 +26,15 @@ const Code = (props: any) => {
   );
 };
 
-export const QInputSelectSingleStory = ({
-  allowEmpty = false,
-  inputProps,
-  label,
-  initialValue = '',
-  options,
-  formatDisplayValues = (value: any) => {
-    return `is ${value}`;
-  },
+export function QInputTextStory({
   formatCallbackValues,
-  termOperator,
-}: QInputSelectSingleProps) => {
+  formatDisplayValues,
+  // inputProps?: object;
+  inputDataType = 'text',
+  label = 'Story Example',
+  termOperator = '$eq',
+  initialValue = '' as string,
+}: QInputTextStoryProps) {
   const [callStack, setCallStack] = useState([] as any[]);
 
   const handleChange = (...args: any) => {
@@ -50,14 +44,14 @@ export const QInputSelectSingleStory = ({
   return (
     <Grid container spacing={3} direction="row">
       <Grid item>
-        <QInputSelectSingle
-          allowEmpty={allowEmpty}
-          inputProps={inputProps}
-          label={label}
+        <QInputText
+          formatCallbackValues={formatCallbackValues}
+          formatDisplayValues={formatDisplayValues}
           initialValue={initialValue}
+          inputDataType={inputDataType}
+          label={label}
           onChange={handleChange}
           termOperator={termOperator}
-          options={options}
         />
         <ul>
           {callStack.map((call, idx) => (
@@ -70,15 +64,6 @@ export const QInputSelectSingleStory = ({
           <h2>Properties</h2>
           <p>
             <ul>
-              <li>
-                <Code>allowEmpty?: boolean;</Code>
-                <figure>
-                  <figcaption>
-                    Traditional Dropdown box behavior. Effectively unselect. Will cause
-                    value of QInput to be null.
-                  </figcaption>
-                </figure>
-              </li>
               <li>
                 <Code>formatCallbackValues?: (value: any) =&gt; object;</Code>
                 <figure>
@@ -96,6 +81,14 @@ export const QInputSelectSingleStory = ({
                     Human readable label. The label part of &#123;value: label&#125;
                     <br />
                     Default: <Code>(value) =&gt; value</Code>
+                  </figcaption>
+                </figure>
+              </li>
+              <li>
+                <Code>inputDataType?: InputDataType</Code>
+                <figure>
+                  <figcaption>
+                    Determine data type to be echoed back. Text, integer, decimal, date{' '}
                   </figcaption>
                 </figure>
               </li>
@@ -130,19 +123,10 @@ export const QInputSelectSingleStory = ({
                   </figcaption>
                 </figure>
               </li>
-              <li>
-                <Code>options: SelectOption[];</Code>
-                <figure>
-                  <figcaption>The options of the dropdown box.</figcaption>
-                </figure>
-                <Code>
-                  SelectOption: &#123; value: string|number, label: string &#125;
-                </Code>
-              </li>
             </ul>
           </p>
         </article>
       </Grid>
     </Grid>
   );
-};
+}

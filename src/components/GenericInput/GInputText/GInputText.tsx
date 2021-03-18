@@ -22,12 +22,11 @@ const noopOnChange = (value: CallbackArgs) => {};
 interface QInputScalarProps {
   errorText?: string | undefined;
   helperText?: string;
-  // id: string;
   inputProps?: object;
   inputDataType?: InputDataType;
   label?: string;
   required?: boolean;
-  value?: string;
+  value?: string | number;
   onChange?: (value: CallbackArgs) => void;
 }
 

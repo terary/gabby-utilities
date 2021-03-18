@@ -9,13 +9,17 @@ import { GInputText, InputDataType } from '../../GenericInput';
 // TODO - refactor the properties interface, single
 // need to fix-up properties - only allowed ops $eq, $gt, $eq (all I suppose except $in)
 // this needs to implement (already does) interface same as QInputRange
-// props need to be refector and components extend as necessary
+// props need to be refactor and components extend as necessary
 
 // TODO  - implement data type integer decimal string
 
 // TODO - Is QInput*  supposed to have label?  I think not, not <label
 
 const noopOnChange = (termValue: TermValueChangeMessageOrNull) => {};
+export const untestables = {
+  noopOnChange,
+};
+
 
 interface QInputTextProps extends IQInputChange {
   formatCallbackValues?: (value: any) => object;
@@ -24,7 +28,7 @@ interface QInputTextProps extends IQInputChange {
   inputDataType?: InputDataType;
   label?: string;
   termOperator?: TermOperators;
-  initialValue?: string;
+  initialValue?: string | number;
   // onChange?: (termValue: TermValueChangeMessageOrNull) => void;
 }
 export function QInputText({

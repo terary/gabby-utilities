@@ -3,22 +3,21 @@ import { render, act, cleanup } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import { QInputText } from './QInputText';
-
-// inputProps,
-// inputDataType = 'text',
-// termOperator = '$eq',
-// label,
-// initialValue,
-// onChange = noopOnChange,
-// formatDisplayValues = (value) => value,
-// formatCallbackValues = (value: any) => {
-//   return { [termOperator]: value };
-// },
+import { QInputText, untestables } from './QInputText';
+import { TermValueChangeMessageOrNull } from '../term.types';
 
 describe('QInputText', () => {
   afterEach(() => {
     cleanup();
+  });
+  describe('Untestables for the sake of coverage only', () => {
+    describe('noopOnChange', () => {
+      it('Should do nothing', () => {
+        expect(
+          untestables.noopOnChange({} as TermValueChangeMessageOrNull)
+        ).toBeUndefined();
+      });
+    });
   });
   describe('inputProps', () => {
     it('Should be set on the base html input contorl', () => {
