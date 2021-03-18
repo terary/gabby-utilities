@@ -5,11 +5,11 @@
 
 import { useState } from 'react';
 import { Grid } from '@material-ui/core';
-import { QInputText } from './QInputText';
+import { QInputScalar } from './QInputScalar';
 import { TermOperators } from '../term.types';
 import { InputDataType } from '../../GenericInput';
 
-interface QInputTextStoryProps {
+interface QInputScalarStoryProps {
   formatCallbackValues?: (value: any) => object;
   formatDisplayValues?: (value: any) => string;
   inputProps?: object;
@@ -26,7 +26,7 @@ const Code = (props: any) => {
   );
 };
 
-export function QInputTextStory({
+export function QInputScalarStory({
   formatCallbackValues,
   formatDisplayValues,
   // inputProps?: object;
@@ -34,7 +34,7 @@ export function QInputTextStory({
   label = 'Story Example',
   termOperator = '$eq',
   initialValue = '' as string,
-}: QInputTextStoryProps) {
+}: QInputScalarStoryProps) {
   const [callStack, setCallStack] = useState([] as any[]);
 
   const handleChange = (...args: any) => {
@@ -44,7 +44,7 @@ export function QInputTextStory({
   return (
     <Grid container spacing={3} direction="row">
       <Grid item>
-        <QInputText
+        <QInputScalar
           formatCallbackValues={formatCallbackValues}
           formatDisplayValues={formatDisplayValues}
           initialValue={initialValue}

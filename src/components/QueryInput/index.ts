@@ -1,2 +1,5 @@
 import { QInputSelectSingle, QInputSelectMultiple } from './QInputSelect';
-export { QInputSelectSingle, QInputSelectMultiple };
+import { QInputScalar } from './QInputScalar';
+import { QInputRange } from './QInputRange';
+
+export { QInputSelectSingle, QInputSelectMultiple, QInputRange, QInputScalar };

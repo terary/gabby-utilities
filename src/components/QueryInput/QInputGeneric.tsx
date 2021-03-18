@@ -1,6 +1,6 @@
 import React, { ReactChild, ReactComponentElement, useState } from 'react';
 
-import { QInputText } from './QInputText/QInputText';
+import { QInputScalar } from './QInputScalar';
 import { QueryTermValueOrNull } from './types';
 import { TermValueChangeMessageOrNull } from './term.types';
 import { QInputSelectMultiple } from './QInputSelect/QInputSelectMultiple';
@@ -63,10 +63,10 @@ export const QInputGeneric = ({
        * some of the code adding "()".
        */}
       {queryTermOperator === 'eq' && (
-        <QInputText initialValue="" onChange={handleChange2} />
+        <QInputScalar initialValue="" onChange={handleChange2} />
       )}
       {queryTermOperator === 'regex' && (
-        <QInputText initialValue="" onChange={handleChange2} />
+        <QInputScalar initialValue="" onChange={handleChange2} />
       )}
       {queryTermOperator === 'betweenx' && (
         <QInputRange

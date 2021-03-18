@@ -20,7 +20,7 @@ export const untestables = {
   noopOnChange,
 };
 
-interface QInputTextProps extends IQInputChange {
+interface QInputScalarProps extends IQInputChange {
   formatCallbackValues?: (value: any) => object;
   formatDisplayValues?: (value: any) => string;
   inputProps?: object;
@@ -30,7 +30,7 @@ interface QInputTextProps extends IQInputChange {
   initialValue?: string | number;
   // onChange?: (termValue: TermValueChangeMessageOrNull) => void;
 }
-export function QInputText({
+export function QInputScalar({
   inputProps,
   inputDataType = 'text',
   termOperator = '$eq',
@@ -42,7 +42,7 @@ export function QInputText({
   formatCallbackValues = (value: any) => {
     return { [termOperator]: value };
   },
-}: QInputTextProps) {
+}: QInputScalarProps) {
   const handleChange = (value: any) => {
     if (!value || value === '') {
       onChange(null);

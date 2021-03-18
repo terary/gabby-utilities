@@ -3,10 +3,10 @@ import { render, act, cleanup } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import { QInputText, untestables } from './QInputText';
+import { QInputScalar, untestables } from './QInputScalar';
 import { TermValueChangeMessageOrNull } from '../term.types';
 
-describe('QInputText', () => {
+describe('QInputScalar', () => {
   afterEach(() => {
     cleanup();
   });
@@ -151,7 +151,7 @@ describe('QInputText', () => {
       });
       const textboxes = screen.getAllByRole('textbox');
       expect(textboxes.length).toBe(1);
-      expect(textboxes[0].value).toBe('This s a value');
+      expect((textboxes[0] as HTMLInputElement).value).toBe('This s a value');
     });
   });
   describe('onChange, formatCallbackValues, formatDisplayValues', () => {
@@ -201,7 +201,7 @@ describe('QInputText', () => {
       expect(changeHandler).toHaveBeenCalledWith(null);
     });
   });
-}); // describe('QInputText'
+}); // describe('QInputScalar'
 
 // ----------------- Helpers
 type PropertyObject = { [propName: string]: any };
@@ -217,5 +217,5 @@ const setupRender = (focusProps: PropertyObject = {}) => {
     }
   });
 
-  return render(<QInputText {...effectiveProps} />);
+  return render(<QInputScalar {...effectiveProps} />);
 };

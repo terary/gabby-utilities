@@ -6,7 +6,6 @@ import { Subfield } from '../../../common/types';
 import { QInputRange, untestables } from './QInputRange';
 import { TermValueChangeMessageOrNull } from '../term.types';
 
-const noopOnChange = (expressionValue: any) => {};
 type StringOrNumberOrNull = string | number | null;
 const testSubfieldsWithInitialValue = {
   min: {

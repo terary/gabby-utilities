@@ -3,11 +3,11 @@
 import React, { ComponentProps } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 
-import { QInputTextStory } from './QInputTextStory';
+import { QInputScalarStory } from './QInputScalarStory';
 
 export default {
   title: 'Query Input/Scalar',
-  component: QInputTextStory,
+  component: QInputScalarStory,
   args: {
     // formatCallbackValues?: (value: any) => object;
     // formatDisplayValues?: (value: any) => string;
@@ -19,8 +19,8 @@ export default {
   argTypes: { onChange: { action: 'change' } },
 } as Meta;
 
-const Template: Story<ComponentProps<typeof QInputTextStory>> = (args) => (
-  <QInputTextStory {...args} />
+const Template: Story<ComponentProps<typeof QInputScalarStory>> = (args) => (
+  <QInputScalarStory {...args} />
 );
 
 export const DefaultStory = Template.bind({});

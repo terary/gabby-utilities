@@ -1,16 +1,16 @@
 // cspell:ignore  fname lname
 import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { QueryTermValueOrNull } from './types';
+import { QueryTermValueOrNull } from '../QueryInput/types';
 import {
   QueryTermOperators,
   SelectOption,
   QFieldDataTypeEnum,
   QFieldCollection,
-} from './types';
-import { QFieldSelector } from './QFieldSelector';
-import { QInputGeneric } from './QInputGeneric';
-import { TermValueChangeMessageOrNull } from './term.types';
+} from '../QueryInput/types';
+import { QFieldSelector } from '../QueryInput/QFieldSelector';
+import { QInputGeneric } from '../QueryInput/QInputGeneric';
+import { TermValueChangeMessageOrNull } from '../QueryInput/term.types';
 import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
