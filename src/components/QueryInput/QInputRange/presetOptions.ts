@@ -1,7 +1,7 @@
 import { Subfield } from '../../GenericInput';
 import {
   formatCallbackValueMinMax,
-  formatCallbackValueWithNulls,
+  // formatCallbackValueWithNulls,
   formatCallbackValueWithoutNull,
   //
   formatDisplayValuesExclusive,
@@ -19,9 +19,8 @@ interface IPresetOptions {
   formatDisplayValue:
     | typeof formatDisplayValuesExclusive
     | typeof formatDisplayValuesMinMax;
-  formatCallbackValue:
-    | typeof formatCallbackValueWithoutNull
-    | typeof formatCallbackValueMinMax;
+  formatCallbackValue: typeof formatCallbackValueWithoutNull;
+  // | typeof formatCallbackValueMinMax;
 }
 type OptionPresets = {
   [key in Options]: IPresetOptions; // Note that "key in".
@@ -51,6 +50,7 @@ export const presetOptions: OptionPresets = {
     },
     formatDisplayValue: formatDisplayValuesMinMax,
     // formatCallbackValue: formatCallbackValueMinMax,
-    formatCallbackValue: formatCallbackValueWithNulls,
+    formatCallbackValue: formatCallbackValueWithoutNull, // default should be able to do this
+    // formatCallbackValue: formatCallbackValueWithNulls,
   },
 };

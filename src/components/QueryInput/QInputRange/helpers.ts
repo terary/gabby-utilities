@@ -52,22 +52,23 @@ export const formatDisplayValuesExclusive = (min: any, max: any): string => {
 
 // *****************   formatCallback
 // used
-export const formatCallbackValueWithNulls = (
-  min: any,
-  max: any,
-  { min: sfMin, max: sfMax }: { min: Subfield; max: Subfield }
-) => {
-  if (isEmpty(min) && isEmpty(max)) {
-    return null;
-  }
+// export const formatCallbackValueWithNulls = (
+//   min: any,
+//   max: any,
+//   { min: sfMin, max: sfMax }: { min: Subfield; max: Subfield }
+// ) => {
+//   if (isEmpty(min) && isEmpty(max)) {
+//     return null;
+//   }
 
-  return {
-    [sfMin.id]: isEmpty(min) ? null : min,
-    [sfMax.id]: isEmpty(max) ? null : max,
-  };
-};
+//   return {
+//     [sfMin.id]: isEmpty(min) ? null : min,
+//     [sfMax.id]: isEmpty(max) ? null : max,
+//   };
+// };
 //used
 export const formatCallbackValueWithoutNull = (
+  // Without Nulls - means none of this {min:null, max:null}
   min: any,
   max: any,
   { min: sfMin, max: sfMax }: { min: Subfield; max: Subfield }

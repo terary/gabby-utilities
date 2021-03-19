@@ -1,5 +1,5 @@
 import { GInputPairSideBySide, Subfield } from '../../GenericInput';
-import { IQInputChange, TermValueChangeMessageOrNull } from '../term.types';
+import { IQInputChange, TermValueChangeMessageOrNull, TermValue } from '../term.types';
 import { presetOptions } from './presetOptions';
 
 const onChangeNoOp = (changeMessage: TermValueChangeMessageOrNull) => {};
@@ -13,7 +13,7 @@ export interface QInputRangeProps extends IQInputChange {
   // TODO - reorganize Range, create new MinMax (think I deleted when it was called Pair)
   // TODO - min/max will support {min:null, max:null} where as Range does not
   // TODO - separate/specialization/generalization
-  formatCallbackValues?: (min: any, max: any) => any;
+  formatCallbackValues?: (min: any, max: any) => TermValue;
   // formatCallbackValues?: (min: any, max: any) => TermValue;
   formatDisplayValues?: (min: any, max: any) => string;
   subfields?: { min: Subfield; max: Subfield };
@@ -32,7 +32,11 @@ export const QInputRange = ({
   subfields = presetOptions[rangeOption].subfields,
   formatDisplayValues = presetOptions[rangeOption].formatDisplayValue,
   formatCallbackValues = (min: any, max: any) => {
-    return presetOptions[rangeOption].formatCallbackValue(min, max, subfields);
+    return presetOptions[rangeOption].formatCallbackValue(
+      min,
+      max,
+      subfields
+    ) as TermValue;
   },
 }: QInputRangeProps) => {
   const handleChange = (newValue: ChangeValue) => {

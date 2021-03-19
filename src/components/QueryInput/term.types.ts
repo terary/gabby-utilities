@@ -51,12 +51,11 @@ export type { SelectOption };
 // };
 // ----------------------------------------
 export interface IQInputChange {
-  // for the time being not used, only here to keep notes.
   inputDataType?: InputDataType;
-  // formatCallbackValues?:
-  //   | ((value: numberOrString) => objectOrNull) // scalar
-  //   | ((value: numberOrString[]) => objectOrNull) // multiple select
-  //   | ((min: any, max: any) => object); // range
+  formatCallbackValues?:
+    | ((value: Scalar) => TermValue) // scalar
+    | ((value: Scalar[]) => TermValue) // multiple select
+    | ((min: any, max: any) => TermValue); // range
 
   formatDisplayValues?:
     | ((value: Scalar) => string) // scalar
