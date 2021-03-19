@@ -6,15 +6,10 @@
 import { ReactElement, useState } from 'react';
 
 import { QInputSelectMultiple } from './QInputSelectMultiple';
-import { SelectOption } from '../../GenericInput';
+// import { SelectOption } from '../../GenericInput';
+import { SelectOption } from '../term.types';
 import { Grid } from '@material-ui/core';
 import { TermOperators } from '../term.types';
-
-const options = [
-  { value: 'value1', label: 'Option One' },
-  { value: 'value2', label: 'Option Two' },
-  { value: 'value3', label: 'Option Three' },
-];
 
 interface QInputSelectMultipleProps {
   formatCallbackValues?: (value: any) => object;

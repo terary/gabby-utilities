@@ -4,23 +4,22 @@ import {
   TermValueChangeMessageOrNull,
   TermValue,
   TermOperators,
+  Scalar,
+  SelectOption,
 } from '../term.types';
-import { GInputSelectMultiple, SelectOption } from '../../GenericInput';
+import { GInputSelectMultiple /*, SelectOption */ } from '../../GenericInput';
 
 const noopOnChange = (changeMessage: TermValueChangeMessageOrNull) => {};
 export const untestables = {
   noopOnChange,
 };
 
-interface QInputSelectMultipleProps extends IQInputChange {
-  formatCallbackValues?: (value: (number | string)[]) => object;
-  formatDisplayValues?: (value: (number | string)[]) => string;
-  inputProps?: object;
-  label?: string;
+export interface QInputSelectMultipleProps extends IQInputChange {
+  formatCallbackValues?: (value: Scalar[]) => TermValue;
+  formatDisplayValues?: (value: Scalar[]) => string;
   termOperator?: TermOperators;
-  initialValue?: (string | number)[]; // actually its one of the datatypes?
+  initialValue?: Scalar[]; // actually its one of the data types?
   options: SelectOption[];
-  // onChange?: from IQInputChange
 }
 
 export const QInputSelectMultiple = ({

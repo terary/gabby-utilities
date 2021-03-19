@@ -1,4 +1,4 @@
-import { IQInputChange, TermValue, TermOperators } from '../term.types';
+import { IQInputChange, TermValue, TermOperators, Scalar } from '../term.types';
 import { GInputSelectSingle, SelectOption } from '../../GenericInput';
 
 const noopOnChange = (value: any) => {};
@@ -7,17 +7,15 @@ export const untestables = {
   noopOnChange,
 };
 
-interface QInputSelectSingleProps extends IQInputChange {
+export interface QInputSelectSingleProps extends IQInputChange {
   allowEmpty?: boolean;
 
-  formatCallbackValues?: (value: any) => object;
-  formatDisplayValues?: (value: any) => string;
-  inputProps?: object;
-  initialValue?: string | number; // actually its one of the data types?
-  label?: string;
+  formatCallbackValues?: (value: Scalar) => TermValue;
+  formatDisplayValues?: (value: Scalar) => string;
+  // inputDataType -- comes from the options
+  initialValue?: Scalar; // actually its one of the data types?
   options: SelectOption[];
   termOperator?: TermOperators;
-  // onChange?: (termValue: TermValueChangeMessageOrNull) => void;
 }
 
 export const QInputSelectSingle = ({

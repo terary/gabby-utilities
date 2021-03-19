@@ -1,17 +1,46 @@
 // cspell:ignore  fname lname
-import React, { useState } from 'react';
+import React, { useState, ReactChild } from 'react';
+
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { QueryTermValueOrNull } from '../QueryInput/types';
 import {
-  QueryTermOperators,
+  // QueryTermOperators,
+  QueryTermValueOrNull,
   SelectOption,
-  QFieldDataTypeEnum,
-  QFieldCollection,
-} from '../QueryInput/types';
-import { QFieldSelector } from '../QueryInput/QFieldSelector';
+  // QFieldDataTypeEnum,
+  // QFieldCollection,
+} from '../QueryInput';
+import { QFieldSelector } from './QFieldSelector';
 import { QInputGeneric } from '../QueryInput/QInputGeneric';
 import { TermValueChangeMessageOrNull } from '../QueryInput/term.types';
 import { Grid } from '@material-ui/core';
+
+type QueryField = {
+  label: string;
+  datatype: QFieldDataTypeEnum;
+  UIInput?: ReactChild;
+};
+
+export type QueryTermOperator = {
+  [operator: string]: {
+    longLabel: string;
+    shortLabel: string;
+  };
+};
+type QFieldCollection = { [fieldId: string]: QueryField };
+enum QFieldDataTypeEnum {
+  DATE = 'DATE',
+  STRING = 'STRING',
+  NUMBER = 'NUMBER',
+}
+const QueryTermOperators = {
+  eq: { longLabel: 'Equals', shortLabel: '=' },
+  gt: { longLabel: 'Greater Than', shortLabel: '>' },
+  lt: { longLabel: 'Less Than', shortLabel: '<' },
+  regex: { longLabel: 'Contains', shortLabel: 'has' },
+  betweenx: { longLabel: 'Between', shortLabel: 'from' },
+  betweeni: { longLabel: 'Between and Including', shortLabel: 'from' },
+  anyOf: { longLabel: 'Any Of', shortLabel: 'Any' },
+} as QueryTermOperator;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

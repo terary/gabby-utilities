@@ -6,11 +6,14 @@
 import { useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { QInputScalar } from './QInputScalar';
-import { TermOperators } from '../term.types';
+import { TermOperators, Scalar, TermValue } from '../term.types';
 import { InputDataType } from '../../GenericInput';
+// formatCallbackValues = (value: Scalar) => {
+//   return { [termOperator]: value } as TermValue;
+// },
 
 interface QInputScalarStoryProps {
-  formatCallbackValues?: (value: any) => object;
+  formatCallbackValues?: (value: Scalar) => TermValue;
   formatDisplayValues?: (value: any) => string;
   inputProps?: object;
   inputDataType?: InputDataType;
@@ -38,7 +41,7 @@ export function QInputScalarStory({
   const [callStack, setCallStack] = useState([] as any[]);
 
   const handleChange = (...args: any) => {
-    setCallStack(callStack.concat([args]));
+    setCallStack(callStack.concat(args));
   };
 
   return (

@@ -1,7 +1,9 @@
 import React from 'react';
 import {
+  Scalar,
   IQInputChange,
   TermValueChangeMessageOrNull,
+  TermValue,
   TermOperators,
 } from '../term.types';
 import { GInputText, InputDataType } from '../../GenericInput';
@@ -20,16 +22,13 @@ export const untestables = {
   noopOnChange,
 };
 
-interface QInputScalarProps extends IQInputChange {
-  formatCallbackValues?: (value: any) => object;
-  formatDisplayValues?: (value: any) => string;
-  inputProps?: object;
-  inputDataType?: InputDataType;
-  label?: string;
+export interface QInputScalarProps extends IQInputChange {
+  formatCallbackValues?: (value: Scalar) => TermValue;
+  formatDisplayValues?: (value: Scalar) => string;
   termOperator?: TermOperators;
   initialValue?: string | number;
-  // onChange?: (termValue: TermValueChangeMessageOrNull) => void;
 }
+
 export function QInputScalar({
   inputProps,
   inputDataType = 'text',
@@ -39,8 +38,8 @@ export function QInputScalar({
   onChange = noopOnChange,
 
   formatDisplayValues = (value) => value + '', //in case of numeric types
-  formatCallbackValues = (value: any) => {
-    return { [termOperator]: value };
+  formatCallbackValues = (value: Scalar) => {
+    return { [termOperator]: value } as TermValue;
   },
 }: QInputScalarProps) {
   const handleChange = (value: any) => {

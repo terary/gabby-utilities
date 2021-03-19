@@ -1,7 +1,7 @@
 import React, { ReactChild, ReactComponentElement, useState } from 'react';
 
 import { QInputScalar } from './QInputScalar';
-import { QueryTermValueOrNull } from './types';
+import { QueryTermValueOrNull } from './term.types';
 import { TermValueChangeMessageOrNull } from './term.types';
 import { QInputSelectMultiple } from './QInputSelect/QInputSelectMultiple';
 import { QInputRange } from './QInputRange/QInputRange';
@@ -93,21 +93,3 @@ export const QInputGeneric = ({
     </>
   );
 };
-/**
- export const QueryTermOperators = {
-  eq: { longLabel: 'Equals', shortLabel: '=' },
-  gt: { longLabel: 'Greater Than', shortLabel: '>' },
-  lt: { longLabel: 'Less Than', shortLabel: '<' },
-  regex: { longLabel: 'Contains', shortLabel: 'has' },
-  betweenx: { longLabel: 'Between', shortLabel: 'from' },
-  betweeni: { longLabel: 'Between and Including', shortLabel: 'from' },
-} as QueryTermOperator;
-
-
-    formatDisplayedValues: formatDisplayValues,
-    helperText: 'This is the help test - disappears when expanded',
-    id: 'primaryStoryId',
-    label: 'This is the Label',
-    subfields: { min: minSubfield, max: maxSubfield },
-
-*/
