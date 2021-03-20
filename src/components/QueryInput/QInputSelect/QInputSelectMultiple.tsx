@@ -1,7 +1,7 @@
 // cspell:ignore datatypes
 import {
-  IQInputChange,
-  TermValueChangeMessageOrNull,
+  IQInputComponent,
+  TermValueWithLabelOrNull,
   TermValue,
   TermOperators,
   Scalar,
@@ -9,12 +9,12 @@ import {
 } from '../term.types';
 import { GInputSelectMultiple /*, SelectOption */ } from '../../GenericInput';
 
-const noopOnChange = (changeMessage: TermValueChangeMessageOrNull) => {};
+const noopOnChange = (changeMessage: TermValueWithLabelOrNull) => {};
 export const untestables = {
   noopOnChange,
 };
 
-export interface QInputSelectMultipleProps extends IQInputChange {
+export interface QInputSelectMultipleProps extends IQInputComponent {
   formatCallbackValues?: (value: Scalar[]) => TermValue;
   formatDisplayValues?: (value: Scalar[]) => string;
   termOperator?: TermOperators;

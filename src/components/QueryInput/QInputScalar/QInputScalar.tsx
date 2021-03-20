@@ -1,8 +1,8 @@
 import React from 'react';
 import {
   Scalar,
-  IQInputChange,
-  TermValueChangeMessageOrNull,
+  IQInputComponent,
+  TermValueWithLabelOrNull,
   TermValue,
   TermOperators,
 } from '../term.types';
@@ -17,12 +17,12 @@ import { GInputText, InputDataType } from '../../GenericInput';
 
 // TODO - Is QInput*  supposed to have label?  I think not, not <label
 
-const noopOnChange = (termValue: TermValueChangeMessageOrNull) => {};
+const noopOnChange = (termValue: TermValueWithLabelOrNull) => {};
 export const untestables = {
   noopOnChange,
 };
 
-export interface QInputScalarProps extends IQInputChange {
+export interface QInputScalarProps extends IQInputComponent {
   formatCallbackValues?: (value: Scalar) => TermValue;
   formatDisplayValues?: (value: Scalar) => string;
   termOperator?: TermOperators;
@@ -49,7 +49,7 @@ export function QInputScalar({
       const newTermValue = {
         termLabel: formatDisplayValues(value),
         termValue: formatCallbackValues(value),
-      } as TermValueChangeMessageOrNull;
+      } as TermValueWithLabelOrNull;
       onChange(newTermValue);
     }
   };

@@ -1,13 +1,13 @@
 import { GInputPairSideBySide, Subfield } from '../../GenericInput';
-import { IQInputChange, TermValueChangeMessageOrNull, TermValue } from '../term.types';
+import { IQInputComponent, TermValueWithLabelOrNull, TermValue } from '../term.types';
 import { presetOptions } from './presetOptions';
 
-const onChangeNoOp = (changeMessage: TermValueChangeMessageOrNull) => {};
+const onChangeNoOp = (changeMessage: TermValueWithLabelOrNull) => {};
 export const untestables = {
   onChangeNoOp,
 };
 
-export interface QInputRangeProps extends IQInputChange {
+export interface QInputRangeProps extends IQInputComponent {
   rangeOption?: 'inclusive' | 'exclusive';
   expanded?: boolean; //undocumented exposed for test/dev/debug -not expected to be externally
   // TODO - reorganize Range, create new MinMax (think I deleted when it was called Pair)
@@ -41,10 +41,15 @@ export const QInputRange = ({
 }: QInputRangeProps) => {
   const handleChange = (newValue: ChangeValue) => {
     const { min: sfMin, max: sfMax } = subfields;
-    onChange({
-      termLabel: formatDisplayValues(newValue[sfMin.id], newValue[sfMax.id]),
-      termValue: formatCallbackValues(newValue[sfMin.id], newValue[sfMax.id]),
-    });
+    const termValue = formatCallbackValues(newValue[sfMin.id], newValue[sfMax.id]);
+    if (termValue === null) {
+      onChange(null);
+    } else {
+      onChange({
+        termValue: termValue,
+        termLabel: formatDisplayValues(newValue[sfMin.id], newValue[sfMax.id]),
+      });
+    }
   };
   return (
     <GInputPairSideBySide

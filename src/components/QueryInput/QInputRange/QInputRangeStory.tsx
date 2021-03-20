@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import { QInputRange } from './QInputRange';
 import { Subfield } from '../../GenericInput';
-import { QueryTermValueOrNull } from '../term.types';
+import { TermValueWithLabelOrNull } from '../term.types';
 import { Grid } from '@material-ui/core';
 import { InputDataType } from '../../GenericInput';
 
@@ -26,7 +26,7 @@ interface QInputPairStoryProps {
   formatDisplayValues?: (min: any, max: any) => string;
   inputDataType?: InputDataType;
   label?: string;
-  onChange?: (termValue: QueryTermValueOrNull) => void;
+  onChange?: (termValue: TermValueWithLabelOrNull) => void;
   subfields?: { min: Subfield; max: Subfield };
 }
 
@@ -83,9 +83,9 @@ export const QInputRangeStory = ({
                 <pre>
                   <code>
                     {`
-        onChange: (value: QueryTermValueOrNull) => void
+        onChange: (value: TermValueWithLabelOrNull) => void
 
-        QueryTermValueOrNull: 
+        TermValueWithLabelOrNull: 
             label: string, ( value of formatDisplayValues)
             value: object, ( value of formatCallbackValues)
         

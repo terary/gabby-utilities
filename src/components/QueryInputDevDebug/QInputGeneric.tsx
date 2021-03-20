@@ -1,13 +1,12 @@
 import React, { ReactChild, ReactComponentElement, useState } from 'react';
 
-import { QInputScalar } from './QInputScalar';
-import { QueryTermValueOrNull } from './term.types';
-import { TermValueChangeMessageOrNull } from './term.types';
-import { QInputSelectMultiple } from './QInputSelect/QInputSelectMultiple';
-import { QInputRange } from './QInputRange/QInputRange';
-// TermValueChangeMessageOrNull
+import { QInputScalar } from '../QueryInput/QInputScalar';
+import { TermValueWithLabelOrNull } from '../QueryInput/term.types';
+import { QInputSelectMultiple } from '../QueryInput/QInputSelect/QInputSelectMultiple';
+import { QInputRange } from '../QueryInput/QInputRange/QInputRange';
+// TermValueWithLabelOrNull
 const noopOnChange = (value: string | object | null) => {};
-const noopOnQueryChange = (termValue: TermValueChangeMessageOrNull) => {};
+const noopOnQueryChange = (termValue: TermValueWithLabelOrNull) => {};
 const options = [
   { value: 'value1', label: 'Option One' },
   { value: 'value2', label: 'Option Two' },
@@ -16,9 +15,9 @@ const options = [
 
 interface QInputGenericProps {
   id: string;
-  onChange?: (value: QueryTermValueOrNull) => void;
+  onChange?: (value: TermValueWithLabelOrNull) => void;
 
-  onQueryTermChange: (termValue: TermValueChangeMessageOrNull) => void;
+  onQueryTermChange: (termValue: TermValueWithLabelOrNull) => void;
   queryTermOperator: string;
   value?: any;
   // queryTermOperator: QueryTermOperator;
@@ -33,23 +32,10 @@ export const QInputGeneric = ({
 }: QInputGenericProps) => {
   const [thisValue, setThisValue] = useState(value || '');
 
-  const handleChange2 = (termValue: TermValueChangeMessageOrNull) => {
+  const handleChange2 = (termValue: TermValueWithLabelOrNull) => {
     console.log('Need finish this', termValue);
   };
-  const handleChange = (termValue: QueryTermValueOrNull) => {
-    setThisValue(JSON.stringify(termValue?.value));
-    onChange(termValue);
-  };
-  const handleQueryTermValueChange = (termValue: QueryTermValueOrNull) => {
-    setThisValue(JSON.stringify(termValue?.value));
-    onChange(termValue);
-    if (queryTermOperator === 'betweenx') {
-      console.log(termValue?.value);
-    }
-
-    // onChange(termValue);
-  };
-  const handleQueryTermValueChange2 = (termValue: TermValueChangeMessageOrNull) => {
+  const handleQueryTermValueChange2 = (termValue: TermValueWithLabelOrNull) => {
     // setThisValue(JSON.stringify(termValue?.value));
     onQueryTermChange(termValue);
 

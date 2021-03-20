@@ -4,7 +4,7 @@ import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { Subfield } from '../../../common/types';
 import { QInputRange, untestables } from './QInputRange';
-import { TermValueChangeMessageOrNull } from '../term.types';
+import { TermValueWithLabelOrNull } from '../term.types';
 
 type StringOrNumberOrNull = string | number | null;
 const testSubfieldsWithInitialValue = {
@@ -23,9 +23,7 @@ const testSubfieldsWithInitialValue = {
 describe('Untestables for the sake of coverage only', () => {
   describe('noopOnChange', () => {
     it('Should do nothing', () => {
-      expect(
-        untestables.onChangeNoOp({} as TermValueChangeMessageOrNull)
-      ).toBeUndefined();
+      expect(untestables.onChangeNoOp({} as TermValueWithLabelOrNull)).toBeUndefined();
     });
   });
 });
@@ -157,7 +155,7 @@ describe('Properties', () => {
         expectCallbackHelper('5', null, 'Greater or Equal to 5'),
         expectCallbackHelper('5', '7', 'Greater or Equal to 5 and Less or Equal to 7'),
         expectCallbackHelper(null, '7', 'Less or Equal to 7'),
-        expectCallbackHelper(null, null, ''),
+        [null], //expectCallbackHelper(null, null, ''),
         expectCallbackHelper(null, '3', 'Less or Equal to 3'),
       ];
       const changeHandler = jest.fn((_childChange: any) => {});
@@ -196,7 +194,7 @@ describe('Properties', () => {
         expectCallbackHelper('5', null, 'Greater than 5'),
         expectCallbackHelper('5', '7', 'Greater than 5 and Less than 7'),
         expectCallbackHelper(null, '7', 'Less than 7'),
-        expectCallbackHelper(null, null, ''),
+        [null], //expectCallbackHelper(null, null, ''),
         expectCallbackHelper(null, '3', 'Less than 3'),
       ];
       const changeHandler = jest.fn((_childChange: any) => {});
@@ -302,7 +300,7 @@ describe('Properties', () => {
         expectCallbackHelper('5', null),
         expectCallbackHelper('5', '7'),
         expectCallbackHelper(null, '7'),
-        expectCallbackHelper(null, null),
+        [null], //expectCallbackHelper(null, null),
         expectCallbackHelper(null, '3'),
       ];
       const changeHandler = jest.fn((_childChange: any) => {});

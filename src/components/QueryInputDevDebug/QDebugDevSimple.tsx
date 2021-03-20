@@ -4,14 +4,14 @@ import React, { useState, ReactChild } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import {
   // QueryTermOperators,
-  QueryTermValueOrNull,
+  TermValueWithLabelOrNull,
   SelectOption,
   // QFieldDataTypeEnum,
   // QFieldCollection,
 } from '../QueryInput';
 import { QFieldSelector } from './QFieldSelector';
-import { QInputGeneric } from '../QueryInput/QInputGeneric';
-import { TermValueChangeMessageOrNull } from '../QueryInput/term.types';
+import { QInputGeneric } from './QInputGeneric';
+
 import { Grid } from '@material-ui/core';
 
 type QueryField = {
@@ -65,10 +65,10 @@ const fields = {
 } as QFieldCollection;
 
 type QueryTerm = {
-  fieldId: string | null;
-  queryOp: string | null;
-  expression?: object | null;
-} & QueryTermValueOrNull;
+  fieldId: any; //string | null;
+  queryOp: any; // string | null;
+  expression?: any; // object | null;
+} & TermValueWithLabelOrNull;
 
 const getQueryTermOperators = (): SelectOption[] => {
   return Object.entries(QueryTermOperators).map(([qOperator, entity], i) => {
@@ -83,11 +83,11 @@ const getFieldOptions = (): SelectOption[] => {
 };
 
 const noopOnChange = (queryExpression: object | null) => {};
-const noopOnQueryChange = (termValue: TermValueChangeMessageOrNull) => {};
+const noopOnQueryChange = (termValue: TermValueWithLabelOrNull) => {};
 
 interface QDebugDevSimpleProps {
   onChange: (queryExpression: object | null) => void;
-  onQueryTermChange?: (termValue: TermValueChangeMessageOrNull) => void;
+  onQueryTermChange?: (termValue: TermValueWithLabelOrNull) => void;
 }
 
 export function QDebugDevSimple({
@@ -95,14 +95,11 @@ export function QDebugDevSimple({
   onQueryTermChange = noopOnQueryChange,
 }: QDebugDevSimpleProps) {
   const classes = useStyles();
-  const [queryTerm, setQueryTerm] = useState({
-    // fieldId: 'estimatedIncome',
-    // queryOp: 'betweenx',
-
+  const [queryTerm, setQueryTerm] = useState(({
     fieldId: 'lname',
     queryOp: 'regex',
     value: 'The Awesome Value',
-  } as QueryTerm);
+  } as unknown) as QueryTerm);
 
   const handleFieldIdChange = (newFieldId: string) => {
     const fieldId = newFieldId === '' ? null : newFieldId;
@@ -136,20 +133,20 @@ export function QDebugDevSimple({
     return ` ${fields[fieldId].label} ${QueryTermOperators[queryOp].longLabel} ${inputValue}`;
   };
 
-  const handleInputChange = (termValue: QueryTermValueOrNull) => {
+  const handleInputChange = (termValue: TermValueWithLabelOrNull) => {
     const newTermValue = { ...queryTerm, ...termValue };
-    newTermValue.expression = {
-      [newTermValue.fieldId || 'missing_filed_id']: termValue?.value,
-    };
+    // newTermValue.expression = {
+    //   [newTermValue.fieldId || 'missing_filed_id']: termValue?.value,
+    // };
     setQueryTerm(newTermValue);
-    if (!termValue || termValue.value === null) {
-      onChange(null);
-    } else {
-      newTermValue.label = makeLabel(newTermValue.label);
-      onChange(newTermValue);
-    }
+    // if (!termValue || termValue.value === null) {
+    //   onChange(null);
+    // } else {
+    //   newTermValue.label = makeLabel(newTermValue.label);
+    //   onChange(newTermValue);
+    // }
   };
-  const handleQueryTermValueChange2 = (termValue: TermValueChangeMessageOrNull) => {
+  const handleQueryTermValueChange2 = (termValue: TermValueWithLabelOrNull) => {
     // setThisValue(JSON.stringify(termValue?.value));
     onQueryTermChange(termValue);
   };
@@ -191,7 +188,7 @@ export function QDebugDevSimple({
             id="Maybe ID is a mistake"
             queryTermOperator={queryTerm.queryOp}
             onChange={handleInputChange}
-            value={queryTerm.value || ''}
+            // value={queryTerm.value || ''}
             onQueryTermChange={handleQueryTermValueChange2}
           />
         )}

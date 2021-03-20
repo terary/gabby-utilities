@@ -1,4 +1,4 @@
-import { IQInputChange, TermValue, TermOperators, Scalar } from '../term.types';
+import { IQInputComponent, TermValue, TermOperators, Scalar } from '../term.types';
 import { GInputSelectSingle, SelectOption } from '../../GenericInput';
 
 const noopOnChange = (value: any) => {};
@@ -7,7 +7,7 @@ export const untestables = {
   noopOnChange,
 };
 
-export interface QInputSelectSingleProps extends IQInputChange {
+export interface QInputSelectSingleProps extends IQInputComponent {
   allowEmpty?: boolean;
 
   formatCallbackValues?: (value: Scalar) => TermValue;

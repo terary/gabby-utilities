@@ -4,7 +4,7 @@ import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import { QInputScalar, untestables } from './QInputScalar';
-import { TermValueChangeMessageOrNull } from '../term.types';
+import { TermValueWithLabelOrNull } from '../term.types';
 
 describe('QInputScalar', () => {
   afterEach(() => {
@@ -14,7 +14,7 @@ describe('QInputScalar', () => {
     describe('noopOnChange', () => {
       it('Should do nothing', () => {
         expect(
-          untestables.noopOnChange({} as TermValueChangeMessageOrNull)
+          untestables.noopOnChange({} as TermValueWithLabelOrNull)
         ).toBeUndefined();
       });
     });

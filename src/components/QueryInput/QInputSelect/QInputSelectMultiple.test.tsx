@@ -4,7 +4,7 @@ import { render, act, cleanup, fireEvent, within } from '@testing-library/react'
 import { screen } from '@testing-library/dom';
 
 import userEvent from '@testing-library/user-event';
-import { TermValueChangeMessageOrNull } from '../term.types';
+import { TermValueWithLabelOrNull } from '../term.types';
 import { QInputSelectMultiple, untestables } from './QInputSelectMultiple';
 
 const testOptions = [
@@ -20,7 +20,7 @@ describe('QInputSelect', () => {
     describe('noopOnChange', () => {
       it('Should do nothing', () => {
         expect(
-          untestables.noopOnChange({} as TermValueChangeMessageOrNull)
+          untestables.noopOnChange({} as TermValueWithLabelOrNull)
         ).toBeUndefined();
       });
     });

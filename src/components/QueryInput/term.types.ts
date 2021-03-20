@@ -1,22 +1,5 @@
-/*
-  QInput will call parent with value
-  value will be {operator:termValue}
-  termValue will be either a listScalar or objectScalar
-
-  cb(
-    {$gt: value1, $lt: value}
-  )
-
-  cb(
-    {$eg: value}
-  )
-
-  cb(
-    {$in: [value1, value2]}
-  )
-*/
 import { SelectOption } from '../common.types';
-import { Subfield, InputDataType } from '../GenericInput';
+import { InputDataType } from '../GenericInput';
 
 export type TermOperators = '$eq' | '$lt' | '$lte' | '$gt' | '$gte' | '$in' | '$regex';
 export type Scalar = string | number;
@@ -27,30 +10,17 @@ export type TermValue =
   | { [key in TermOperators]: ScalarList }
   | null;
 
-// type numberOrString = number | string;
-// type ObjectOrNull = object | null;
-
-type TermValueChangeMessage = {
+export type TermValueWithLabel = {
   termLabel: string;
-  termValue: TermValue;
-};
-export type TermValueChangeMessageOrNull = TermValueChangeMessage | null;
-
-export type QueryTermValue = {
-  label: string;
-  value: string | number | object | null;
+  termValue: string | number | object | null;
+  // Scala string | number, Range object, SelectMultiple array
   // null probably unnecessary.  If null the expression is null
-  // see QueryTermValueOrNull
 };
 
-export type QueryTermValueOrNull = QueryTermValue | null;
+export type TermValueWithLabelOrNull = TermValueWithLabel | null;
+
 export type { SelectOption };
-// export type SelectOption = {
-//   value: string;
-//   label: string;
-// };
-// ----------------------------------------
-export interface IQInputChange {
+export interface IQInputComponent {
   inputDataType?: InputDataType;
   formatCallbackValues?:
     | ((value: Scalar) => TermValue) // scalar
@@ -64,5 +34,5 @@ export interface IQInputChange {
 
   inputProps?: object;
   label?: string;
-  onChange?: (termValues: TermValueChangeMessageOrNull) => void;
+  onChange?: (termValues: TermValueWithLabelOrNull) => void;
 }
