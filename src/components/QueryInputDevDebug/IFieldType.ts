@@ -6,7 +6,7 @@ export enum CONDITION_OPERATORS {
   lt = '$lt',
 }
 
-export interface IFieldCompoentPros {
+export interface IFieldComponentPros {
   conditionOperator: CONDITION_OPERATORS;
   fieldId: string;
   helperText?: string;
@@ -23,10 +23,10 @@ export interface IFieldCompoentPros {
 // parentChangeNotifier - needs  some help will signature changes
 // with different control type
 //
-// Need to define control respponsibiltiy.  - only to send {nodeId:NodeValue}
+// Need to define control responsibility.  - only to send {nodeId:NodeValue}
 // nothing more.  The qOperator or field name are something else.
 
-export interface IGenericFieldCompoentPros {
+export interface IGenericFieldComponentPros {
   conditionOperator: CONDITION_OPERATORS;
   fieldId: string;
   helperText?: string;

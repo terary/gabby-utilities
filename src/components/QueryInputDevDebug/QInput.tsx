@@ -2,11 +2,11 @@ import TextField from '@material-ui/core/TextField';
 import { getByLabelText } from '@testing-library/react';
 import { useState } from 'react';
 import {
-  IFieldCompoentPros,
+  IFieldComponentPros,
   CONDITION_OPERATORS,
   QSingleConditionChangeMessage,
 } from './IFieldType';
-// export interface IFieldCompoentPros {
+// export interface IFieldComponentPros {
 //   conditionOperator: CONDITION_OPERATORS;
 //   fieldId: string;
 //   helperText?: string;
@@ -43,7 +43,7 @@ export const QInput = ({
   nodeId,
   onChange = noopOnChange,
   validator = noopValidator,
-}: IFieldCompoentPros) => {
+}: IFieldComponentPros) => {
   const [inputValue, setInputValue] = useState(initialValue);
   const [inputError, setInputError] = useState(validator(initialValue));
 

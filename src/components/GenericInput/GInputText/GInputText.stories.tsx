@@ -11,7 +11,7 @@ export default {
   args: {
     errorText: 'Remove this text to clear error',
     helperText: 'This is the help test - disappears when expanded',
-    id: 'primaryStoryId',
+    // id: 'primaryStoryId',
     label: 'This is the Label',
     required: true,
     value: 'Value can be set by Parent',
@@ -34,12 +34,12 @@ export default {
 const Template: Story<ComponentProps<typeof GInputText>> = (args) => (
   <GInputText
     {...args}
-    // formatDispayedValues={formatDisplayValues}
+    // formatDisplayedValues={formatDisplayValues}
   />
 );
 
 export const DefaultStory = Template.bind({});
 DefaultStory.args = {
-  id: 'TheStoryID',
+  // id: 'TheStoryID',
   /* the args you need here will depend on your component */
 };

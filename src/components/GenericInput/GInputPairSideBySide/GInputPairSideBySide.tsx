@@ -7,17 +7,17 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { InputDataType } from '../types';
 import {
   DoubleValueFields,
   Subfield,
-  ClickHanlder,
+  ClickHandler,
 } from './GInputPairSideBySide.types';
-
 const noopOnChange = (values: object) => {};
 const useStyles = makeStyles({
   root: {},
   overRideFocus: {
-    /*
+    /* handler
     Not currently in use.  Keeping because it maybe handy.
     Can be used to set disabled to appear active (parent disable but children active)
     */
@@ -39,6 +39,9 @@ const useStyles = makeStyles({
     marginRight: '1em',
     top: '-1.5em',
     color: 'primary',
+  },
+  subFieldHidden: {
+    display: 'none',
   },
   input: {
     color: 'white',
@@ -62,7 +65,7 @@ const defaultGetDisplayValue = (min: string | number, max: string | number) => {
 };
 
 interface TheAdornmentProps {
-  onClick: ClickHanlder;
+  onClick: ClickHandler;
   isExpanded: boolean;
 }
 
@@ -84,9 +87,11 @@ export interface GInputPairSideBySideProps {
   /**
    * Parent defined main text fields display
    */
-  formatDispayedValues?: (min: string | number, max: string | number) => string;
+  formatDisplayedValues?: (min: string | number, max: string | number) => string;
   helperText?: string | ((value: any) => string);
   id?: string;
+  inputDataType?: InputDataType;
+  inputProps?: object;
   expanded?: boolean;
   label?: string;
   onChange?: (newValue: any) => void; // should be <T> or something
@@ -100,9 +105,11 @@ export interface GInputPairSideBySideProps {
  */
 export function GInputPairSideBySide({
   errorSubfields,
-  formatDispayedValues = defaultGetDisplayValue,
+  formatDisplayedValues = defaultGetDisplayValue,
   helperText,
-  id,
+  // id,
+  inputDataType = 'text',
+  inputProps = {},
   expanded = false,
   label,
   subfields = defaultSubfields,
@@ -116,8 +123,8 @@ export function GInputPairSideBySide({
   const [thisValue, setThisValue] = React.useState(
     extractValue(
       value || {
-        [subfields.min.id]: subfields.min.intialValue || '',
-        [subfields.max.id]: subfields.max.intialValue || '',
+        [subfields.min.id]: subfields.min.initialValue || '',
+        [subfields.max.id]: subfields.max.initialValue || '',
       },
       subfields
     )
@@ -139,7 +146,7 @@ export function GInputPairSideBySide({
     helperText: getHelperText(),
     placeholder: focusedField.label, // not sure why this works, but it seems to
     required: false,
-    variant: 'outlined' as 'outlined', // typescript compplains if I dont do it this way.
+    variant: 'outlined' as 'outlined', // typescript complains if I don't do it this way.
   };
   Object.assign(effectiveTextFieldProps, textFieldProps);
 
@@ -149,6 +156,24 @@ export function GInputPairSideBySide({
   ) => {
     const newValue = { ...thisValue };
     newValue[subfields[fieldIndex].id] = e.target.value;
+
+    if (inputDataType === 'text') {
+      newValue[subfields[fieldIndex].id] += '';
+    }
+
+    if (inputDataType === 'integer') {
+      newValue[subfields[fieldIndex].id] = parseInt(
+        newValue[subfields[fieldIndex].id],
+        10
+      );
+    }
+
+    if (inputDataType === 'decimal') {
+      const floatVal = parseFloat(newValue[subfields[fieldIndex].id]);
+      if (!Number.isNaN(floatVal) && floatVal !== undefined) {
+        newValue[subfields[fieldIndex].id] = floatVal;
+      }
+    }
 
     setThisValue(newValue);
     onChange(newValue);
@@ -176,7 +201,7 @@ export function GInputPairSideBySide({
   };
 
   const getValueForDisplay = (): string => {
-    return formatDispayedValues(
+    return formatDisplayedValues(
       thisValue[subfields['min'].id],
       thisValue[subfields['max'].id]
     );
@@ -240,41 +265,58 @@ export function GInputPairSideBySide({
           error={subfieldError('min') || subfieldError('max')}
           className={classes.textField}
           onFocus={setExpandedTrue}
-          id={id}
+          // key={id}
+          // id={id}
           InputProps={{
+            readOnly: true,
             endAdornment: (
               <TheAdornment onClick={handleExpandFields} isExpanded={isExpanded} />
             ),
+            ...inputProps,
           }}
           value={getValueForDisplay()}
           {...effectiveTextFieldProps}
           helperText={getAppropriateHelperText()}
         />
         <Fade in={isExpanded}>
-          <div>
+          <div style={{ position: 'absolute' }}>
             <TextField
               error={subfieldError('min')}
-              className={classes.subField}
-              id={id + '-min'}
+              className={isExpanded ? classes.subField : classes.subFieldHidden}
+              // id={id + '-min'}
+              inputProps={subfields['min'].inputProps}
+              key="min"
               label={subfields['min'].label}
               margin="dense"
               onFocus={setExpandedTrue}
               onChange={(e) => {
                 handleChange(e, 'min');
               }}
+              type={
+                inputDataType === 'integer' || inputDataType === 'decimal'
+                  ? 'number'
+                  : inputDataType
+              }
               value={thisValue[subfields['min'].id]}
               variant="outlined"
             />
             <TextField
               error={subfieldError('max')}
-              className={classes.subField}
+              className={isExpanded ? classes.subField : classes.subFieldHidden}
               color="primary"
-              id={id + '-max'}
+              // id={id + '-max'}
+              inputProps={subfields['max'].inputProps}
+              key="max"
               label={subfields['max'].label}
               margin="dense"
               onChange={(e) => {
                 handleChange(e, 'max');
               }}
+              type={
+                inputDataType === 'integer' || inputDataType === 'decimal'
+                  ? 'number'
+                  : inputDataType
+              }
               value={thisValue[subfields['max'].id]}
               variant="outlined"
             />

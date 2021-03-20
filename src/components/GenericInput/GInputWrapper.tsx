@@ -20,9 +20,9 @@ export interface GInputProps {
   // component allowEmpty?: boolean;
   errorText?: string | undefined;
   helperText?: string;
-  id: string;
+  id?: string; // shouldn't be used? aria-label
   label?: string;
-  // conponent options: SelectOption[];
+  // component options: SelectOption[];
   required?: boolean;
   // component startValue?: string | null;
   // onChange?: (value: string) => void;
@@ -51,9 +51,9 @@ export function GInputWrapper({
 
   const hasError = () => {
     // because storybook's user control
-    // no way to set errorText to undefined. non empty is consdered length
+    // no way to set errorText to undefined. non empty is considered length
     // greater than 0.  Hence to set error without description will require
-    // setting " ", emptyish string.
+    // setting " ", empty-ish string.
     return errorText !== undefined && errorText.length > 0;
   };
 

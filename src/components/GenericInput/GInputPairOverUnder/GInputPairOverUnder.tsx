@@ -12,7 +12,7 @@ const noopOnChange = (values: object) => {};
 type Subfield = {
   label: string;
   id: string;
-  intialValue?: string | number;
+  initialValue?: string | number;
 };
 
 export type GInputPairOverUnderFields = {
@@ -57,8 +57,8 @@ export function GInputPairOverUnder({
   const [thisValue, setThisValue] = React.useState(
     extractValue(
       value || {
-        [subfields.min.id]: subfields.min.intialValue || '',
-        [subfields.max.id]: subfields.max.intialValue || '',
+        [subfields.min.id]: subfields.min.initialValue || '',
+        [subfields.max.id]: subfields.max.initialValue || '',
       },
       subfields
     )
@@ -78,7 +78,7 @@ export function GInputPairOverUnder({
     helperText: getHelperText(),
     placeholder: focusedField.label, // not sure why this works, but it seems to
     required: false,
-    variant: 'outlined' as 'outlined', // typescript objects if I dont do it this way.
+    variant: 'outlined' as 'outlined', // typescript objects if I don't do it this way.
   };
 
   Object.assign(effectiveTextFieldProps, textFieldProps);

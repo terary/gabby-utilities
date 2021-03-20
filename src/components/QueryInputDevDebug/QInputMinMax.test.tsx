@@ -3,13 +3,12 @@ import { render, act } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
-import { QInputMinMax } from '../GenericInput/QInputMinMax';
+import { QInputMinMax } from './QInputMinMax';
 import {
   CONDITION_OPERATORS,
   UIValidatorError,
   // NodeChangeValueType,
   // NodeChangeValueType,
-
 } from './IFieldType';
 // import { act } from 'react-dom/test-utils';
 
@@ -38,7 +37,7 @@ describe('QInput', () => {
         render(
           <QInputMinMax
             nodeId="MyAwesomeNode"
-            fieldId="TheVield"
+            fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
             // new
             id={'MyAwesomeNode:0-1-3'}
@@ -57,7 +56,6 @@ describe('QInput', () => {
             nodeId="MyAwesomeNode"
             validator={validatorIsValid}
             initialValue={initVal}
-            // onChange={parentHadleChange}
             fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
             // new
@@ -69,8 +67,6 @@ describe('QInput', () => {
       expect(helperP?.constructor.name).toBe('HTMLParagraphElement');
       expect(helperP?.innerHTML).toBe(JSON.stringify(initVal));
       expect(screen.getByRole('textbox')).toHaveValue(initVal.min);
-
-      // expect(parentHadleChange).not.toHaveBeenCalled();
     });
   });
   describe('Option Helper Text', () => {
@@ -80,7 +76,7 @@ describe('QInput', () => {
           nodeId="MyAwesomeNode"
           validator={validatorIsValid}
           // onChange={(qCondition) => {}}
-          fieldId="TheVield"
+          fieldId="TheField"
           conditionOperator={CONDITION_OPERATORS.eq}
           // new
           id={'MyAwesomeNode_0-1-3'}
@@ -94,13 +90,13 @@ describe('QInput', () => {
     });
   });
   describe('Optional Label Text', () => {
-    it('Should displays when pressent, will append Max/Min as apropos', () => {
+    it('Should displays when present, will append Max/Min as apropos', () => {
       const dom = render(
         <QInputMinMax
           nodeId="MyAwesomeNode"
           validator={validatorIsValid}
           // onChange={(qCondition) => {}}
-          fieldId="TheVield"
+          fieldId="TheField"
           conditionOperator={CONDITION_OPERATORS.eq}
           // new
           id={'MyAwesomeNode_0-1-3'}
@@ -114,13 +110,13 @@ describe('QInput', () => {
       userEvent.click(screen.getByRole('button'));
       expect(label?.innerHTML).toBe('This is the Label Text (Max.)');
     });
-    it('Should not displays when not pressent', () => {
+    it('Should not displays when not present', () => {
       const dom = render(
         <QInputMinMax
           nodeId="MyAwesomeNode"
           validator={validatorIsValid}
           // onChange={(qCondition) => {}}
-          fieldId="TheVield"
+          fieldId="TheField"
           conditionOperator={CONDITION_OPERATORS.eq}
           // new
           id={'MyAwesomeNode_0-1-3'}
@@ -154,16 +150,16 @@ describe('QInput', () => {
       expect(screen.getByRole('textbox')).toHaveValue('Hello, World!');
     });
     it('Should be called when present', async () => {
-      const parentHadleChange = jest.fn((_childChange: any) => {});
+      const parentHandleChange = jest.fn((_childChange: any) => {});
       act(() => {
         render(
           <QInputMinMax
             nodeId="MyAwesomeNode"
             validator={validatorIsValid}
-            onChangeParentMinMax={parentHadleChange}
+            onChangeParentMinMax={parentHandleChange}
             fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
-            onChangeParent={parentHadleChange}
+            onChangeParent={parentHandleChange}
             // new
             id={'MyAwesomeNode:0-1-3'}
           />
@@ -173,32 +169,32 @@ describe('QInput', () => {
       const theExpected = {
         nodeId: 'MyAwesomeNode',
         condition: {
-          // computed property more closely mimmics real-world
+          // computed property more closely mimics real-world
           ['TheField']: { [CONDITION_OPERATORS.eq]: { min: '3', max: '' } },
         },
       };
 
       await userEvent.type(screen.getByRole('textbox'), '3');
-      expect(parentHadleChange).toHaveBeenCalledWith(theExpected);
+      expect(parentHandleChange).toHaveBeenCalledWith(theExpected);
 
       theExpected.condition['TheField'][CONDITION_OPERATORS.eq].max = '5';
       userEvent.click(screen.getByRole('button'));
       await userEvent.type(screen.getByRole('textbox'), '5');
-      expect(parentHadleChange).toHaveBeenCalledWith(theExpected);
+      expect(parentHandleChange).toHaveBeenCalledWith(theExpected);
     });
   });
   describe('callback validator', () => {
     it('Should be optional', async () => {
-      const parentHadleChange = jest.fn((_childChange: any) => {});
+      const parentHandleChange = jest.fn((_childChange: any) => {});
       act(() => {
         render(
           <QInputMinMax
             nodeId="MyAwesomeNode"
             validator={validatorNotValid}
-            onChangeParentMinMax={parentHadleChange}
+            onChangeParentMinMax={parentHandleChange}
             fieldId="TheField"
             conditionOperator={CONDITION_OPERATORS.eq}
-            onChangeParent={parentHadleChange}
+            onChangeParent={parentHandleChange}
             // new//
             id={'MyAwesomeNode:0-1-3'}
           />
@@ -208,19 +204,19 @@ describe('QInput', () => {
       const theExpected = {
         nodeId: 'MyAwesomeNode',
         condition: {
-          // computed property more closely mimmics real-world
+          // computed property more closely mimics real-world
           ['TheField']: { [CONDITION_OPERATORS.eq]: { min: '3', max: '' } },
         },
       };
 
       await userEvent.type(screen.getByRole('textbox'), '3');
-      expect(parentHadleChange).not.toHaveBeenCalledWith();
+      expect(parentHandleChange).not.toHaveBeenCalledWith();
 
       theExpected.condition['TheField'][CONDITION_OPERATORS.eq].max = '5';
       userEvent.click(screen.getByRole('button'));
 
       await userEvent.type(screen.getByRole('textbox'), '5');
-      expect(parentHadleChange).not.toHaveBeenCalledWith();
+      expect(parentHandleChange).not.toHaveBeenCalledWith();
     });
   });
 });

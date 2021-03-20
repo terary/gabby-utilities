@@ -6,8 +6,8 @@ import userEvent from '@testing-library/user-event';
 import { GInputPairOverUnder, GInputPairOverUnderFields } from './GInputPairOverUnder';
 
 const testSubfieldsWithInitialValue = {
-  min: { id: 'testLow', label: 'LowerBound', intialValue: 1 },
-  max: { id: 'testHigh', label: 'UpperBound', intialValue: 23 },
+  min: { id: 'testLow', label: 'LowerBound', initialValue: 1 },
+  max: { id: 'testHigh', label: 'UpperBound', initialValue: 23 },
 } as GInputPairOverUnderFields;
 
 describe('QInput', () => {
@@ -53,12 +53,12 @@ describe('QInput', () => {
 
       expect(changeHandler).toHaveBeenCalledWith({ min: '5', max: '7' });
     });
-    it('Should allow config of label, id and intial value, updating display and calling onChnage ', async () => {
-      // set intial value, displays correct, changes correctly, calls onChange correctly
+    it('Should allow config of label, id and initial value, updating display and calling onChange ', async () => {
+      // set initial value, displays correct, changes correctly, calls onChange correctly
       const changeHandler = jest.fn((_childChange: any) => {});
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      tmpSubFields.min.intialValue = 3;
-      tmpSubFields.max.intialValue = 23;
+      tmpSubFields.min.initialValue = 3;
+      tmpSubFields.max.initialValue = 23;
       act(() => {
         render(
           <GInputPairOverUnder onChange={changeHandler} subfields={tmpSubFields} />
@@ -110,8 +110,8 @@ describe('QInput', () => {
     });
     it('Should call a with internal value using, subfield.id(s) if provided, as keys', () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      delete tmpSubFields.min.intialValue;
-      delete tmpSubFields.max.intialValue;
+      delete tmpSubFields.min.initialValue;
+      delete tmpSubFields.max.initialValue;
       const dom = render(
         <GInputPairOverUnder
           helperText={(value) => JSON.stringify(value)}
@@ -127,7 +127,7 @@ describe('QInput', () => {
   });
 
   describe('Optional Label Text', () => {
-    it('Should contain label and lengend when supplied', () => {
+    it('Should contain label and legend when supplied', () => {
       const dom = render(<GInputPairOverUnder label="Client Code Label" />);
       const label = dom.container.querySelector('label');
       expect(label?.innerHTML).toBe('Client Code Label');
@@ -135,7 +135,7 @@ describe('QInput', () => {
       const legend = dom.container.querySelector('legend > span');
       expect(legend?.innerHTML).toMatch('Client Code Label');
     });
-    it('Should not contain label or lengend when not supplied', () => {
+    it('Should not contain label or legend when not supplied', () => {
       const dom = render(<GInputPairOverUnder />);
       const label = dom.container.querySelector('label');
       expect(label).toBeNull();
@@ -164,8 +164,8 @@ describe('QInput', () => {
     it('Should be called with subfield keys when subfield provided', async () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      tmpSubFields.min.intialValue = '';
-      tmpSubFields.max.intialValue = '';
+      tmpSubFields.min.initialValue = '';
+      tmpSubFields.max.initialValue = '';
 
       act(() => {
         render(

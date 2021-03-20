@@ -2,13 +2,15 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import { IGenericFieldCompoentPros, QSingleConditionChangeMessage } from './IFieldType';
-import { ControlCamera } from '@material-ui/icons';
+import {
+  IGenericFieldComponentPros,
+  QSingleConditionChangeMessage,
+} from './IFieldType';
 
 // Need to tease out the control from teh QueryControl
 
-// min/max has its own thing going on.  It should only send {min/max} and/or generic lable
-// and QInput shoud use that to wrap the NodeID=Op=Values
+// min/max has its own thing going on.  It should only send {min/max} and/or generic label
+// and QInput should use that to wrap the NodeID=Op=Values
 
 type MinMaxValueType = { min: any; max: any };
 // QSingleConditionChangeMessage
@@ -19,7 +21,7 @@ const noopValidator = (v: MinMaxValueType) => {
   return { hasError: false, errorText: '' };
 };
 
-interface QInputMinMaxPros extends IGenericFieldCompoentPros {
+interface QInputMinMaxPros extends IGenericFieldComponentPros {
   initialValue?: MinMaxValueType;
   // onChangeParent: typeof ({ [nodeId: string]: MinMaxValueType }) => void;
   // onChangeParent?: ({ [nodeId: string]: MinMaxValueType }) => void;
@@ -53,11 +55,11 @@ export function QInputMinMax({
     }
     setThisValue(newValue);
     if (!validator(newValue).hasError) {
-      notifiyParent(newValue);
+      notify(newValue);
     }
   };
 
-  const notifiyParent = (newValue: MinMaxValueType) => {
+  const notify = (newValue: MinMaxValueType) => {
     const updatedCondition = {
       [fieldId]: {
         [conditionOperator]: newValue,
@@ -97,7 +99,7 @@ export function QInputMinMax({
             toggleMaxMin();
           }}
           onMouseDown={() => {
-            // this maybe necesarry. Leaving in so that it doesn't get overlooked
+            // this maybe necessary. Leaving in so that it doesn't get overlooked
           }}
         >
           {isMin ? 'Min' : 'Max'}

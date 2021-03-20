@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField, { TextFieldProps } from '@material-ui/core/TextField';
-import { render } from '@testing-library/react';
 import { FormControl, InputLabel, Select } from '@material-ui/core';
-import { SelectOption, QFieldDataTypeEnum, QFieldCollection } from './types';
+import { SelectOption } from '../QueryInput';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

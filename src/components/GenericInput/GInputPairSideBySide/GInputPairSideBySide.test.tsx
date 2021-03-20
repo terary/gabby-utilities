@@ -1,3 +1,5 @@
+// cspell:ignore dateBoxes textboxes premero bigs
+
 import React from 'react';
 import { render, act, cleanup } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
@@ -12,8 +14,8 @@ const testSubfields = {
 } as DoubleValueFields;
 
 const testSubfieldsWithInitialValue = {
-  min: { id: 'testLow', label: 'LowerBound', intialValue: 1 },
-  max: { id: 'testHigh', label: 'UpperBound', intialValue: 23 },
+  min: { id: 'testLow', label: 'LowerBound', initialValue: 1 },
+  max: { id: 'testHigh', label: 'UpperBound', initialValue: 23 },
 } as DoubleValueFields;
 
 describe('GInputPairSideBySide', () => {
@@ -24,8 +26,8 @@ describe('GInputPairSideBySide', () => {
   describe('Subfields', () => {
     it('Should be able to set initial values of internal fields', () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      tmpSubFields.min.intialValue = 'little';
-      tmpSubFields.max.intialValue = 'big';
+      tmpSubFields.min.initialValue = 'little';
+      tmpSubFields.max.initialValue = 'big';
       act(() => {
         setupRender({ subfields: tmpSubFields });
       });
@@ -35,7 +37,9 @@ describe('GInputPairSideBySide', () => {
     it('Should be able to set labels of internal fields', () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
       tmpSubFields.min.label = 'Low';
+      tmpSubFields.min.inputProps = { 'aria-label': 'Low' };
       tmpSubFields.max.label = 'High';
+      tmpSubFields.max.inputProps = { 'aria-label': 'High' };
 
       act(() => {
         setupRender({ subfields: tmpSubFields });
@@ -44,7 +48,7 @@ describe('GInputPairSideBySide', () => {
       // button click expands - original text box plus 2 more
       const button = screen.getByRole('button');
       userEvent.click(button);
-      const lowEndLabel = screen.getByLabelText('High');
+      const lowEndLabel = screen.getByLabelText('Low');
       const highEndLabel = screen.getByLabelText('High');
       expect(lowEndLabel).toBeInTheDocument();
       expect(highEndLabel).toBeInTheDocument();
@@ -53,8 +57,8 @@ describe('GInputPairSideBySide', () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
       const changeHandler = jest.fn((_childChange: any) => {});
 
-      Object.assign(tmpSubFields.min, { id: 'lowEnd', intialValue: '' });
-      Object.assign(tmpSubFields.max, { id: 'highEnd', intialValue: '' });
+      Object.assign(tmpSubFields.min, { id: 'lowEnd', initialValue: '' });
+      Object.assign(tmpSubFields.max, { id: 'highEnd', initialValue: '' });
 
       act(() => {
         setupRender({ subfields: tmpSubFields, onChange: changeHandler });
@@ -90,7 +94,7 @@ describe('GInputPairSideBySide', () => {
       expect(helperP).toBeInTheDocument();
       expect(helperP?.innerHTML).toBe('Client supplied helper text');
     });
-    it('Should call helerText function with default fieldIds if supplied', () => {
+    it('Should call helperText function with default fieldIds if supplied', () => {
       act(() => {
         setupRender({ helperText: (value: any) => JSON.stringify(value) });
       });
@@ -98,10 +102,10 @@ describe('GInputPairSideBySide', () => {
       expect(helperP).toBeInTheDocument();
       expect(helperP?.innerHTML).toBe('{"min":"","max":""}');
     });
-    it('Should call helerText function with custom Subfield.id(s)', () => {
+    it('Should call helperText function with custom Subfield.id(s)', () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      Object.assign(tmpSubFields.min, { id: 'lowEnd', intialValue: '' });
-      Object.assign(tmpSubFields.max, { id: 'highEnd', intialValue: '' });
+      Object.assign(tmpSubFields.min, { id: 'lowEnd', initialValue: '' });
+      Object.assign(tmpSubFields.max, { id: 'highEnd', initialValue: '' });
 
       act(() => {
         setupRender({
@@ -112,6 +116,137 @@ describe('GInputPairSideBySide', () => {
       const helperP = document.querySelector('p');
       expect(helperP).toBeInTheDocument();
       expect(helperP?.innerHTML).toBe('{"lowEnd":"","highEnd":""}');
+    });
+  });
+  describe('inputDataType', () => {
+    beforeEach(() => {
+      cleanup();
+    });
+    it.skip('Should callback with data formatted as number when decimal (not a string)', async () => {
+      // actual use seems to work as expected.  Testing library seems goofed
+      // https://github.com/testing-library/user-event/issues/360
+      //  mock typing '.' after number (5.) - is consider invalid input and doesn't fire event.
+      // This test works if expected value (5.0123) 5123, which is an error.
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'decimal',
+          expanded: true,
+        });
+      });
+
+      // default isExpanded = false, click isExpanded = true
+      // userEvent.click(screen.getByRole('button'));
+      const textBox = screen.getAllByRole('textbox');
+      const numberBoxes = screen.getAllByRole('spinbutton');
+
+      await userEvent.type(numberBoxes[0], '5.0123');
+      await userEvent.type(numberBoxes[1], '0.7321');
+
+      expect(textBox.length).toBe(1);
+      expect(numberBoxes.length).toBe(2);
+      const calls = changeHandler.mock.calls;
+      expect(changeHandler).toHaveBeenCalledWith({ min: 5.01, max: '' });
+      expect(changeHandler).toHaveBeenCalledWith({ min: 5.0123, max: 0.7321 });
+
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '5.0123', max: '' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '5.0123', max: '0.7321' });
+    });
+    it('Should callback with data formatted as number when integer (not a string)', async () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'integer',
+          expanded: true,
+        });
+      });
+
+      // default isExpanded = false, click isExpanded = true
+      // userEvent.click(screen.getByRole('button'));
+      const textBox = screen.getAllByRole('textbox');
+      const numberBoxes = screen.getAllByRole('spinbutton');
+
+      await userEvent.type(numberBoxes[0], '51');
+      await userEvent.type(numberBoxes[1], '-7');
+
+      expect(textBox.length).toBe(1);
+      expect(numberBoxes.length).toBe(2);
+
+      expect(changeHandler).toHaveBeenCalledWith({ min: 51, max: '' });
+      expect(changeHandler).toHaveBeenCalledWith({ min: 51, max: -7 });
+
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '51', max: '' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: '51', max: '-7' });
+    });
+
+    it('Should callback with data formatted as string when set to text', async () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'text',
+          expanded: true,
+        });
+      });
+
+      // default isExpanded = false, click isExpanded = true
+      // userEvent.click(screen.getByRole('button'));
+      const textBox = screen.getAllByRole('textbox');
+
+      await userEvent.type(textBox[1], '51');
+      await userEvent.type(textBox[2], '-7');
+
+      expect(textBox.length).toBe(3);
+
+      expect(changeHandler).toHaveBeenCalledWith({ min: '51', max: '' });
+      expect(changeHandler).toHaveBeenCalledWith({ min: '51', max: '-7' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: 51, max: '' });
+      expect(changeHandler).not.toHaveBeenCalledWith({ min: 51, max: -7 });
+    });
+    it('Should set input type to date when appropriate', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'date',
+          expanded: true,
+        });
+      });
+
+      const textBox = screen.getAllByRole('textbox');
+      const dateboxes = document.querySelectorAll('input[type=date]');
+      expect(textBox.length).toBe(1);
+      expect(dateboxes.length).toBe(2);
+    });
+    it('Should set input type to number when decimal | integer', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          inputDataType: 'decimal',
+          expanded: true,
+        });
+      });
+
+      const textBox = screen.getAllByRole('textbox');
+      const dateboxes = document.querySelectorAll('input[type=number]');
+      expect(textBox.length).toBe(1);
+      expect(dateboxes.length).toBe(2);
+    });
+    it('Should set input type to text by default ', () => {
+      const changeHandler = jest.fn((_childChange: any) => {});
+      act(() => {
+        setupRender({
+          onChange: changeHandler,
+          // inputDataType: 'decimal',
+          expanded: true,
+        });
+      });
+
+      const textboxes = document.querySelectorAll('input[type=text]');
+      expect(textboxes.length).toBe(3);
     });
   });
   describe('Label', () => {
@@ -144,21 +279,29 @@ describe('GInputPairSideBySide', () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
       Object.assign(tmpSubFields.min, {
         id: 'lowEnd',
-        intialValue: '',
+        initialValue: '',
         label: 'premero',
+        inputProps: { 'aria-label': 'premero' },
       });
       Object.assign(tmpSubFields.max, {
         id: 'highEnd',
-        intialValue: '',
+        initialValue: '',
         label: 'ultima',
+        inputProps: { 'aria-label': 'ultima' },
       });
 
       act(() => {
-        setupRender({ subfields: tmpSubFields, label: 'Parent Label' });
+        setupRender({
+          subfields: tmpSubFields,
+          label: 'Parent Label',
+          inputProps: { 'aria-label': 'Parent Label' },
+        });
       });
-
       const mainLabel = screen.getByLabelText('Parent Label');
       expect(mainLabel).toBeInTheDocument();
+
+      // const mainLabel = document.querySelectorAll('[aria-label="Parent Label"]');
+      // expect(mainLabel.length).toBe(1);
 
       const minLabel = screen.getByLabelText('premero');
       expect(minLabel).toBeInTheDocument();
@@ -187,8 +330,8 @@ describe('GInputPairSideBySide', () => {
     it('Should be called with subfield.id when using subfields', async () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      Object.assign(tmpSubFields.min, { id: 'lowEnd', intialValue: '' });
-      Object.assign(tmpSubFields.max, { id: 'highEnd', intialValue: '' });
+      Object.assign(tmpSubFields.min, { id: 'lowEnd', initialValue: '' });
+      Object.assign(tmpSubFields.max, { id: 'highEnd', initialValue: '' });
 
       act(() => {
         setupRender({ onChange: changeHandler, subfields: tmpSubFields });
@@ -206,7 +349,7 @@ describe('GInputPairSideBySide', () => {
     });
   });
   describe('Format displayed value', () => {
-    it('Should default "minValu/maxValue', async () => {
+    it('Should default "minValue/maxValue', async () => {
       act(() => {
         setupRender();
       });
@@ -218,8 +361,8 @@ describe('GInputPairSideBySide', () => {
     });
     it('Should display custom value format', async () => {
       const tmpSubFields = Object.assign({}, testSubfieldsWithInitialValue);
-      Object.assign(tmpSubFields.min, { id: 'lowerBound', intialValue: '' });
-      Object.assign(tmpSubFields.max, { id: 'upperBound', intialValue: '' });
+      Object.assign(tmpSubFields.min, { id: 'lowerBound', initialValue: '' });
+      Object.assign(tmpSubFields.max, { id: 'upperBound', initialValue: '' });
 
       const formatDisplayedValue = (
         lowerBound: string | number,
@@ -230,7 +373,7 @@ describe('GInputPairSideBySide', () => {
 
       act(() => {
         setupRender({
-          formatDispayedValues: formatDisplayedValue,
+          formatDisplayedValues: formatDisplayedValue,
           subfields: tmpSubFields,
         });
       });
@@ -243,7 +386,7 @@ describe('GInputPairSideBySide', () => {
       expect((inputBoxes[0] as HTMLInputElement).value).toBe('between smalls and bigs');
     });
 
-    it.skip('Should accept customization funtion to format diaplayed value.', () => {});
+    it.skip('Should accept customization function to format displayed value.', () => {});
   });
   describe('Error Messages', () => {
     beforeEach(() => {
@@ -375,19 +518,19 @@ describe('GInputPairSideBySide', () => {
       await userEvent.type(inputBoxes[0], 'any thing');
       expect((inputBoxes[0] as HTMLInputElement).value).toBe(' / ');
     });
-    test('Input into min/max fields changes display in primar textbox', async () => {
+    test('Input into min/max fields changes display in primary textbox', async () => {
       const buttons = screen.getAllByRole('button');
 
       // button click expands - original text box plus 2 more
       userEvent.click(buttons[0]);
       const inputBoxes = screen.getAllByRole('textbox');
 
-      // children0 accepts first postion text
+      // children0 accepts first position text
       await userEvent.type(inputBoxes[1], 'first');
       expect((inputBoxes[1] as HTMLInputElement).value).toBe('first');
       expect((inputBoxes[0] as HTMLInputElement).value).toBe('first / ');
 
-      // children1 accepts first postion text
+      // children1 accepts first position text
       await userEvent.type(inputBoxes[2], 'second');
       expect((inputBoxes[2] as HTMLInputElement).value).toBe('second');
       expect((inputBoxes[0] as HTMLInputElement).value).toBe('first / second');
@@ -407,15 +550,12 @@ describe('GInputPairSideBySide', () => {
   }); //describe('Smoke test...
 }); // describe('GOverUnder'
 
-// ------------------  Helperss
+// ------------------  Helpers
 
 type PropertyObject = { [propName: string]: any };
 
 const setupRender = (focusProps: PropertyObject = {}) => {
   const effectiveProps = {
-    // ...{
-    //   errorSubfields: { lowerBound: 'Low End Error', upperBound: 'High End Error' },
-    // },
     ...focusProps,
   } as PropertyObject;
   Object.keys(focusProps).forEach((propName) => {
@@ -423,9 +563,7 @@ const setupRender = (focusProps: PropertyObject = {}) => {
       delete effectiveProps[propName];
     }
   });
-  return render(
-    <GInputPairSideBySide {...effectiveProps} id={'testManyThings' + Math.random()} />
-  );
+  return render(<GInputPairSideBySide {...effectiveProps} />);
 };
 
 const setupBeforeEachError = (focusProps: PropertyObject = {}) => {
@@ -456,8 +594,8 @@ const setupBeforeEachError = (focusProps: PropertyObject = {}) => {
   tmpSubFields.min.label = 'premero';
   tmpSubFields.max.label = 'ultima';
 
-  tmpSubFields.min.intialValue = '';
-  tmpSubFields.max.intialValue = '';
+  tmpSubFields.min.initialValue = '';
+  tmpSubFields.max.initialValue = '';
 
   return render(
     <GInputPairSideBySide
@@ -465,7 +603,7 @@ const setupBeforeEachError = (focusProps: PropertyObject = {}) => {
       {...effectiveProps}
       //errorSubfields={{ lowerBound: 'Low End Error', upperBound: 'High End Error' }}
       subfields={tmpSubFields}
-      formatDispayedValues={formatDisplayedValue}
+      formatDisplayedValues={formatDisplayedValue}
       helperText="The Helper Text"
       id={'testManyThings' + Math.random()}
       label="Parent Label"

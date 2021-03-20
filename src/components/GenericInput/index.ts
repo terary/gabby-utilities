@@ -6,9 +6,19 @@ import {
   GInputPairOverUnderFields,
 } from './GInputPairOverUnder/GInputPairOverUnder';
 import { GInputPairSideBySide } from './GInputPairSideBySide/GInputPairSideBySide';
-import { GInputSelect } from './GInputSelect/GInputSelect';
+import {
+  GInputSelectSingle,
+  GInputSelectMulti as GInputSelectMultiple,
+} from './GInputSelect/GInputSelectGeneric';
 import { GInputText } from './GInputText/GInputText';
+import { Subfield } from './GInputPairSideBySide/GInputPairSideBySide.types';
+import { InputDataType, SelectOption } from './types';
+export {
+  GInputPairOverUnder,
+  GInputPairSideBySide,
+  GInputSelectSingle,
+  GInputSelectMultiple,
+  GInputText,
+};
 
-export { GInputPairOverUnder, GInputPairSideBySide, GInputSelect, GInputText };
-
-export type { GInputPairOverUnderFields };
+export type { GInputPairOverUnderFields, Subfield, InputDataType, SelectOption };

@@ -1,12 +1,15 @@
-export type Subfield = {
-  label: string;
-  id: string;
-  intialValue?: string | number;
-};
+import { Subfield } from '../../../common/types';
+
+export type { Subfield };
+// export type Subfield = {
+//   label: string;
+//   id: string;
+//   initialValue?: string | number;
+// };
 
 export type DoubleValueFields = {
   min: Subfield;
   max: Subfield;
 };
 
-export type ClickHanlder = () => void;
+export type ClickHandler = () => void;
