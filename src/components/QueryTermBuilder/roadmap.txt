@@ -1,0 +1,11 @@
+
+
+QueryTermBuilder - operatorWithLabels
+  should only be in the form {id:string, lable:string}
+  do away with short/long
+  make sure the labels can change dynamically (spanish, thai, etc)
+  make sure the labels can change dynamically short (=, >=, ...) and long ('Equals' 'Greater Than')
+  
+-- done - QueryTermBuilder - create Object (not type) of Ops supportedOps {$eq:'$eq', '$gt':'$gt' ... }
+-- done - use that when a 'type' wont do (mostly for testing)
+  find when/where to replace with AllOperators

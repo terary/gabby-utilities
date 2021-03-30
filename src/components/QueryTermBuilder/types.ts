@@ -1,39 +1,85 @@
-export enum FIELD_DATA_TYPE {
-  DATE = 'DATE',
-  STRING = 'STRING',
-  NUMBER = 'NUMBER',
-}
+import { SelectOption } from '../QueryInput';
+import { InputDataType, TermOperators } from './index';
 
-export type DBField = {
+export type TermSubject = {
+  id: string;
   label: string;
-  datatype: FIELD_DATA_TYPE;
-};
-export type DBFieldCollection = { [fieldId: string]: DBField };
-
-// export type SelectOption = {
-//   value: string;
-//   label: string;
-// };
-export type QueryTermOperator = {
-  shortLabel: string;
-  longLabel: string;
-};
-export type QueryTermOperatorCollection = {
-  [operator: string]: QueryTermOperator;
+  dataType: InputDataType;
+  queryOps: TermOperators[];
+  selectOptions?: SelectOption[];
 };
 
-export const QueryTermOperators = {
-  eq: { longLabel: 'Equals', shortLabel: '=' },
-  gt: { longLabel: 'Greater Than', shortLabel: '>' },
-  // lt: { longLabel: 'Less Than', shortLabel: '<' },
-  // regex: { longLabel: 'Contains', shortLabel: 'has' },
-  // betweenx: { longLabel: 'Between', shortLabel: 'from' },
-  // betweeni: { longLabel: 'Between and Including', shortLabel: 'from' },
-} as QueryTermOperatorCollection;
+export type TermSubjectCollection = {
+  // this id will be the same id in the TermSubject
+  [id: string]: TermSubject;
+};
 
-// export type QueryTermOperator = {
-//   [operator: string]: {
-//     longLabel: string;
-//     shortLabel: string;
-//   };
-// };
+export type QueryTermExpression = {
+  dataType: InputDataType;
+  label: string;
+  mongoExpression: object | null;
+  nodeId: string; // form 0:3:2:1 or similar
+  operator: TermOperators; // string;
+  subjectId: string;
+  value: string | number | object | null;
+};
+export type QueryTermValue = {
+  // dataType: InputDataType;
+  label: string;
+  mongoValue: object | null;
+  // mongoExpression: object | null;
+  // nodeId: string; // form 0:3:2:1 or similar
+  // operator: TermOperators; // string;
+  // subjectId: string;
+  value: string | number | object | null; // Scalar | object | null
+};
+
+export type TermOperatorLabelCollection = {
+  [key in TermOperators]: {
+    short: string;
+    long: string;
+  };
+};
+
+export const defaultOperatorLabels = {
+  $eq: {
+    long: 'Is',
+    short: '=',
+  },
+  $lt: {
+    long: 'Less Than',
+    short: '<',
+  },
+  $gt: {
+    long: 'Greater Than',
+    short: '>',
+  },
+  $lte: {
+    long: 'Less or Equal',
+    short: '=<',
+  },
+  $gte: {
+    long: 'Greater or Equal',
+    short: '>=',
+  },
+  $regex: {
+    long: 'Contains',
+    short: 'has',
+  },
+  $anyOf: {
+    long: 'Any Of',
+    short: 'in',
+  },
+  $oneOf: {
+    long: 'One Of',
+    short: 'is',
+  },
+  $betweenX: {
+    long: 'Between',
+    short: 'between',
+  },
+  $betweenI: {
+    long: 'BetweenI',
+    short: 'between',
+  },
+} as TermOperatorLabelCollection;

@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import { QInputRange } from './QInputRange';
 import { Subfield } from '../../GenericInput';
-import { TermValueWithLabelOrNull } from '../term.types';
+import { TermValueWithLabelOrNull } from '../index';
 import { Grid } from '@material-ui/core';
 import { InputDataType } from '../../GenericInput';
 

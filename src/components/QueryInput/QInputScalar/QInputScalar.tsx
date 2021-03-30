@@ -1,11 +1,11 @@
 import React from 'react';
+import { TermOperators } from '../term.types';
 import {
   Scalar,
   IQInputComponent,
   TermValueWithLabelOrNull,
   TermValue,
-  TermOperators,
-} from '../term.types';
+} from '../index';
 import { GInputText, InputDataType } from '../../GenericInput';
 
 // TODO - refactor the properties interface, single

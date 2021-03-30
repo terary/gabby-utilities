@@ -1,5 +1,6 @@
 import { GInputPairSideBySide, Subfield } from '../../GenericInput';
-import { IQInputComponent, TermValueWithLabelOrNull, TermValue } from '../term.types';
+import { IQInputComponent } from '../term.types';
+import { TermValueWithLabelOrNull, TermValue } from '../index';
 import { presetOptions } from './presetOptions';
 
 const onChangeNoOp = (changeMessage: TermValueWithLabelOrNull) => {};

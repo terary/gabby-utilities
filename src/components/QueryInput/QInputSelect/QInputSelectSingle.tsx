@@ -1,4 +1,5 @@
-import { IQInputComponent, TermValue, TermOperators, Scalar } from '../term.types';
+import { IQInputComponent, TermOperators } from '../term.types';
+import { TermValue, Scalar } from '../index';
 import { GInputSelectSingle, SelectOption } from '../../GenericInput';
 
 const noopOnChange = (value: any) => {};

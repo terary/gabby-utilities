@@ -1,12 +1,6 @@
 // cspell:ignore datatypes
-import {
-  IQInputComponent,
-  TermValueWithLabelOrNull,
-  TermValue,
-  TermOperators,
-  Scalar,
-  SelectOption,
-} from '../term.types';
+import { IQInputComponent, TermOperators, SelectOption } from '../term.types';
+import { TermValueWithLabelOrNull, TermValue, Scalar } from '../index';
 import { GInputSelectMultiple /*, SelectOption */ } from '../../GenericInput';
 
 const noopOnChange = (changeMessage: TermValueWithLabelOrNull) => {};

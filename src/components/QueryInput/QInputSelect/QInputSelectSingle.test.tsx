@@ -25,7 +25,7 @@ describe('QInputSelect', () => {
     });
   });
   describe('inputProps', () => {
-    it('Should be set on the base html input contorl', () => {
+    it('Should be set on the base html input control', () => {
       act(() => {
         setupRender({
           inputProps: {
