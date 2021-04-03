@@ -35,12 +35,13 @@ export const AllOperators: { [key in TermOperators]: string } = {
   $betweenI: '$betweenI',
 };
 
-export type TermValueTypes = string | number | object | null;
+// export type TermValueTypes = string | number | object | null;
+export type TermValueTypes = Scalar | ScalarList | object | null;
 
 export type TermValue =
-  | { [key in TermOperators]: Scalar }
-  | { [key in TermOperators]: ScalarList }
-  | null;
+  // | { [key in TermOperators]: Scalar }
+  // | { [key in TermOperators]: ScalarList }
+  { [key in TermOperators]: ScalarList | Scalar | object } | null;
 
 export type TermValueWithLabel = {
   termLabel: string;

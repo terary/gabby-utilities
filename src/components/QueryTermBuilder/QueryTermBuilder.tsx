@@ -1,34 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { SimpleDropdown } from './SimpleDropdown';
 import { helpers } from '../../common/helpers';
-
 import { InputMux } from './InputMux';
-import { TermOperators, TermValueWithLabelOrNull } from './index';
+import { TermOperators, TermValueTypes } from './index';
 import {
   QueryTermExpression,
-  QueryTermValue,
   TermOperatorLabelCollection,
   TermSubjectCollection,
   defaultOperatorLabels,
 } from './types';
-import { ScalarList, SelectOption } from '../QueryInput';
+import { SelectOption } from '../QueryInput';
+
+const isScalarOperator = (op: string) => {
+  return ['$eq', '$gt', '$lt', '$gte', '$lte', '$regex'].indexOf(op) !== -1;
+};
 
 const onExpressionChangeNoop = (express: QueryTermExpression | null) => {};
 
 const firstKey = (obj: object) => {
   return Object.keys(obj)[0] || '';
-};
-const hasNull = (thingy: object | null) => {
-  if (thingy === null) {
-    return true;
-  }
-  let hasNull = false;
-  Object.entries(thingy).forEach(([key, property]) => {
-    if (property === null) {
-      hasNull = true;
-    }
-  });
-  return hasNull;
 };
 
 const getSelectableOptions = (
@@ -65,7 +55,6 @@ const makeInitialQueryExpression = (
     subjectId: firstKey(querySubject),
     operator: firstKey(operatorsWithLabels),
     value: null, // not sure if null is a better option
-    mongoExpression: null,
   } as QueryTermExpression;
 };
 
@@ -93,6 +82,7 @@ interface QueryTermBuilderProps {
   operatorsWithLabels: TermOperatorLabelCollection;
   onExpressionChange: (expression: QueryTermExpression | null) => void;
   querySubjects: TermSubjectCollection;
+  initialQueryExpression?: QueryTermExpression;
 }
 
 export const QueryTermBuilder = ({
@@ -100,16 +90,27 @@ export const QueryTermBuilder = ({
   operatorsWithLabels = defaultOperatorLabels as TermOperatorLabelCollection,
   onExpressionChange = onExpressionChangeNoop,
   querySubjects = {},
+  initialQueryExpression = makeInitialQueryExpression(
+    nodeId,
+    querySubjects,
+    operatorsWithLabels
+  ),
 }: QueryTermBuilderProps) => {
-  const [queryExpression, setQueryExpression] = useState(
-    makeInitialQueryExpression(nodeId, querySubjects, operatorsWithLabels)
+  const [queryExpression, setQueryExpression] = useState(initialQueryExpression);
+  const [selectableValues, setSelectableValues] = useState(
+    (querySubjects[queryExpression.subjectId].selectOptions || []) as SelectOption[]
   );
-  const [selectableValues, setSelectableValues] = useState([] as SelectOption[]);
+
   const opLabels = extractLabels(operatorsWithLabels, 'long');
   // gets called multiple times- not desirable.
   // useRef maybe a friend but docs says 'for mutable' and this should not be
   // mutable.
   const opsBySubjectId = makeOpsBySubjectId(opLabels, querySubjects);
+
+  useEffect(() => {
+    setSelectableValues(getSelectableOptions(queryExpression, querySubjects));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryExpression]);
 
   const handleSubjectChange = (newSubjectId: string) => {
     const newQueryExp = Object.assign({}, queryExpression);
@@ -117,55 +118,44 @@ export const QueryTermBuilder = ({
     newQueryExp.dataType = querySubjects[newSubjectId].dataType;
     newQueryExp.operator = querySubjects[newSubjectId].queryOps[0];
     newQueryExp.value = null;
+
+    setQueryExpression(newQueryExp);
     _doUpdate(newQueryExp);
   };
-
-  useEffect(() => {
-    setSelectableValues(getSelectableOptions(queryExpression, querySubjects));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryExpression]);
 
   const handleOperatorChange = (newOperatorId: string) => {
-    // will have to change mongoExpression.operator - or ?
     const newQueryExp = Object.assign({}, queryExpression);
     newQueryExp.operator = newOperatorId as TermOperators;
+
+    if (
+      !isScalarOperator(newQueryExp.operator) ||
+      !isScalarOperator(queryExpression.operator)
+    ) {
+      newQueryExp.value = null;
+    }
+    setQueryExpression(newQueryExp);
     _doUpdate(newQueryExp);
   };
 
-  const handleValueChange = (newValue: QueryTermValue | null) => {
-    if (newValue === null) {
-      // probably would do some house cleaning.. Redux.delete or similar
-      onExpressionChange(null);
-      return;
-    }
+  const handleValueChange = (newValue: TermValueTypes) => {
+    // if (newValue === null) {
+    //   onExpressionChange(null);
+    //   return;
+    // }
 
-    const newQueryExp = Object.assign({}, queryExpression, newValue) as any;
-    newQueryExp.mongoExpression = { [queryExpression.subjectId]: newValue.mongoValue };
-    newQueryExp.label = buildLabel(newQueryExp as QueryTermExpression, newValue.label);
-    // some overlap in type - but mongoValue is not part of QueryExpression
-    delete newQueryExp.mongoValue;
-    console.dir(newValue);
-
-    _doUpdate(newQueryExp as QueryTermExpression);
-  };
-
-  const buildLabel = (q: QueryTermExpression, valueLabel: string) => {
-    //  operatorsWithLabels,
-
-    return [
-      querySubjects[q.subjectId].label,
-      operatorsWithLabels[q.operator].long,
-      valueLabel,
-    ].join(' ');
+    const newQueryExp = Object.assign({}, queryExpression) as QueryTermExpression;
+    newQueryExp.value = newValue;
+    setQueryExpression(newQueryExp);
+    _doUpdate(newQueryExp);
   };
 
   const _doUpdate = (newQueryExp: QueryTermExpression) => {
-    setQueryExpression(newQueryExp);
-    if (hasNull(newQueryExp)) {
-      onExpressionChange(null);
-    } else {
-      onExpressionChange(newQueryExp);
-    }
+    // if (hasNull(newQueryExp)) {
+    //   onExpressionChange(null);
+    // } else {
+    //   onExpressionChange(newQueryExp);
+    // }
+    onExpressionChange(newQueryExp);
   };
 
   return (
@@ -190,9 +180,8 @@ export const QueryTermBuilder = ({
       <InputMux
         onChange={handleValueChange}
         queryExpression={queryExpression}
-        label="First Name is"
+        label=""
         selectOptions={selectableValues}
-        // querySubjects={querySubjects}
       />
     </>
   );

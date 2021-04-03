@@ -1,5 +1,5 @@
 import { SelectOption } from '../QueryInput';
-import { InputDataType, TermOperators } from './index';
+import { InputDataType, TermOperators, TermValueTypes } from './index';
 
 export type TermSubject = {
   id: string;
@@ -16,12 +16,12 @@ export type TermSubjectCollection = {
 
 export type QueryTermExpression = {
   dataType: InputDataType;
-  label: string;
-  mongoExpression: object | null;
+  // label: string;
+  // mongoExpression: object | null;
   nodeId: string; // form 0:3:2:1 or similar
   operator: TermOperators; // string;
   subjectId: string;
-  value: string | number | object | null;
+  value: TermValueTypes;
 };
 export type QueryTermValue = {
   // dataType: InputDataType;
@@ -33,6 +33,11 @@ export type QueryTermValue = {
   // subjectId: string;
   value: string | number | object | null; // Scalar | object | null
 };
+
+// TODO - QueryTermValue should no long be used.
+// TODO - Audit where/how types are being used - I think there is some overlap causing confusion
+//      - There are unused types
+// TODO - TermValues: .... object;  I think Object should be {[$gte|$gt|$lt|$lte]}
 
 export type TermOperatorLabelCollection = {
   [key in TermOperators]: {

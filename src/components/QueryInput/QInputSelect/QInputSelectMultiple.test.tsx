@@ -48,7 +48,7 @@ describe('QInputSelect', () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       const lastCallOnChangeArgs = {
         termLabel: 'One of: 1, 2, 3.14, date, Some String',
-        termValue: { $in: [1, '2', 3.14, 'date', 'Some String'] },
+        termValue: { $anyOf: [1, '2', 3.14, 'date', 'Some String'] },
       };
       const testOptions = [
         { value: 1, label: 'Integer' },
@@ -109,7 +109,7 @@ describe('QInputSelect', () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       const lastCallOnChangeArgs = {
         termLabel: 'One of: value1, value3',
-        termValue: { $in: ['value1', 'value3'] },
+        termValue: { $anyOf: ['value1', 'value3'] },
       };
 
       act(() => {
@@ -148,7 +148,7 @@ describe('QInputSelect', () => {
       const changeHandler = jest.fn((_childChange: any) => {});
       const lastCallOnChangeArgs = {
         termLabel: 'One of: value1, value3',
-        termValue: { $in: ['value1', 'value3'] },
+        termValue: { $anyOf: ['value1', 'value3'] },
       };
 
       act(() => {

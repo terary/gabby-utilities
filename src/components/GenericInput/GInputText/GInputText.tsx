@@ -47,7 +47,7 @@ export function GInputText({
     // this will never be perfect....??
     // if decimal|float and end user wishes to clear field, onChange
     //
-    setThisValue(cast(newValue));
+    setThisValue(cast(newValue)); // should 1 or the other and set default.  In parent doesn't provide..
     onChange(cast(newValue));
   };
 
@@ -89,7 +89,9 @@ export function GInputText({
           ? 'number'
           : inputDataType
       }
-      value={thisValue}
+      value={value}
+      // value={thisValue}
+      // by maintain it's own state -- cant be updated from parent
       variant="outlined"
     />
   );

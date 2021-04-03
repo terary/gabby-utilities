@@ -2,6 +2,10 @@ import { QueryTermBuilder } from './QueryTermBuilder';
 import {
   InputDataType,
   TermOperators,
+  Scalar,
+  ScalarList,
+  TermValue,
+  TermValueTypes,
   TermValueWithLabel,
   TermValueWithLabelOrNull,
   AllOperators,
@@ -9,7 +13,11 @@ import {
 
 export type {
   InputDataType,
+  Scalar,
+  ScalarList,
   TermOperators,
+  TermValue,
+  TermValueTypes,
   TermValueWithLabelOrNull,
   TermValueWithLabel,
 };

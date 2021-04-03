@@ -6,14 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { QueryTermBuilder } from './QueryTermBuilder';
 import { AllOperators } from './index';
 import { dbFields, operatorLabels } from './test-helpers';
-import {
-  QueryTermExpression,
-  QueryTermValue,
-  TermOperatorLabelCollection,
-  TermSubjectCollection,
-  TermSubject,
-  defaultOperatorLabels,
-} from './types';
+import { TermOperatorLabelCollection, defaultOperatorLabels } from './types';
 
 /**
  * Named QueryTermBuilderT (T) for test run purposes
@@ -22,11 +15,7 @@ import {
 
 describe('QueryTermBuilder', () => {
   describe('Properties', () => {
-    describe('nodeId', () => {
-      it('Should be', () => {});
-    }); //  describe('nodeId'
     describe('operatorsWithLabels', () => {
-      it.skip('Should be dynamic, change language, change short/long form (mobile)', () => {});
       it('Will use default labels if not provided', () => {
         const subjects = {
           opLabelTest: {
@@ -70,22 +59,229 @@ describe('QueryTermBuilder', () => {
         });
       });
     }); // describe('operatorsWithLabels
-    describe.only('onExpressionChange', () => {
-      it('Should be', () => {});
+    describe('Expression and UI - Symmetry', () => {
+      it('Should accept and display QueryExpression same as QueryExpression created ($oneOf)', () => {
+        const expected = Object.assign(
+          {},
+          // incase dbFields doesn't have the options will cause failure
+          { label: 'MISSING', value: 'MISSING' },
+          dbFields['customers.favoriteFruit'].selectOptions?.[1]
+        );
+        const initialQueryExpression = {
+          dataType: 'text',
+          nodeId: 'test-display-existing-expression',
+          subjectId: 'customers.favoriteFruit',
+          operator: '$oneOf',
+          value: 'apples0002', // not sure if null is a better option/
+        };
+
+        act(() => {
+          setupRender({
+            initialQueryExpression,
+            querySubjects: dbFields,
+          });
+        });
+
+        const buttons = screen.getAllByRole('button');
+        const selectBoxes = screen.getAllByRole('combobox');
+        const hiddenInputs = document.querySelectorAll('input[aria-hidden="true"]');
+
+        expect(selectBoxes.length).toBe(2);
+        expect(buttons.length).toBe(1);
+        expect(hiddenInputs.length).toBe(1);
+
+        expect(screen.getByText(expected.label)).toBeInTheDocument();
+        expect(screen.getByText('Red Apple')).toBeInTheDocument();
+
+        //values
+        // that they are the same and not empty
+        expect((hiddenInputs[0] as HTMLInputElement).value).toBe(expected.value);
+        expect((hiddenInputs[0] as HTMLInputElement).value).toBe('apples0002');
+
+        expect((selectBoxes[0] as HTMLInputElement).value).toBe(
+          initialQueryExpression.subjectId
+        );
+        expect((selectBoxes[1] as HTMLInputElement).value).toBe(
+          initialQueryExpression.operator
+        );
+      });
+      it('Should accept and display QueryExpression same as QueryExpression created ($anyOf)', () => {
+        const expectedValues = [
+          // dropdown values
+          dbFields['customers.daysOff'].selectOptions?.[2].value,
+          dbFields['customers.daysOff'].selectOptions?.[4].value,
+        ];
+        const expectedLabels = [
+          // dropdown labels
+          dbFields['customers.daysOff'].selectOptions?.[2].label,
+          dbFields['customers.daysOff'].selectOptions?.[4].label,
+        ];
+        const initialQueryExpression = {
+          dataType: 'text',
+          nodeId: 'test-display-existing-expression',
+          subjectId: 'customers.daysOff',
+          operator: '$anyOf',
+          value: ['wednesday', 'friday'], // not sure if null is a better option/
+        };
+
+        act(() => {
+          setupRender({
+            initialQueryExpression,
+            querySubjects: dbFields,
+          });
+        });
+
+        const buttons = screen.getAllByRole('button');
+        const selectBoxes = screen.getAllByRole('combobox');
+        const hiddenInputs = document.querySelectorAll('input[aria-hidden="true"]');
+
+        expect(selectBoxes.length).toBe(2);
+        expect(buttons.length).toBe(1);
+        expect(hiddenInputs.length).toBe(1);
+
+        //presentation
+        expect(screen.getByText(expectedLabels.join(', '))).toBeInTheDocument();
+        expect(screen.getByText('Wednesday, Friday')).toBeInTheDocument();
+
+        //values
+        expect((selectBoxes[0] as HTMLInputElement).value).toBe(
+          initialQueryExpression.subjectId
+        );
+        expect((selectBoxes[1] as HTMLInputElement).value).toBe(
+          initialQueryExpression.operator
+        );
+
+        expect((hiddenInputs[0] as HTMLInputElement).value).toBe(
+          expectedValues.join(',')
+        );
+        expect((hiddenInputs[0] as HTMLInputElement).value).toBe('wednesday,friday');
+      });
+
+      it('Should accept and display QueryExpression same as QueryExpression created ($betweenX)', () => {
+        const initialQueryExpression = {
+          dataType: 'decimal',
+          nodeId: 'nodePredefined004',
+          subjectId: 'customers.annualSalary',
+          operator: '$betweenX',
+          value: { $gt: 3, $lt: 3000 },
+        };
+
+        act(() => {
+          setupRender({
+            initialQueryExpression,
+            querySubjects: dbFields,
+          });
+        });
+
+        const buttons = screen.getAllByRole('button');
+        const selectBoxes = screen.getAllByRole('combobox');
+        const numberInputs = document.querySelectorAll('input[type="number"]');
+
+        // layout
+        expect(selectBoxes.length).toBe(2);
+        expect(buttons.length).toBe(1);
+        expect(numberInputs.length).toBe(2);
+
+        // values
+        expect((selectBoxes[0] as HTMLInputElement).value).toBe(
+          initialQueryExpression.subjectId
+        );
+        expect((selectBoxes[1] as HTMLInputElement).value).toBe(
+          initialQueryExpression.operator
+        );
+        expect((numberInputs[0] as HTMLInputElement).value).toBe(
+          initialQueryExpression.value['$gt'] + '' // I think because htmlElement will be string
+        );
+        expect((numberInputs[1] as HTMLInputElement).value).toBe(
+          initialQueryExpression.value['$lt'] + '' // I think because htmlElement will be string
+        );
+      });
+      it('Should accept and display QueryExpression same as QueryExpression created ($betweenI)', () => {
+        const initialQueryExpression = {
+          dataType: 'decimal',
+          nodeId: 'nodePredefined004',
+          subjectId: 'customers.annualSalary',
+          operator: '$betweenI',
+          value: { $gte: 3, $lte: 3000 },
+        };
+
+        act(() => {
+          setupRender({
+            initialQueryExpression,
+            querySubjects: dbFields,
+          });
+        });
+
+        const buttons = screen.getAllByRole('button');
+        const selectBoxes = screen.getAllByRole('combobox');
+        const numberInputs = document.querySelectorAll('input[type="number"]');
+
+        // layout
+        expect(selectBoxes.length).toBe(2);
+        expect(buttons.length).toBe(1);
+        expect(numberInputs.length).toBe(2);
+
+        // values
+        expect((selectBoxes[0] as HTMLInputElement).value).toBe(
+          initialQueryExpression.subjectId
+        );
+        expect((selectBoxes[1] as HTMLInputElement).value).toBe(
+          initialQueryExpression.operator
+        );
+        expect((numberInputs[0] as HTMLInputElement).value).toBe(
+          initialQueryExpression.value['$gte'] + '' // I think because htmlElement will be string
+        );
+        expect((numberInputs[1] as HTMLInputElement).value).toBe(
+          initialQueryExpression.value['$lte'] + '' // I think because htmlElement will be string
+        );
+      });
+      ['$eq', '$gt', '$gte', '$lt', '$lte', '$regex'].forEach((operator) => {
+        it(`Should accept and display QueryExpression same as QueryExpression created (${operator})`, () => {
+          const initialQueryExpression = {
+            dataType: 'text',
+            nodeId: 'nodePredefined004',
+            subjectId: 'customers.lastName',
+            operator: operator,
+            value: 'test data to be displayed',
+          };
+
+          act(() => {
+            setupRender({
+              initialQueryExpression,
+              querySubjects: dbFields,
+            });
+          });
+
+          const selectBoxes = screen.getAllByRole('combobox');
+          const textInputs = document.querySelectorAll('input[type="text"]');
+
+          // layout
+          expect(selectBoxes.length).toBe(2);
+          expect(textInputs.length).toBe(1);
+
+          // values
+          expect((selectBoxes[0] as HTMLInputElement).value).toBe(
+            initialQueryExpression.subjectId
+          );
+          expect((selectBoxes[1] as HTMLInputElement).value).toBe(
+            operator
+            // initialQueryExpression.operator
+          );
+          expect((textInputs[0] as HTMLInputElement).value).toBe(
+            initialQueryExpression.value
+          );
+        });
+      }); // foreach Operator
+    });
+    describe('onExpressionChange', () => {
       it('Should be sane', async () => {
         const changeHandler = jest.fn((_childChange: any) => {});
-        make this into a helper function - beat the hell out of this test
-        want to change opLabels then change tests accordingly
+        // make this into a helper function - beat the hell out of this test
+        // want to change opLabels then change tests accordingly
         const expectedCallback = [
           [
             {
               dataType: 'text',
-              label: 'Test Subject Is 5',
-              mongoExpression: {
-                testSubject: {
-                  $eq: '5',
-                },
-              },
               nodeId: 'Node ID Not Set',
               operator: '$eq',
               subjectId: 'testSubject',
@@ -121,7 +317,6 @@ describe('QueryTermBuilder', () => {
       });
     }); // describe('onExpressionChange'
     describe('querySubjects', () => {
-      it('Will shit the bed without this property', () => {});
       it('Should be - sanity', () => {
         act(() => {
           setupRender({
@@ -219,12 +414,8 @@ describe('QueryTermBuilder', () => {
         );
       });
     }); // describe('querySubjects'
-
-    // operatorsWithLabels: TermOperatorLabelCollection;
-    // onExpressionChange: (expression: QueryTermExpression | null) => void;
-    // querySubjects: TermSubjectCollection;
   }); // describe properties
-  describe('Behavior', () => {
+  describe.skip('Behavior', () => {
     describe('Subject Selector Change', () => {
       it('Should change available operators', () => {});
       it('Should change available operators -covered in properties/querySubjects', () => {});

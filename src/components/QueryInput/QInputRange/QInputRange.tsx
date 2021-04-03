@@ -17,6 +17,7 @@ export interface QInputRangeProps extends IQInputComponent {
   formatCallbackValues?: (min: any, max: any) => TermValue;
   // formatCallbackValues?: (min: any, max: any) => TermValue;
   formatDisplayValues?: (min: any, max: any) => string;
+  initialValue?: object;
   subfields?: { min: Subfield; max: Subfield };
 }
 
@@ -25,6 +26,7 @@ type ChangeValue = { [subfieldId: string]: string | number | null };
 export const QInputRange = ({
   rangeOption = 'inclusive',
   expanded = false,
+  initialValue,
   inputProps = {},
   inputDataType = 'text',
   label,
@@ -55,6 +57,7 @@ export const QInputRange = ({
   return (
     <GInputPairSideBySide
       expanded={expanded}
+      value={initialValue}
       inputProps={inputProps}
       inputDataType={inputDataType}
       label={label}

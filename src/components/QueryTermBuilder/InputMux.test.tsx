@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { render, act, cleanup, fireEvent, within } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -36,22 +36,56 @@ describe('InputMux', () => {
 
     describe('queryExpression', () => {});
     describe('onChange', () => {
+      it(`..Should be called with value honoring datatype integer ($eq) `, async () => {
+        let theValue = null;
+        const changeHandler = jest.fn((_childChange: any) => {
+          theValue = _childChange;
+        });
+
+        const expectCallbackHelper = (value: string | number) => {
+          return [value];
+        };
+
+        const expectedCallbacks = [
+          expectCallbackHelper(5),
+          expectCallbackHelper(51),
+          expectCallbackHelper(5),
+          [null],
+        ];
+        act(() => {
+          setupStatefulRender({
+            onChange: changeHandler,
+            queryExpression: {
+              operator: '$eq',
+              dataType: 'integer',
+              value: '',
+            },
+          });
+        });
+        const numberBoxes = screen.getAllByRole('spinbutton');
+        await userEvent.type(numberBoxes[0], '51');
+        await userEvent.type(numberBoxes[0], '{backspace}{backspace}');
+
+        expect(changeHandler.mock.calls).toEqual(expectedCallbacks);
+        expect(changeHandler).toHaveBeenCalledTimes(expectedCallbacks.length);
+      });
+
       ['$eq', '$gt', '$gte', '$lt', '$lte'].forEach((operator) => {
         describe(`${operator}`, () => {
-          it(`Should be called with { label, value, mongoValue: { ${operator}: value } honoring datatype integer (${operator}) `, async () => {
+          it(`Should be called with value honoring datatype integer (${operator}) `, async () => {
             const changeHandler = jest.fn((_childChange: any) => {});
 
-            const expectCallbackHelper = (value: string | number, label: string) => {
-              return [{ label, value, mongoValue: { [operator]: value } }];
+            const expectCallbackHelper = (value: string | number) => {
+              return [value];
             };
             const expectedCallbacks = [
-              expectCallbackHelper(5, '5'),
-              expectCallbackHelper(51, '51'),
-              expectCallbackHelper(5, '5'),
+              expectCallbackHelper(5),
+              expectCallbackHelper(51),
+              expectCallbackHelper(5),
               [null],
             ];
             act(() => {
-              setupRender({
+              setupStatefulRender({
                 onChange: changeHandler,
                 queryExpression: {
                   operator,
@@ -69,18 +103,18 @@ describe('InputMux', () => {
           it(`Should be called with { label, value, mongoValue: { ${operator}: value } honoring datatype decimal (${operator}) `, async () => {
             const changeHandler = jest.fn((_childChange: any) => {});
 
-            const expectCallbackHelper = (value: string | number, label: string) => {
-              return [{ label, value, mongoValue: { [operator]: value } }];
+            const expectCallbackHelper = (value: string | number) => {
+              return [value];
             };
             const expectedCallbacks = [
-              expectCallbackHelper(5, '5'),
-              expectCallbackHelper(51, '51'),
+              expectCallbackHelper(5),
+              expectCallbackHelper(51),
               // decimal does funky things
               [null], //expectCallbackHelper(51, '51'),
-              expectCallbackHelper(51.1, '51.1'),
-              expectCallbackHelper(51.12, '51.12'),
+              expectCallbackHelper(51.1),
+              expectCallbackHelper(51.12),
 
-              expectCallbackHelper(51.1, '51.1'),
+              expectCallbackHelper(51.1),
               [null],
               // expectCallbackHelper(51, '51'),
               //
@@ -90,7 +124,7 @@ describe('InputMux', () => {
               // This test works if expected value (5.0123) 5123, which is an error.
             ];
             act(() => {
-              setupRender({
+              setupStatefulRender({
                 onChange: changeHandler,
                 queryExpression: {
                   operator,
@@ -106,21 +140,18 @@ describe('InputMux', () => {
             expect(changeHandler).toHaveBeenCalledTimes(expectedCallbacks.length);
             expect(changeHandler.mock.calls).toEqual(expectedCallbacks);
           });
-          it(`Should be called with { label, value, mongoValue: { ${operator}: value } honoring datatype text (${operator}) `, async () => {
+          it(`Should be called with value honoring datatype text (${operator}) `, async () => {
             const changeHandler = jest.fn((_childChange: any) => {});
 
-            const expectCallbackHelper = (value: string | number, label: string) => {
-              return [
-                { label, value: value + '', mongoValue: { [operator]: value + '' } },
-              ];
-              // return [{ termLabel: label, termValue: { $eq: value + '' } }];
+            const expectCallbackHelper = (value: string | number) => {
+              return [value];
             };
             const expectedCallbacks = [
-              expectCallbackHelper(5, '5'),
-              expectCallbackHelper(51, '51'),
+              expectCallbackHelper('5'),
+              expectCallbackHelper('51'),
             ];
             act(() => {
-              setupRender({
+              setupStatefulRender({
                 onChange: changeHandler,
                 dataType: 'text',
                 queryExpression: {
@@ -163,19 +194,21 @@ describe('InputMux', () => {
           });
         }); // describe op
       });
+      describe('initialValue', () => {
+        it('Should be able to set it', () => {});
+      });
       describe('$betweenX', () => {
         it(`betweenX: Should call with single or double value when appropriate {$gt,$lt}`, async () => {
           const changeHandler = jest.fn((_childChange: any) => {});
           const expectedCallbacks = [
-            expectOnChangeBetweenExclusive('5', undefined, '5'),
-            expectOnChangeBetweenExclusive('51', undefined, '51'),
-            expectOnChangeBetweenExclusive('51', '7', '51 and 7'),
-            expectOnChangeBetweenExclusive('51', '72', '51 and 72'),
-            expectOnChangeBetweenExclusive('5', '72', '5 and 72'),
-            expectOnChangeBetweenExclusive(undefined, '72', '72'),
-            expectOnChangeBetweenExclusive(undefined, '7', '7'),
+            expectOnChangeBetweenExclusive('5', undefined),
+            expectOnChangeBetweenExclusive('51', undefined),
+            expectOnChangeBetweenExclusive('51', '7'),
+            expectOnChangeBetweenExclusive('51', '72'),
+            expectOnChangeBetweenExclusive('5', '72'),
+            expectOnChangeBetweenExclusive(undefined, '72'),
+            expectOnChangeBetweenExclusive(undefined, '7'),
             [null],
-            // expectCallbackHelper(51, '51'),
           ];
           act(() => {
             setupRender({
@@ -189,6 +222,7 @@ describe('InputMux', () => {
           userEvent.click(screen.getByRole('button'));
           const textBoxes = screen.getAllByRole('textbox');
 
+          // await userEvent.type(textBoxes[1], '5');
           await userEvent.type(textBoxes[1], '51');
           await userEvent.type(textBoxes[2], '72');
           await userEvent.type(textBoxes[1], '{backspace}{backspace}');
@@ -203,13 +237,13 @@ describe('InputMux', () => {
         it(`betweenI: Should call with single or double value when appropriate {$gte,$lte}`, async () => {
           const changeHandler = jest.fn((_childChange: any) => {});
           const expectedCallbacks = [
-            expectOnChangeBetweenInclusive('5', undefined, '5'),
-            expectOnChangeBetweenInclusive('51', undefined, '51'),
-            expectOnChangeBetweenInclusive('51', '7', '51 and 7'),
-            expectOnChangeBetweenInclusive('51', '72', '51 and 72'),
-            expectOnChangeBetweenInclusive('5', '72', '5 and 72'),
-            expectOnChangeBetweenInclusive(undefined, '72', '72'),
-            expectOnChangeBetweenInclusive(undefined, '7', '7'),
+            expectOnChangeBetweenInclusive('5', undefined),
+            expectOnChangeBetweenInclusive('51', undefined),
+            expectOnChangeBetweenInclusive('51', '7'),
+            expectOnChangeBetweenInclusive('51', '72'),
+            expectOnChangeBetweenInclusive('5', '72'),
+            expectOnChangeBetweenInclusive(undefined, '72'),
+            expectOnChangeBetweenInclusive(undefined, '7'),
             [null],
             // expectCallbackHelper(51, '51'),
           ];
@@ -237,17 +271,11 @@ describe('InputMux', () => {
         });
       });
       describe('$anyOf (multi-select)', () => {
-        it(`Should be called with { label, [values], mongoValue: { $in: [values] } honoring datatype text ($anyOf) `, async () => {
+        it(`Should be called with [values] honoring datatype text ($anyOf) `, async () => {
           const changeHandler = jest.fn((_childChange: any) => {});
 
           const expectCallbackHelper = (value: (string | number)[]) => {
-            return [
-              {
-                label: `One of: ${value.join(', ')}`,
-                value,
-                mongoValue: { $in: value },
-              },
-            ];
+            return [value];
           };
           const expectedCallbacks = [
             expectCallbackHelper([1]),
@@ -283,17 +311,11 @@ describe('InputMux', () => {
         });
       });
       describe('$oneOf', () => {
-        it(`Should be called with { label, value, mongoValue: { $eq: value } honoring datatype text ($oneOf) `, async () => {
+        it(`Should be called with value  honoring datatype text ($oneOf) `, async () => {
           const changeHandler = jest.fn((_childChange: any) => {});
 
           const expectCallbackHelper = (value: string | number) => {
-            return [
-              {
-                label: `is ${value}`,
-                value,
-                mongoValue: { $eq: value },
-              },
-            ];
+            return [value];
           };
           const expectedCallbacks = [
             expectCallbackHelper(1),
@@ -426,73 +448,87 @@ const setupRender = (focusProps: PropertyObject = {}) => {
   //@ts-ignore
   return render(<InputMux {...effectiveProps} />);
 };
+const setupStatefulRender = (focusProps: PropertyObject = {}) => {
+  const defaultProps = {
+    // queryExpression: makeTestQueryExpression(),
+    label: 'Test Label Not Set',
+    onChange: (...arg: any) => {},
+    querySubjects: dbFields,
+  };
+
+  const effectiveProps = {
+    ...defaultProps,
+    ...focusProps,
+  } as PropertyObject;
+
+  if (!effectiveProps.queryExpression) {
+    effectiveProps.queryExpression = makeTestQueryExpression(
+      effectiveProps.dataType || 'text',
+      effectiveProps.nodeId || 'nodeIdTest001',
+      effectiveProps.subjectId || 'testField.subjectId',
+      effectiveProps.queryOperator || '$eq'
+    );
+  }
+
+  Object.keys(focusProps).forEach((propName) => {
+    if (focusProps[propName] === null) {
+      delete effectiveProps[propName];
+    }
+  });
+
+  const StatefulComponent = () => {
+    const [qExpression, setQExpression] = useState(effectiveProps.queryExpression);
+
+    const handleValueChange = (newValue: any) => {
+      const newQExpression = Object.assign({}, qExpression);
+      newQExpression.value = newValue;
+      setQExpression(newQExpression);
+      effectiveProps.onChange(newValue);
+    };
+
+    return (
+      //@ts-ignore
+      <InputMux
+        {...effectiveProps}
+        queryExpression={qExpression}
+        onChange={handleValueChange}
+        // initialValue={qExpression.value || ''}
+      />
+    );
+  };
+
+  //@ts-ignore
+  return render(<StatefulComponent />);
+};
 
 const expectOnChangeBetweenExclusive = (
   _valueMin: string | number | undefined,
-  _valueMax: string | number | undefined,
-  label: string
+  _valueMax: string | number | undefined
 ) => {
   if (_valueMin && _valueMax) {
-    return [
-      {
-        label,
-        value: { $gt: _valueMin, $lt: _valueMax },
-        mongoValue: { $gt: _valueMin, $lt: _valueMax },
-      },
-    ];
+    return [{ $gt: _valueMin, $lt: _valueMax }];
   }
   if (_valueMin) {
-    return [
-      {
-        label,
-        value: { $gt: _valueMin },
-        mongoValue: { $gt: _valueMin },
-      },
-    ];
+    return [{ $gt: _valueMin }];
   }
   if (_valueMax) {
-    return [
-      {
-        label,
-        value: { $lt: _valueMax },
-        mongoValue: { $lt: _valueMax },
-      },
-    ];
+    return [{ $lt: _valueMax }];
   }
   return null;
 };
 
 const expectOnChangeBetweenInclusive = (
   _valueMin: string | number | undefined,
-  _valueMax: string | number | undefined,
-  label: string
+  _valueMax: string | number | undefined
 ) => {
   if (_valueMin && _valueMax) {
-    return [
-      {
-        label,
-        value: { $gte: _valueMin, $lte: _valueMax },
-        mongoValue: { $gte: _valueMin, $lte: _valueMax },
-      },
-    ];
+    return [{ $gte: _valueMin, $lte: _valueMax }];
   }
   if (_valueMin) {
-    return [
-      {
-        label,
-        value: { $gte: _valueMin },
-        mongoValue: { $gte: _valueMin },
-      },
-    ];
+    return [{ $gte: _valueMin }];
   }
   if (_valueMax) {
-    return [
-      {
-        label,
-        value: { $lte: _valueMax },
-        mongoValue: { $lte: _valueMax },
-      },
-    ];
+    return [{ $lte: _valueMax }];
   }
   return null;
 };

@@ -18,7 +18,7 @@ export interface QInputSelectMultipleProps extends IQInputComponent {
 
 export const QInputSelectMultiple = ({
   inputProps,
-  termOperator = '$in',
+  termOperator = '$anyOf',
   label,
   initialValue = [],
   onChange = noopOnChange,

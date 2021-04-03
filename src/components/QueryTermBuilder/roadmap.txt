@@ -9,3 +9,6 @@ QueryTermBuilder - operatorWithLabels
 -- done - QueryTermBuilder - create Object (not type) of Ops supportedOps {$eq:'$eq', '$gt':'$gt' ... }
 -- done - use that when a 'type' wont do (mostly for testing)
   find when/where to replace with AllOperators
+
+-- Add opps $nregex and $neq (not) - Probably shouldn't be too difficult.
+   Now I need to make forward progress.
