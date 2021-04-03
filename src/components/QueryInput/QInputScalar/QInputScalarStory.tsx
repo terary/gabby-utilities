@@ -6,7 +6,8 @@
 import { useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { QInputScalar } from './QInputScalar';
-import { TermOperators, Scalar, TermValue } from '../term.types';
+import { TermOperators } from '../term.types';
+import { Scalar, TermValue } from '../index';
 import { InputDataType } from '../../GenericInput';
 // formatCallbackValues = (value: Scalar) => {
 //   return { [termOperator]: value } as TermValue;

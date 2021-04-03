@@ -1,7 +1,7 @@
 import React, { ReactChild, ReactComponentElement, useState } from 'react';
 
 import { QInputScalar } from '../QueryInput/QInputScalar';
-import { TermValueWithLabelOrNull } from '../QueryInput/term.types';
+import { TermValueWithLabelOrNull } from '../../components/common.types';
 import { QInputSelectMultiple } from '../QueryInput/QInputSelect/QInputSelectMultiple';
 import { QInputRange } from '../QueryInput/QInputRange/QInputRange';
 // TermValueWithLabelOrNull

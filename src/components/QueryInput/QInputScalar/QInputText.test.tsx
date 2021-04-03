@@ -72,7 +72,7 @@ describe('QInputScalar', () => {
     });
     it.skip('Should handle dates', () => {
       // Date is not yet implemented.  Currently relying on underlying browswer support
-      // Date should suppor calander and copy/paste.
+      // Date should support calender and copy/paste.
     });
     it('Should support "text" string option', async () => {
       const changeHandler = jest.fn((_childChange: any) => {});

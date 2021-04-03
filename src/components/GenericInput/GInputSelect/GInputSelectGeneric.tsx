@@ -3,7 +3,9 @@ import { MenuItem, Select } from '@material-ui/core';
 import { SelectOption } from '../types';
 import { GInputWrapper, GInputProps } from '../GInputWrapper';
 
-const noopOnChange = (value: any) => {};
+const noopOnChange = (value: any) => {
+  console.log(value);
+};
 
 // TODO - remove id
 type AllowedTypes = (string | number) | (string | number)[];
