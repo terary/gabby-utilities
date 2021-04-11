@@ -9,11 +9,11 @@ import { InputDataType } from '../common.types';
 //   // MyAwesomeAllSelector,
 // } from './slice';
 import {
-  queryNodeAdded,
+  appendNode,
   // allQueryNodes,
   selectChildrenIdsOf,
   // MyAwesomeAllSelector,
-} from './selectors';
+} from './slice';
 
 import { TermViewer } from './TermViewer';
 import { NoteAddOutlined } from '@material-ui/icons';
@@ -65,7 +65,7 @@ export const QueryTermBuilderStateful = () => {
       parentNodeId: rootNodeId,
     };
 
-    dispatch(queryNodeAdded(theAction));
+    dispatch(appendNode(theAction));
     // await store.dispatch(insertDidThunk(theActions));
   };
 

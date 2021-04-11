@@ -1,14 +1,4 @@
-import {
-  createEntityAdapter,
-  createSelector,
-  createSlice,
-  configureStore,
-  EntityId,
-} from '@reduxjs/toolkit';
-
-// slice and selectors depend no each other and both
-// depend on ../store.  The file depnedencies are wacked. 
-import { selectChildrenIdsOf, selectSiblingIdsOf } from './selectors';
+import { createEntityAdapter, createSlice, configureStore } from '@reduxjs/toolkit';
 
 import { QueryTermExpression } from '../QueryTermBuilder/types';
 
@@ -16,24 +6,21 @@ type QueryBranchExpression = {
   junctionOperator: '$and' | '$or';
 };
 
-type QueryNode = {
-  nodeId: string;
-  expression: QueryTermExpression | null;
-  junctionOperator: '$and' | '$or' | null;
+export type QueryNode = {
   // isLeaf = junctionOperator === null
   // isBranch junctionOperator !== null
   // if(isBranch) -> expression = null
   // nodeExpression: QueryTermExpression | QueryBranchExpression;
+  nodeId: string;
+  expression: QueryTermExpression | null;
+  junctionOperator: '$and' | '$or' | null;
   parentNodeId: string;
 };
-type QueryNodeCollection = { [nodeId: string]: QueryNode };
 
-export const queryNodeAdapter = createEntityAdapter<QueryNode>({
-  // Assume IDs are stored in a field other than `book.id`
+const queryNodeAdapter = createEntityAdapter<QueryNode>({
   selectId: (queryNode: QueryNode) => queryNode.nodeId,
 
-  // Keep the "all IDs" array sorted based on book titles
-  // *tmc* IDs are sorted
+  // *tmc* How are IDs sorted
   sortComparer: (a, b) => a.nodeId.localeCompare(b.nodeId),
 });
 
@@ -41,15 +28,8 @@ const queryNodeSlice = createSlice({
   name: 'queryNodes',
   initialState: queryNodeAdapter.getInitialState(),
   reducers: {
-    // Can pass adapter functions directly as case reducers.  Because we're passing this
-    // as a value, `createSlice` will auto-generate the `bookAdded` action type / creator
-
-    // bookAdded: booksAdapter.addOne,
     queryNodeAdded: queryNodeAdapter.addOne,
-    addChildToNode: (state, action) => {
-      queryNodeAdapter.addOne(state, action.payload);
-    },
-    addChildToNode2: (state, action) => {
+    appendNode: (state, action) => {
       // const theAction = {
       //   nodeId: childNodeId,
       //   expression: termExpression,
@@ -73,7 +53,6 @@ const queryNodeSlice = createSlice({
           parentNode.expression = null;
           queryNodeAdapter.updateOne(state, { id: parentNodeId, changes: parentNode });
         }
-
         queryNodeAdapter.addOne(state, promoteFirstChildPayload as QueryNode);
       }
 
@@ -85,9 +64,9 @@ const queryNodeSlice = createSlice({
       };
       queryNodeAdapter.addOne(state, newQueryNode as QueryNode);
     },
-    updateQueryNode: queryNodeAdapter.updateOne,
-    removeManyQueryNodes: queryNodeAdapter.removeMany,
-    removeManyQueryNodes2: (state, action) => {
+    // updateQueryNode: queryNodeAdapter.updateOne,
+    // removeManyQueryNodes: queryNodeAdapter.removeMany,
+    removeNode: (state, action) => {
       const thisNodeId = action.payload;
       const mySiblings = selectSiblingIdsOf(thisNodeId)({ queryNodes: state });
       const nodesToBeRemoved = selectChildrenIdsOf(thisNodeId)({ queryNodes: state });
@@ -98,41 +77,53 @@ const queryNodeSlice = createSlice({
         if (siblingNode) {
           const parent = state.entities[siblingNode.parentNodeId];
           if (parent) {
-            parent.expression = siblingNode.expression;
+            parent.expression = Object.assign({}, siblingNode.expression);
+            parent.expression.nodeId = parent.nodeId;
           }
         }
       }
       queryNodeAdapter.removeMany(state, nodesToBeRemoved);
     },
-    // promoteChild: (state, action) => {
-    //   const childId = action.payload.childId;
-    //   const child = state.entities[childId];
-    //   if (child) {
-    //     const parent = state.entities[child.parentNodeId];
-    //     if (parent) {
-    //       parent.expression = child?.expression || null;
-    //     }
-    //   }
-    // }
-
-    // queryNodeReceived(state, action) {
-    //   // Or, call them as "mutating" helpers in a case reducer
-    //   queryNodeAdapter.setAll(state, action.payload.queryNode);
-    // },
-    // bookAdded: booksAdapter.addOne,
-    // booksLoading(state, action) {
-    //   if (state.loading === 'idle') {
-    //     state.loading = 'pending'
-    //   }
-    // },
-    // booksReceived(state, action) {
-    //   if (state.loading === 'pending') {
-    //     // Or, call them as "mutating" helpers in a case reducer
-    //     booksAdapter.setAll(state, action.payload)
-    //     state.loading = 'idle'
-    //   }
-    // },
-    // bookUpdated: booksAdapter.updateOne
   },
 });
 export default queryNodeSlice;
+
+const store = configureStore({
+  reducer: {
+    queryNodes: queryNodeSlice.reducer,
+  },
+});
+// Want to figure out how to do this.
+// Also doing the same thing in store/index.
+// doing in both places can't be correct.
+type RootState = ReturnType<typeof store.getState>;
+
+export const { appendNode, removeNode } = queryNodeSlice.actions;
+
+const TheSelectors = queryNodeAdapter.getSelectors<RootState>(
+  (state) => state.queryNodes
+);
+
+// ------------------------ Selectors
+export const selectByNodeId = (nodeId: string) => {
+  return (state: RootState) => TheSelectors.selectById(state, nodeId);
+};
+export const selectChildrenIdsOf = (nodeId: string) => {
+  const childRegExp = RegExp(`^${nodeId}:[\\d]+$`);
+  return (state: RootState) => {
+    // return state.queryNodes.ids;
+    return state.queryNodes.ids.filter((childId) => {
+      return (childId as string).match(childRegExp);
+    });
+  }; // TheSelectors.selectById(state, nodeId);
+};
+export const selectSiblingIdsOf = (nodeId: string) => {
+  const parentId = nodeId.split(':').slice(0, -1).join(':');
+  const childRegExp = RegExp(`^${parentId}:[\\d]+$`);
+  return (state: RootState) => {
+    // return state.queryNodes.ids;
+    return state.queryNodes.ids.filter((childId) => {
+      return (childId as string).match(childRegExp) && childId !== nodeId;
+    });
+  }; // TheSelectors.selectById(state, nodeId);
+};

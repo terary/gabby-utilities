@@ -1,28 +1,12 @@
 import React, { useEffect } from 'react'; // we need this to make JSX compile
 import { useSelector, useDispatch } from 'react-redux';
 import { QueryTermExpression } from '../QueryTermBuilder/types';
-// import { selectByNodeId } from './slice';
-// import {
-//   queryNodeAdded,
-//   removeManyQueryNodes,
-//   removeManyQueryNodes2,
-//   addChildToNode,
-//   addChildToNode2,
-//   updateQueryNode,
-//   selectChildrenIdsOf,
-//   // promoteChild,
-// } from './slice';
 import {
   selectByNodeId,
-  queryNodeAdded,
-  removeManyQueryNodes,
-  removeManyQueryNodes2,
-  addChildToNode,
-  addChildToNode2,
-  updateQueryNode,
+  removeNode,
+  appendNode,
   selectChildrenIdsOf,
-  // promoteChild,
-} from './selectors';
+} from './slice';
 
 import { InputDataType } from '../common.types';
 import { EntityId } from '@reduxjs/toolkit';
@@ -36,51 +20,6 @@ export const TermViewer = ({ nodeId }: TermViewerProps) => {
   // this ids?
   const childrenNodes = useSelector(selectChildrenIdsOf(nodeId)) || [];
 
-  // useEffect(() => {
-  //   if (childrenNodes.length === 1) {
-  //     const theAction = {
-  //       lastChildNodeId: childrenNodes[0]
-  //     }
-  //     dispatch(promoteLastChild(lastChildNodeId));
-  //   }
-  // }, [childrenNodes, dispatch]);
-
-  const promoteChildToMyExpression = () => {
-    const childNodeId = nodeId + ':0'; // this will be an issue
-    const theAction = {
-      childId: childNodeId,
-      // expression: childExpression,
-      // junctionOperator: null,
-      // parentNodeId: nodeId,
-    };
-
-    // dispatch(promoteChild(theAction));
-  };
-
-  const demoteMyExpressionToFirstChild = () => {
-    const childNodeId = nodeId + ':0'; // this will be an issue
-    const childExpression = {
-      ...(thisQueryNode || {}).expression,
-      ...{ nodeId: childNodeId },
-    };
-    // thisQueryNode?.expression?.nodeId = childNodeId;
-    const theAction = {
-      nodeId: childNodeId,
-      expression: childExpression,
-      junctionOperator: null,
-      parentNodeId: nodeId,
-    };
-
-    dispatch(addChildToNode(theAction));
-    // dispatch(addChildToNode(theUpdateMeAction));
-    dispatch(
-      updateQueryNode({
-        id: nodeId,
-        changes: { expression: null, junctionOperator: '$or' },
-      })
-    );
-  };
-
   const debugMakeFakeTermExpression = (childNodeId: string) => {
     return {
       nodeId: childNodeId,
@@ -91,66 +30,12 @@ export const TermViewer = ({ nodeId }: TermViewerProps) => {
     } as QueryTermExpression;
   };
   const handleRemoveMe = () => {
-    // childrenNodes
-    if (childrenNodes.length === 2) {
-      promoteChildToMyExpression();
-    }
-    const nodeIds = childrenNodes.concat([nodeId]) as EntityId[];
-    // dispatch(removeManyQueryNodes(nodeIds));
-    dispatch(removeManyQueryNodes2(nodeId));
-  };
-
-  const x_handleAddChild = () => {
-    if (childrenNodes.length === 0) {
-      demoteMyExpressionToFirstChild();
-      const childNodeId = nodeId + ':1';
-      const termExpression = debugMakeFakeTermExpression(childNodeId);
-      const theAction = {
-        nodeId: childNodeId,
-        expression: termExpression,
-        junctionOperator: null,
-        parentNodeId: nodeId,
-      };
-      dispatch(addChildToNode(theAction));
-    } else {
-      const childNodeId = nodeId + ':' + childrenNodes.length;
-      const termExpression = debugMakeFakeTermExpression(childNodeId);
-      const theAction = {
-        nodeId: childNodeId,
-        expression: termExpression,
-        junctionOperator: null,
-        parentNodeId: nodeId,
-      };
-      dispatch(addChildToNode(theAction));
-    }
+    dispatch(removeNode(nodeId));
   };
 
   const handleAddChild = () => {
-    // if (childrenNodes.length === 0) {
-    //   demoteMyExpressionToFirstChild();
-    //   const childNodeId = nodeId + ':1';
-    //   const termExpression = debugMakeFakeTermExpression(childNodeId);
-    //   const theAction = {
-    //     nodeId: childNodeId,
-    //     expression: termExpression,
-    //     junctionOperator: null,
-    //     parentNodeId: nodeId,
-    //   };
-    //   dispatch(addChildToNode(theAction));
-    // } else {
-    //   const childNodeId = nodeId + ':' + childrenNodes.length;
-    //   const termExpression = debugMakeFakeTermExpression(childNodeId);
-    //   const theAction = {
-    //     nodeId: childNodeId,
-    //     expression: termExpression,
-    //     junctionOperator: null,
-    //     parentNodeId: nodeId,
-    //   };
-    //   dispatch(addChildToNode(theAction));
-    // }
-
     dispatch(
-      addChildToNode2({
+      appendNode({
         parentNodeId: nodeId,
         expression: debugMakeFakeTermExpression('namelessChild'),
       })
