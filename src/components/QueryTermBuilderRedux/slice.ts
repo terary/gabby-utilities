@@ -29,13 +29,35 @@ const queryNodeSlice = createSlice({
   initialState: queryNodeAdapter.getInitialState(),
   reducers: {
     queryNodeAdded: queryNodeAdapter.addOne,
+    toggleJunctionOperator: (state, action) => {
+      const { nodeId } = action.payload;
+      const node = selectByNodeId(nodeId)({ queryNodes: state });
+      if (node) {
+        node.junctionOperator = node.junctionOperator === '$and' ? '$or' : '$and';
+        queryNodeAdapter.updateOne(state, { id: nodeId, changes: node });
+      }
+    },
+    updateNodeExpression: (state, action) => {
+      const { nodeId, expression } = action.payload;
+      const node = selectByNodeId(nodeId)({ queryNodes: state });
+      if (node) {
+        node.expression = expression;
+      }
+    },
+    addRootNode: (state, action) => {
+      const { expression } = action.payload;
+
+      const newQueryNode = {
+        nodeId: '0',
+        expression,
+        junctionOperator: null,
+        parentNodeId: '0',
+      };
+      queryNodeAdapter.addOne(state, newQueryNode as QueryNode);
+    },
     appendNode: (state, action) => {
-      // const theAction = {
-      //   nodeId: childNodeId,
-      //   expression: termExpression,
-      //   junctionOperator: null,
-      //   parentNodeId: nodeId,
-      // };
+      // TODO - revise code to use partial whatever, such that node ID is not
+      //        being passed in.  Its not being used and serves only to cause confusion.
       const { expression, parentNodeId } = action.payload;
       const parentsChildren = selectChildrenIdsOf(parentNodeId)({ queryNodes: state });
       let newChildNodeId = parentNodeId + ':' + parentsChildren.length;
@@ -51,6 +73,7 @@ const queryNodeSlice = createSlice({
         };
         if (parentNode) {
           parentNode.expression = null;
+          parentNode.junctionOperator = '$and';
           queryNodeAdapter.updateOne(state, { id: parentNodeId, changes: parentNode });
         }
         queryNodeAdapter.addOne(state, promoteFirstChildPayload as QueryNode);
@@ -78,6 +101,7 @@ const queryNodeSlice = createSlice({
           const parent = state.entities[siblingNode.parentNodeId];
           if (parent) {
             parent.expression = Object.assign({}, siblingNode.expression);
+            parent.junctionOperator = null;
             parent.expression.nodeId = parent.nodeId;
           }
         }
@@ -98,7 +122,13 @@ const store = configureStore({
 // doing in both places can't be correct.
 type RootState = ReturnType<typeof store.getState>;
 
-export const { appendNode, removeNode } = queryNodeSlice.actions;
+export const {
+  addRootNode,
+  appendNode,
+  removeNode,
+  toggleJunctionOperator,
+  updateNodeExpression,
+} = queryNodeSlice.actions;
 
 const TheSelectors = queryNodeAdapter.getSelectors<RootState>(
   (state) => state.queryNodes
@@ -107,6 +137,11 @@ const TheSelectors = queryNodeAdapter.getSelectors<RootState>(
 // ------------------------ Selectors
 export const selectByNodeId = (nodeId: string) => {
   return (state: RootState) => TheSelectors.selectById(state, nodeId);
+};
+export const selectExpressionByNodeId = (nodeId: string) => {
+  return (state: RootState) => {
+    return TheSelectors.selectById(state, nodeId)?.expression || null;
+  }
 };
 export const selectChildrenIdsOf = (nodeId: string) => {
   const childRegExp = RegExp(`^${nodeId}:[\\d]+$`);

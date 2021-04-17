@@ -82,6 +82,8 @@ interface QueryTermBuilderProps {
   operatorsWithLabels: TermOperatorLabelCollection;
   onExpressionChange: (expression: QueryTermExpression | null) => void;
   querySubjects: TermSubjectCollection;
+
+  // TODO - initialQueryExpression should accept null if onchange allows nulls (maybe)
   initialQueryExpression?: QueryTermExpression;
 }
 

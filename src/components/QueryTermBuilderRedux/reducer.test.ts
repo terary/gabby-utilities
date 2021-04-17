@@ -257,3 +257,5 @@ describe('Selectors', () => {
   });
 });
 test.skip("Does order of state.ids matter? For layout purposes? I think it doesn't matter but needs to be consistent", () => {});
+test.skip('to make sure when pre/demoting branch/leaf - junctionOperator and expression are set as expected ', () => {});
+test.skip('Need to make sure that junctionOperator is set-able.  When storing then retrieving query the right (not default) junciton operator is used', () => {});
