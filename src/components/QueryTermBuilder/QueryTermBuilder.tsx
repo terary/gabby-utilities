@@ -10,6 +10,7 @@ import {
   defaultOperatorLabels,
 } from './types';
 import { SelectOption } from '../QueryInput';
+import { Grid } from '@material-ui/core';
 
 const isScalarOperator = (op: string) => {
   return ['$eq', '$gt', '$lt', '$gte', '$lte', '$regex'].indexOf(op) !== -1;
@@ -161,30 +162,32 @@ export const QueryTermBuilder = ({
   };
 
   return (
-    <>
-      <hr />
-      {}
-      <SimpleDropdown
-        options={querySubjects}
-        selectedOption={queryExpression.subjectId}
-        label="Field Name"
-        onChange={handleSubjectChange}
-      />
-      <hr />
-      <SimpleDropdown
-        // options={opLabels}
-        options={opsBySubjectId[queryExpression.subjectId] || {}}
-        selectedOption={queryExpression.operator}
-        label="Operator"
-        onChange={handleOperatorChange}
-      />
-      <hr />
-      <InputMux
-        onChange={handleValueChange}
-        queryExpression={queryExpression}
-        label=""
-        selectOptions={selectableValues}
-      />
-    </>
+    <Grid container direction="row">
+      <Grid item>
+        <SimpleDropdown
+          options={querySubjects}
+          selectedOption={queryExpression.subjectId}
+          label="Field Name"
+          onChange={handleSubjectChange}
+        />
+      </Grid>
+      <Grid item>
+        <SimpleDropdown
+          // options={opLabels}
+          options={opsBySubjectId[queryExpression.subjectId] || {}}
+          selectedOption={queryExpression.operator}
+          label="Operator"
+          onChange={handleOperatorChange}
+        />
+      </Grid>
+      <Grid item>
+        <InputMux
+          onChange={handleValueChange}
+          queryExpression={queryExpression}
+          label=""
+          selectOptions={selectableValues}
+        />
+      </Grid>
+    </Grid>
   );
 };

@@ -1,9 +1,38 @@
-QInput
-  1) accept other/more arguments inteded for the underlying control. 
-  https://material-ui.com/api/input/ has bunches of cool features
-  disable, margin, multiline, color, autoFocus etc...
-  should client code should/could passing arguments for that, QIndex
-  should applie (material UI uses some technique for this)
 
-  2) simply switch from Date/Number/Color etc - don't want
-  to build control for each. How to test for this?
+
+Tests
+src/QueryConfigManager (0.25sp)
+	customers.ts
+	index.ts
+src/store				(0.25sp)
+	index.ts
+
+src/components/QueryTermBuilderRedux  (2sp)
+	JunctionSwitch.tsx
+	QueryTermBuilderStateful.tsx
+	TermEditor.tsx
+	TermViewer.tsx
+	slice.ts
+
+Design QueryTemrBuilderRedux (0.75sp)
+	will have two versions 
+		1) no state - only notify via callback new term expression
+		2) stateful - works off of state
+
+		How do we use stateless?  
+		Is it useful to keep? Better to merge the two?
+		Find good terminalology. 
+
+Design/Dev - config manager  (1sp)
+	Should be write -once read many?
+	There is a a secrets thingy you created could be used for this
+	configManger.get(query, customers)
+	The configmanger maybe hasnt been built for websites
+	like local storage, expriation etc. 
+
+
+clean up code (1.5sp)
+document (2.0 sp)
+	what is the terminology (term, node, expression, etc)
+	what is the purpose
+	why/how to use

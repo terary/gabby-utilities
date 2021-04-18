@@ -38,7 +38,6 @@ export const TermEditor = ({ nodeId, onChange = onChangeNoop }: TermViewerProps)
 
   return (
     <>
-      {JSON.stringify(thisExpression)}
       {isQueryConfigLoaded && thisExpression && (
         <QueryTermBuilder
           nodeId={nodeId}

@@ -14,14 +14,10 @@ import { JunctionSwitch } from './JunctionSwitch';
 import { InputDataType } from '../common.types';
 import { TermEditorSandbox } from '../../Sandboxes/QueryTermEditorSandbox';
 import { TermEditor } from './TermEditor';
+import { queryExpressionLabelMaker } from '../../QueryConfigManager';
+
 interface TermViewerProps {
   nodeId: string;
-}
-
-enum NodeTypeEnum {
-  ROOT = 'ROOT',
-  BRANCH = 'BRANCH',
-  LEAF = 'LEAF',
 }
 
 export const TermViewer = ({ nodeId }: TermViewerProps) => {
@@ -93,12 +89,13 @@ export const TermViewer = ({ nodeId }: TermViewerProps) => {
           junctionOperator={thisQueryNode.junctionOperator}
         />
       )}
-      <h4>
-        Node ID: {nodeId}, Expression {getMyExpression()}
-      </h4>
-      {JSON.stringify(thisQueryNode)}
+      <h3>
+        {' '}
+        Node ID: {nodeId},
+        <br />
+        {queryExpressionLabelMaker(thisQueryNode?.expression || null)}
+      </h3>
       <p>has {childrenNodes.length} children</p>
-      {/* <p>{JSON.stringify(childrenNodes)}</p> */}
       <button onClick={handleAddChild}> Add Child </button>
       <button onClick={handleRemoveMe}> Remove Me </button>
       {childrenNodes.length === 0 && (
