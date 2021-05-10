@@ -1,4 +1,5 @@
 import { QueryTermBuilder } from './QueryTermBuilder';
+import { InputMux } from './InputMux';
 import {
   InputDataType,
   TermOperators,
@@ -21,6 +22,6 @@ export type {
   TermValueWithLabelOrNull,
   TermValueWithLabel,
 };
-export { QueryTermBuilder, AllOperators };
+export { QueryTermBuilder, AllOperators, InputMux };
 
 // export type InputDataType = 'decimal' | 'integer' | 'date' | 'text';

@@ -29,3 +29,5 @@ Sandboxes/
 src/Sandbox.tsx
 
 test-scripts
+
+s3-staging

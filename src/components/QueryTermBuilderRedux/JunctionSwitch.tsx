@@ -1,11 +1,5 @@
-import { FormControlLabel, FormGroup, Switch } from "@material-ui/core";
-import {
-  createMuiTheme,
-  makeStyles,
-  createStyles,
-  // Theme as AugmentedTheme,
-  ThemeProvider,
-} from '@material-ui/core/styles';
+import { FormControlLabel, FormGroup, Switch } from '@material-ui/core';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   overrides: {
@@ -25,7 +19,7 @@ const theme = createMuiTheme({
         '&$checked': {
           // Controls checked color for the thumb
           color: '#7986cb',
-        }
+        },
       },
       track: {
         // Controls default (unchecked) color for the track
@@ -41,35 +35,41 @@ const theme = createMuiTheme({
   },
 });
 
+const defaultJunctionLabels = {
+  $and: 'All of',
+  $or: 'Any of',
+};
+
 interface JunctionSwitchProps {
+  junctionLabels?: typeof defaultJunctionLabels;
   junctionOperator: '$and' | '$or';
   onChange: (junction: string) => void;
 }
-const junctionLabel = {
-  $and: 'All of',
-  $or: 'Any Of',
-};
 
-
-export const JunctionSwitch = ({ onChange, junctionOperator }: JunctionSwitchProps) => {
+export const JunctionSwitch = ({
+  junctionLabels = defaultJunctionLabels,
+  junctionOperator,
+  onChange,
+}: JunctionSwitchProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
   return (
     <ThemeProvider theme={theme}>
-      <FormGroup>
+      <FormGroup style={{ display: 'inline' }}>
         <FormControlLabel
           control={
             <Switch
               size="small"
               value={junctionOperator}
-              defaultChecked
+              // defaultChecked
+              checked={junctionOperator === '$and'}
               onChange={handleChange}
             />
           }
-          label={junctionLabel[junctionOperator]}
+          label={junctionLabels[junctionOperator]}
         />
       </FormGroup>
     </ThemeProvider>
   );
-}
+};

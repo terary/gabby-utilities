@@ -8,7 +8,6 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { ButtonBar } from './ButtonBar';
 import { TermViewer2 } from './TermViewer2';
-import { useQEUtils } from './hooks';
 // import { TermEditor2 } from './TermEditor2';
 import { QELabelMaker } from './types';
 import {
@@ -23,8 +22,7 @@ import {
   appendNode,
   selectChildrenIdsOf,
   toggleJunctionOperator,
-//  updateNodeExpression,
-  openForEdit,
+  updateNodeExpression,
 } from './slice';
 
 import { JunctionSwitch } from './JunctionSwitch';
@@ -33,7 +31,7 @@ import { InputDataType } from '../common.types';
 // import { TermEditor } from './TermEditor.tsx';
 import { Grid, IconButton } from '@material-ui/core';
 import { QueryBuilder } from '@material-ui/icons';
-// import { QueryTermBuilderRedux } from './QueryTermBuilderRedux';
+import { QueryTermBuilderRedux } from './QueryTermBuilderRedux';
 import { TermEditor2 } from './TermEditor2';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -115,25 +113,17 @@ export const TermViewer = ({
   subjects,
   labelMaker,
 }: TermViewerProps) => {
-  const {nodeSelector, nodeCopy, expressionSelector, expressionCopy }  = useQEUtils(nodeId);
+  const [isOpenForEdit, setIsOpenForEdit] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
   const dispatch = useDispatch();
   const classes = useStyles();
-  // const thisQueryNode = useSelector(selectByNodeId(nodeId));
-  // const [thisQueryNode, setThisQueryNode] = useState(
-  //   useSelector(selectByNodeId(nodeId)) || { isOpenForEdit: false }
-  // );
-  const [thisQueryNode, setThisQueryNode] = useState(
-    nodeCopy || { isOpenForEdit: false }
-  );
-
+  const thisQueryNode = useSelector(selectByNodeId(nodeId));
   const [openTerm, setOpenTerm] = useState(null as QueryTermExpression | null);
-  const childrenNodes = useSelector(selectChildrenIdsOf(nodeId)) || [];
+  // let openTerm = {} as QueryTermExpression;
+  // const [openTerm, setOpenTerm] = useState({} as QueryTermExpression);
 
-  useEffect(() => {
-    setThisQueryNode(nodeCopy || { isOpenForEdit: false });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodeId]);
+  // this ids?
+  const childrenNodes = useSelector(selectChildrenIdsOf(nodeId)) || [];
 
   const handleRemoveMe = () => {
     dispatch(removeNode(nodeId));
@@ -153,7 +143,6 @@ export const TermViewer = ({
       return '#173F5F88';
     }
     return thisQueryNode?.junctionOperator === '$and' ? '#20639B88' : '#3CAEA288';
-    // return '#20639B88';
   };
   const handleJunctionOpChange = () => {
     // toggleJunctionOperator
@@ -165,15 +154,21 @@ export const TermViewer = ({
   };
 
   const handleEditToggle = () => {
-    // const x = Object.assign({}, thisQueryNode?.expression);
+    const x = Object.assign({}, thisQueryNode?.expression);
     // openTerm = Object.assign({}, thisQueryNode?.expression);
-    // dispatch(openForEdit({ nodeId, isOpenForEdit: true }));
-    dispatch(openForEdit({ nodeId, isOpenForEdit: !!!thisQueryNode?.isOpenForEdit }));
-
     // setIsOpenForEdit(!isOpenForEdit);
-    // setOpenTerm(Object.assign({}, thisQueryNode?.expression));
+    setOpenTerm(Object.assign({}, thisQueryNode?.expression));
     // eslint-disable-next-line prettier/prettier
     // would expect to update here
+  };
+
+  const handleOpenTermChange = (newTerm: QueryTermExpression) => {
+    setOpenTerm(newTerm);
+
+  };
+  const handleFinishEdit = (termExp: QueryTermExpression) => {
+    dispatch(updateNodeExpression({ nodeId, expression: termExp }));
+    setOpenTerm(null);
   };
 
   const BranchView = () => {
@@ -188,12 +183,12 @@ export const TermViewer = ({
           <JunctionSwitch
             onChange={handleJunctionOpChange}
             //@ts-ignore
-            // junctionOperator={'$and'}
             junctionOperator={thisQueryNode.junctionOperator}
           />
           <IconButton size="small" onClick={handleAddChild} aria-label="Add">
             <AddCircleOutlineIcon />
           </IconButton>
+          {showDebug && <span>Junction Op:{thisQueryNode?.junctionOperator}</span>}
         </Grid>
         <Grid item xs={12}>
           <Grid
@@ -227,27 +222,63 @@ export const TermViewer = ({
     return (
       <>
         <div className={classes.termItemText}>
-          {/* {thisQueryNode?.isOpenForEdit ? 'Open For Edit' : 'Closed For Edit'} */}
-          {thisQueryNode?.isOpenForEdit && (
+          {openTerm && (
+            // <QueryTermBuilderRedux
+            //   nodeId={nodeId}
+            //   operatorsWithLabels={opLabels}
+            //   querySubjects={subjects}
+            //   // onChange={handleOpenTermChange}
+            //   onFinish={handleFinishEdit}
+            //   onAddClick={handleAddChild}
+            //   onRemoveClick={handleRemoveMe}
+            //   initialTermExpression={openTerm}
+            // />
+            <TermEditor2 nodeId={nodeId} />
+            // <TermEditor
+            //   focusTerm={openTerm}
+            //   nodeId={nodeId}
+            //   opLabels={opLabels}
+            //   subjects={subjects}
+            //   onChange={handleOpenTermChange}
+            // />
+          )}
+          {!openTerm && (
             <>
-              <TermEditor2
-                nodeId={nodeId}
-                operatorsWithLabels={opLabels}
-                querySubjects={subjects}
+              <TermViewer2 nodeId={nodeId} />
+              <span>
+                {/* {labelMaker(thisQueryNode?.expression || null, subjects, opLabels)} */}
+              </span>
+              <ButtonBar
+                isOpenForEdit={false}
+                onEditClose={() => {
+                  console.log('Close not click');
+                }}
+                onEditOpen={handleEditToggle}
+                onAddClick={handleAddChild}
+                onRemoveClick={handleRemoveMe}
               />
             </>
           )}
-          {!thisQueryNode?.isOpenForEdit && (
-            <>
-              <TermViewer2
-                nodeId={nodeId}
-                labelMaker={labelMaker}
-                opLabels={opLabels}
-                subjects={subjects}
-              />
-            </>
+          {showDebug && (
+            <p>
+              Node ID: {nodeId}<br />
+              JSON: {JSON.stringify(thisQueryNode)} <br />
+              has {childrenNodes.length} children
+              <br />
+            </p>
           )}
         </div>
+        {/* <div className={classes.termItemButtonBar}>
+          <IconButton size="small" onClick={handleEditToggle} aria-label="Edit">
+            {isOpenForEdit ? <DoneIcon /> : <EditIcon />}
+          </IconButton>
+          <IconButton size="small" onClick={handleRemoveMe} aria-label="Remove">
+            <DeleteIcon />
+          </IconButton>
+          <IconButton size="small" onClick={handleAddChild} aria-label="Add">
+            <AddCircleOutlineIcon />
+          </IconButton>
+        </div> */}
       </>
     );
   };
@@ -258,7 +289,7 @@ export const TermViewer = ({
 
   return (
     <>
-      {/* {!thisQueryNode && (
+      {!thisQueryNode && (
         <span>
           {labelMaker(
             null,
@@ -266,8 +297,8 @@ export const TermViewer = ({
             {} as TermOperatorLabelCollection
           )}
         </span>
-      )} */}
-      {isLeaf() ? <LeafView key={nodeId} /> : <BranchView />}
+      )}
+      {isLeaf() ? <LeafView /> : <BranchView />}
     </>
   );
 };

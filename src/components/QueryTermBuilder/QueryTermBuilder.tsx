@@ -101,7 +101,15 @@ export const QueryTermBuilder = ({
 }: QueryTermBuilderProps) => {
   const [queryExpression, setQueryExpression] = useState(initialQueryExpression);
   const [selectableValues, setSelectableValues] = useState(
-    (querySubjects[queryExpression.subjectId].selectOptions || []) as SelectOption[]
+    (querySubjects[queryExpression.subjectId]?.selectOptions || []) as SelectOption[]
+    // (queryExpression.operator==="$anyOf" || queryExpression.operator==="$oneOf") 
+    //   //@ts-ignore
+    //   ? querySubjects[queryExpression.subjectId].selectOptions[queryExpression.operator] || []
+    //   : [] as SelectOption[]
+    // (querySubjects[queryExpression.subjectId]?.selectOptions || []) as SelectOption[]
+    //@ts-ignore
+    // (querySubjects[queryExpression.subjectId]?.selectOptions?.[queryExpression.operator] ||
+    //   []) as SelectOption[]
   );
 
   const opLabels = extractLabels(operatorsWithLabels, 'long');

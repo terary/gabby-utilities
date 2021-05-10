@@ -14,6 +14,7 @@ import {
   Scalar,
   ScalarList,
 } from './index';
+import { CommuteOutlined } from '@material-ui/icons';
 
 interface InputMuxProps {
   queryExpression: QueryTermExpression;
@@ -129,7 +130,7 @@ export const InputMux = ({
           termOperator={queryExpression.operator}
           initialValue={(queryExpression.value || '') as Scalar}
           // initialValue={(thisValue || '') as Scalar}
-          inputProps={{ 'force-rerender': Math.random() + '' }}
+          // inputProps={{ 'force-rerender': Math.random() + '' }}
           // initialValue={thisInitialValue as Scalar}
           // initialValue={initialValue ? (initialValue as Scalar) : undefined}
           inputDataType={queryExpression.dataType}

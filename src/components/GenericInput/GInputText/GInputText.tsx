@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type CallbackArgs = string | number | undefined;
 
-const noopOnChange = (value: CallbackArgs) => {};
+const noopOnChange = (value: CallbackArgs) => {console.log('DEBUG NOOPT CALLE GInputText')};
 
 interface QInputScalarProps {
   errorText?: string | undefined;
@@ -47,7 +47,7 @@ export function GInputText({
     // this will never be perfect....??
     // if decimal|float and end user wishes to clear field, onChange
     //
-    setThisValue(cast(newValue)); // should 1 or the other and set default.  In parent doesn't provide..
+    // setThisValue(cast(newValue)); // should 1 or the other and set default.  In parent doesn't provide..
     onChange(cast(newValue));
   };
 
@@ -77,10 +77,11 @@ export function GInputText({
   return (
     <TextField
       className={classes.formControl}
-      // id="id"
       error={hasError()}
       helperText={getHelperText()}
       inputProps={inputProps}
+      key={3}
+      // inputProps={{myid: Math.random()}}
       label={label}
       onChange={handleChange}
       required={required}
